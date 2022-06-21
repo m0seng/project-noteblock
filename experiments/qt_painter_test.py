@@ -29,14 +29,20 @@ class MainWindow(QtWidgets.QMainWindow):
     def draw_something(self):
         canvas = self.label.pixmap()
         painter = QtGui.QPainter(canvas)
+
         pen = QtGui.QPen()
-        pen.setWidth(3)
+        pen.setWidth(1)
         pen.setColor(QtGui.QColor("#376F9F"))
         painter.setPen(pen)
-        painter.drawRoundedRect(40, 40, 100, 100, 10, 10)
-        painter.drawRoundedRect(80, 80, 100, 100, 10, 50)
-        painter.drawRoundedRect(120, 120, 100, 100, 50, 10)
-        painter.drawRoundedRect(160, 160, 100, 100, 50, 50)
+
+        brush = QtGui.QBrush()
+        brush.setColor(QtGui.QColor("#BBBBBB"))
+        brush.setStyle(Qt.Dense1Pattern)
+        painter.setBrush(brush)
+
+        painter.drawRect(100, 100, 100, 100)
+        painter.drawRect(150, 200, 100, 100)
+
         painter.end()
         self.label.setPixmap(canvas)
 
