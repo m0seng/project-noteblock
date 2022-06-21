@@ -77,7 +77,7 @@ class LabeledSlider(QtWidgets.QWidget):
         return self._value_format.format(value=value)
 
 
-class AutoClampedSliderValue:
+class ClampedSliderValue:
     def __init__(
         self,
         title: str = "placeholder",
@@ -115,7 +115,7 @@ class AutoClampedSliderValue:
         self.ui.set_value(self._value)
 
 app = QtWidgets.QApplication([])
-thing = AutoClampedSliderValue(
+thing = ClampedSliderValue(
     title="stuff",
     min_value=1.0,
     max_value=2.0,
