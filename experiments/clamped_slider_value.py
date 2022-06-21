@@ -52,7 +52,7 @@ class LabeledSlider(QtWidgets.QWidget):
 
     def set_value(self, value: float):
         self._value_label.setText(self._format_for_display(value))
-        self._slider.setValue(self._convert_to_slider(self._init_value))
+        self._slider.setValue(self._convert_to_slider(value))
 
     def _slider_moved(self, slider_value: int):
         value = self._convert_from_slider(slider_value)
@@ -122,6 +122,8 @@ thing = ClampedSliderValue(
     slider_steps=100,
     init_value=1.5
 )
+
+thing.value = 1.75
 
 thing.ui.show()
 app.exec()
