@@ -7,7 +7,7 @@ def _clamp(value, lower, upper):
 
 
 class LabeledSlider(QtWidgets.QWidget):
-    sliderMoved = QtCore.Signal(float)
+    valueChanged = QtCore.Signal(float)
 
     def __init__(
         self,
@@ -57,7 +57,7 @@ class LabeledSlider(QtWidgets.QWidget):
     def _slider_moved(self, slider_value: int):
         value = self._convert_from_slider(slider_value)
         self._value_label.setText(self._format_for_display(value))
-        self.sliderMoved.emit(value)
+        self.valueChanged.emit(value)
 
     def _convert_to_slider(self, value: float) -> int:
         return int(
@@ -98,7 +98,7 @@ class ClampedSliderValue:
             slider_steps=slider_steps,
             init_value=init_value
         )
-        self.ui.sliderMoved.connect(self._set_value_from_slider)
+        self.ui.valueChanged.connect(self._set_value_from_slider)
 
         self.value = init_value
 
