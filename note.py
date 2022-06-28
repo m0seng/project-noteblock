@@ -25,6 +25,10 @@ class Note:
                 setattr(new_note, k, v)
         return new_note
 
+    def to_dict(self) -> dict:
+        '''Return a dictionary with all the attributes of the note. Can be used to reconstruct a note.'''
+        return {s: getattr(self, s, None) for s in self.__slots__}
+
     def stereo_volumes(self) -> np.ndarray:
         """Return the volumes of the left and right channels as a numpy array."""
         vol_left = self.volume * max(1 - self.pan, 1)
