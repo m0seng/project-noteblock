@@ -1,3 +1,4 @@
+import math
 import random
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -9,10 +10,10 @@ class PianoRoll(ttk.Frame):
     def __init__(self, parent, pattern: list[int], *args, **kwargs):
         """Constructs the piano roll UI. kwargs are passed to ttk.Frame."""
         # drawing constants
-        self.black_notes: list[int] = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
         self.note_width: float = 20
         self.canvas_height: int = 400
-        self.note_height: float = self.canvas_height / 25
+        self.pitch_count: int = 25
+        self.note_height: float = self.canvas_height / self.pitch_count
 
         # colour constants
         self.bg_colour: str = "gray75"
@@ -63,8 +64,11 @@ class PianoRoll(ttk.Frame):
         self.controls.grid(column=1, row=0, sticky="ns", padx=5, pady=5)
 
     def zoom(self, zoom_factor: float):
+        """Stretches the piano roll horizontally by the given factor."""
+        left_fraction = self.canvas.xview()[0]
         self.note_width *= zoom_factor
         self.canvas.configure(scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height))
+        self.canvas.xview_moveto(left_fraction)
         self.draw_everything()
 
     def draw_everything(self):
@@ -85,7 +89,7 @@ class PianoRoll(ttk.Frame):
 
     def draw_guide_bars(self):
         """Draws the horizontal guide bars."""
-        for note in self.black_notes:
+        for note in self.black_notes(self.pitch_count):
             self.draw_note(note, 0, length=len(self.pattern), fill=self.guidebar_colour, outline="")
 
     def draw_guide_lines(self):
@@ -104,9 +108,9 @@ class PianoRoll(ttk.Frame):
         """Draws a note on the canvas. Returns id of rectangle drawn. kwargs are passed to create_rectangle."""
         return self.canvas.create_rectangle(
             tick * self.note_width,
-            self.note_height * (24 - note),
+            self.note_height * (self.pitch_count - 1 - note),
             (tick + length) * self.note_width,
-            self.note_height * (25 - note),
+            self.note_height * (self.pitch_count - note),
             **kwargs
         )
 
@@ -115,7 +119,7 @@ class PianoRoll(ttk.Frame):
         canvas_x = self.canvas.canvasx(x)
         canvas_y = self.canvas.canvasy(y)
         tick = int(canvas_x // self.note_width)
-        note = int(24 - (canvas_y // self.note_height))
+        note = int(self.pitch_count - 1 - (canvas_y // self.note_height))
         return note, tick
 
     def delete_note(self, event: tk.Event):
@@ -132,6 +136,16 @@ class PianoRoll(ttk.Frame):
         self.pattern[tick] = note
         self.canvas.delete(self.pattern_rectangles[tick])
         self.pattern_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.note_colour)
+
+    def black_notes(self, pitch_count: int) -> list[int]:
+        """Helper function which returns a list of black notes within the given pitch range."""
+        result = []
+        octave_black_notes = [0, 2, 4, 7, 9]
+        octave_count = math.ceil(pitch_count / 12)
+        for octave in range(octave_count):
+            result.extend(n + 12*octave for n in octave_black_notes)
+        result = filter(lambda n: n < pitch_count, result)
+        return result
 
     def target_canvas_length(self) -> int:
         """Helper function to calculate how long the canvas should be."""
