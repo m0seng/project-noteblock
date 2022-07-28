@@ -5,10 +5,16 @@ import tkinter.ttk as ttk
 
 class PianoRoll(ttk.Frame):
     def __init__(self, parent, pattern: list[int], *args, **kwargs):
-        self.pattern = pattern
         self.note_width = 20
-
+        self.canvas_height = 400
         self.black_notes = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
+
+        self.bg_colour = "gray75"
+        self.guidebar_colour = "gray70"
+        self.guideline_colour = "gray65"
+        self.note_colour = "red"
+
+        self.pattern = pattern
 
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
@@ -20,12 +26,11 @@ class PianoRoll(ttk.Frame):
 
     def init_canvas(self):
         self.canvas = tk.Canvas(
-            self, width=200, height=400,
+            self, height=self.canvas_height,
             scrollregion=(0, 0, self.target_canvas_length(), 0),
             highlightthickness=0,
-            bg="gray75"
+            bg=self.bg_colour
         )
-
         self.canvas.bind("<Configure>", self.on_resize)
         self.canvas.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
 
@@ -48,14 +53,14 @@ class PianoRoll(ttk.Frame):
     def draw_stuff(self):
         self.draw_guide_bars()
         self.draw_guide_lines()
-        self.draw_notes()
+        self.draw_pattern_notes()
 
-    def draw_notes(self):
+    def draw_pattern_notes(self):
         canvas_height = self.canvas.winfo_height()
         note_height = canvas_height / 25
         print(note_height)
         for tick, note in enumerate(self.pattern):
-            self.draw_note(note, tick, length=1, fill="red")
+            self.draw_note(note, tick, length=1, fill=self.note_colour)
 
     def draw_guide_lines(self):
         for index, _ in enumerate(self.pattern):
@@ -64,7 +69,7 @@ class PianoRoll(ttk.Frame):
                 0,
                 index * self.note_width,
                 self.canvas.winfo_height(),
-                fill="gray65",
+                fill=self.guideline_colour,
                 width=0
             )
             
@@ -72,7 +77,7 @@ class PianoRoll(ttk.Frame):
         canvas_height = self.canvas.winfo_height()
         note_height = canvas_height / 25
         for note in self.black_notes:
-            self.draw_note(note, 0, len(self.pattern), fill="gray70", outline="")
+            self.draw_note(note, 0, len(self.pattern), fill=self.guidebar_colour, outline="")
 
     def draw_note(self, note: int, tick: int, length: int, **kwargs):
         canvas_height = self.canvas.winfo_height()
