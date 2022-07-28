@@ -4,46 +4,54 @@ import tkinter.ttk as ttk
 
 
 class PianoRoll(ttk.Frame):
+    """UI for editing patterns. Subclassed from ttk.Frame."""
+
     def __init__(self, parent, pattern: list[int], *args, **kwargs):
-        self.black_notes = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
-        self.note_width = 20
-        self.canvas_height = 400
-        self.note_height = self.canvas_height / 25
+        """Constructs the piano roll UI. kwargs are passed to ttk.Frame."""
+        # drawing constants
+        self.black_notes: list[int] = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
+        self.note_width: int = 20
+        self.canvas_height: int = 400
+        self.note_height: float = self.canvas_height / 25
 
-        self.bg_colour = "gray75"
-        self.guidebar_colour = "gray70"
-        self.guideline_colour = "gray65"
-        self.note_colour = "red"
+        # colour constants
+        self.bg_colour: str = "gray75"
+        self.guidebar_colour: str = "gray70"
+        self.guideline_colour: str = "gray65"
+        self.note_colour: str = "red"
 
-        self.pattern = pattern
-        self.pattern_rectangles = []
+        self.pattern: list[int] = pattern # list of note numbers (or None) in pattern
+        self.pattern_rectangles: list[int] = [] # contains ids of corresponding rectangles
 
+        # create the frame
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
-        # self.rowconfigure(0, weight=1)
 
         self.init_canvas()
         self.init_scrollbar()
         self.init_controls()
 
     def init_canvas(self):
+        """Initializes and grids the canvas with click bindings."""
         self.canvas = tk.Canvas(
             self, height=self.canvas_height,
             scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height),
             highlightthickness=0,
             bg=self.bg_colour
         )
-        self.canvas.bind("<Configure>", self.on_resize)
+        self.canvas.bind("<ButtonPress-1>", self.set_note)
         self.canvas.bind("<ButtonPress-3>", self.delete_note)
         self.canvas.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
 
     def init_scrollbar(self):
+        """Initializes and grids the canvas scroll bar."""
         self.scrollbar = ttk.Scrollbar(self, orient=tk.HORIZONTAL)
         self.canvas.configure(xscrollcommand=self.scrollbar.set)
         self.scrollbar["command"] = self.canvas.xview
         self.scrollbar.grid(column=0, row=1, sticky="ew", padx=5, pady=5)
 
     def init_controls(self):
+        """Initializes and grids control buttons."""
         self.controls = ttk.Frame(self)
 
         self.btn_zoom_in = ttk.Button(self.controls, text="Zoom in")
@@ -55,12 +63,14 @@ class PianoRoll(ttk.Frame):
         self.controls.grid(column=1, row=0, sticky="ns", padx=5, pady=5)
 
     def draw_everything(self):
+        """Clears and redraws the canvas."""
         self.canvas.delete("all")
         self.draw_guide_bars()
         self.draw_guide_lines()
         self.draw_pattern_notes()
 
     def draw_pattern_notes(self):
+        """Draws all notes in the pattern and adds the corresponding rectangle ids to pattern_rectangles."""
         self.pattern_rectangles = []
         for tick, note in enumerate(self.pattern):
             if note is not None:
@@ -69,10 +79,12 @@ class PianoRoll(ttk.Frame):
                 self.pattern_rectangles.append(None)
 
     def draw_guide_bars(self):
+        """Draws the horizontal guide bars."""
         for note in self.black_notes:
-            self.draw_note(note, 0, len(self.pattern), fill=self.guidebar_colour, outline="")
+            self.draw_note(note, 0, length=len(self.pattern), fill=self.guidebar_colour, outline="")
 
     def draw_guide_lines(self):
+        """Draws the vertical guide lines. TODO: make this snap smart."""
         for index, _ in enumerate(self.pattern):
             self.canvas.create_line(
                 index * self.note_width,
@@ -83,7 +95,8 @@ class PianoRoll(ttk.Frame):
                 width=0
             )
 
-    def draw_note(self, note: int, tick: int, length: int, **kwargs):
+    def draw_note(self, note: int, tick: int, length: int, **kwargs) -> int:
+        """Draws a note on the canvas. kwargs are passed to create_rectangle. Returns id of rectangle drawn."""
         return self.canvas.create_rectangle(
             tick * self.note_width,
             self.note_height * (24 - note),
@@ -92,7 +105,8 @@ class PianoRoll(ttk.Frame):
             **kwargs
         )
 
-    def get_note_at_coords(self, x: int, y: int):
+    def get_note_at_coords(self, x: int, y: int) -> tuple[int, int]:
+        """Translates widget-relative coordinates to the corresponding note and tick."""
         canvas_x = self.canvas.canvasx(x)
         canvas_y = self.canvas.canvasy(y)
         tick = int(canvas_x // self.note_width)
@@ -100,16 +114,22 @@ class PianoRoll(ttk.Frame):
         return note, tick
 
     def delete_note(self, event: tk.Event):
+        """Deletes a note at the given event coordinates."""
         note, tick = self.get_note_at_coords(event.x, event.y)
         if self.pattern[tick] == note:
             self.canvas.delete(self.pattern_rectangles[tick])
             self.pattern[tick] = None
             self.pattern_rectangles[tick] = None
 
-    def on_resize(self, event: tk.Event):
-        print(self.canvas.winfo_height(), self.canvas.winfo_width())
+    def set_note(self, event: tk.Event):
+        """Sets a note at the given event coordinates. If a note is already at that tick it is replaced."""
+        note, tick = self.get_note_at_coords(event.x, event.y)
+        self.pattern[tick] = note
+        self.canvas.delete(self.pattern_rectangles[tick])
+        self.pattern_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.note_colour)
 
-    def target_canvas_length(self):
+    def target_canvas_length(self) -> int:
+        """Helper function to calculate how long the canvas should be."""
         return self.note_width * len(self.pattern)
 
 
