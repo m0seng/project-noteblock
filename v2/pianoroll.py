@@ -8,6 +8,8 @@ class PianoRoll(ttk.Frame):
         self.pattern = pattern
         self.note_width = 20
 
+        self.black_notes = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
+
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
@@ -44,24 +46,18 @@ class PianoRoll(ttk.Frame):
         self.btn_zoom_out.pack()
 
     def draw_stuff(self):
-        self.draw_horizontal_bars()
-        self.draw_vertical_lines()
+        self.draw_guide_bars()
+        self.draw_guide_lines()
         self.draw_notes()
 
     def draw_notes(self):
         canvas_height = self.canvas.winfo_height()
         note_height = canvas_height / 25
         print(note_height)
-        for index, note in enumerate(self.pattern):
-            self.canvas.create_rectangle(
-                index * self.note_width,
-                note_height * (24 - note),
-                (index + 1) * self.note_width,
-                note_height * (25 - note),
-                fill="red"
-            )
+        for tick, note in enumerate(self.pattern):
+            self.draw_note(note, tick, length=1, fill="red")
 
-    def draw_vertical_lines(self):
+    def draw_guide_lines(self):
         for index, _ in enumerate(self.pattern):
             self.canvas.create_line(
                 index * self.note_width,
@@ -71,20 +67,23 @@ class PianoRoll(ttk.Frame):
                 fill="gray65",
                 width=0
             )
-
-    def draw_horizontal_bars(self):
-        black_notes = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
+            
+    def draw_guide_bars(self):
         canvas_height = self.canvas.winfo_height()
         note_height = canvas_height / 25
-        for note in black_notes:
-            self.canvas.create_rectangle(
-                0,
-                note_height * (24 - note),
-                self.target_canvas_length(),
-                note_height * (25 - note),
-                fill="gray70",
-                outline=""
-            )
+        for note in self.black_notes:
+            self.draw_note(note, 0, len(self.pattern), fill="gray70", outline="")
+
+    def draw_note(self, note: int, tick: int, length: int, **kwargs):
+        canvas_height = self.canvas.winfo_height()
+        note_height = canvas_height / 25
+        self.canvas.create_rectangle(
+            tick * self.note_width,
+            note_height * (24 - note),
+            (tick + length) * self.note_width,
+            note_height * (25 - note),
+            **kwargs
+        )
 
     def on_resize(self, event):
         print(self.canvas.winfo_height(), self.canvas.winfo_width())
