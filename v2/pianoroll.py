@@ -10,7 +10,7 @@ class PianoRoll(ttk.Frame):
         """Constructs the piano roll UI. kwargs are passed to ttk.Frame."""
         # drawing constants
         self.black_notes: list[int] = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24]
-        self.note_width: int = 20
+        self.note_width: float = 20
         self.canvas_height: int = 400
         self.note_height: float = self.canvas_height / 25
 
@@ -39,8 +39,8 @@ class PianoRoll(ttk.Frame):
             highlightthickness=0,
             bg=self.bg_colour
         )
-        self.canvas.bind("<ButtonPress-1>", self.set_note)
-        self.canvas.bind("<ButtonPress-3>", self.delete_note)
+        self.canvas.bind("<ButtonPress-1>", self.set_note) # left click sets note
+        self.canvas.bind("<ButtonPress-3>", self.delete_note) # right click deletes note
         self.canvas.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
 
     def init_scrollbar(self):
@@ -54,13 +54,18 @@ class PianoRoll(ttk.Frame):
         """Initializes and grids control buttons."""
         self.controls = ttk.Frame(self)
 
-        self.btn_zoom_in = ttk.Button(self.controls, text="Zoom in")
+        self.btn_zoom_in = ttk.Button(self.controls, text="Zoom in", command=lambda: self.zoom(1.25))
         self.btn_zoom_in.pack()
 
-        self.btn_zoom_out = ttk.Button(self.controls, text="Zoom out")
+        self.btn_zoom_out = ttk.Button(self.controls, text="Zoom out", command=lambda: self.zoom(0.8))
         self.btn_zoom_out.pack()
 
         self.controls.grid(column=1, row=0, sticky="ns", padx=5, pady=5)
+
+    def zoom(self, zoom_factor: float):
+        self.note_width *= zoom_factor
+        self.canvas.configure(scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height))
+        self.draw_everything()
 
     def draw_everything(self):
         """Clears and redraws the canvas."""
@@ -96,7 +101,7 @@ class PianoRoll(ttk.Frame):
             )
 
     def draw_note(self, note: int, tick: int, length: int, **kwargs) -> int:
-        """Draws a note on the canvas. kwargs are passed to create_rectangle. Returns id of rectangle drawn."""
+        """Draws a note on the canvas. Returns id of rectangle drawn. kwargs are passed to create_rectangle."""
         return self.canvas.create_rectangle(
             tick * self.note_width,
             self.note_height * (24 - note),
