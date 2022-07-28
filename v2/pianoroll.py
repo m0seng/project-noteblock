@@ -16,6 +16,7 @@ class PianoRoll(ttk.Frame):
         self.note_height: float = self.canvas_height / self.pitch_count
 
         # colour constants
+        # TODO: derive these from global state and pattern colour
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
