@@ -32,6 +32,7 @@ class PianoRoll(ttk.Frame):
         self.init_canvas()
         self.init_scrollbar()
         self.init_controls()
+        self.draw_everything()
 
     def init_canvas(self):
         """Initializes and grids the canvas with click bindings."""
@@ -154,26 +155,31 @@ class PianoRoll(ttk.Frame):
 
 
 def main():
+    """Bare bones testing code for the piano roll."""
+    # Make and configure the window
     window = tk.Tk()
     window.title("Piano Roll")
-    window.resizable(True, False)
+    window.resizable(True, False) # Only resize horizontally
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
+    # Randomly generate a pattern
     pattern_length = 60
-    pattern = []
     pattern_note_chance = 0.5
+    pattern = []
     for _ in range(pattern_length):
         if random.random() < pattern_note_chance:
             pattern.append(random.randint(0, 24))
         else:
             pattern.append(None)
 
+    # Create the piano roll
     roll = PianoRoll(window, pattern)
     roll.grid(column=0, row=0, sticky="nsew")
-    
-    window.after(100, roll.draw_everything)
+
+    # Start the event loop
     window.mainloop()
 
+# duh
 if __name__ == "__main__":
     main()
