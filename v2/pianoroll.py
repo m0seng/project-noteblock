@@ -6,7 +6,7 @@ import tkinter.ttk as ttk
 class PianoRoll(ttk.Frame):
     def __init__(self, parent, pattern: list[int], *args, **kwargs):
         self.pattern = pattern
-        self.note_width = 10
+        self.note_width = 20
 
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
@@ -19,13 +19,14 @@ class PianoRoll(ttk.Frame):
 
     def init_canvas(self):
         self.canvas = tk.Canvas(
-            self, width=200, height=200,
-            scrollregion=(0, 0, self.target_canvas_length(), 200),
-            bg="black"
+            self, width=200, height=400,
+            scrollregion=(0, 0, self.target_canvas_length(), 400),
+            highlightthickness=0,
+            bg="gray75"
         )
 
         self.canvas.bind("<Configure>", self.on_resize)
-        self.canvas.grid(column=0, row=0, sticky="nsew")
+        self.canvas.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
 
     def init_scrollbar(self):
         self.scrollbar = ttk.Scrollbar(self, orient=tk.HORIZONTAL)
