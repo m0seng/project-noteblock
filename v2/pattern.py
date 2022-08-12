@@ -26,7 +26,7 @@ class Pattern(Savable):
             "id": self.id,
             "name": self.name,
             "colour": self.colour,
-            "notes": self.notes,
+            "notes": self.notes.copy(),
         }
 
     def from_dict(self, source: dict):
