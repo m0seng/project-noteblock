@@ -22,8 +22,8 @@ class PianoRoll(ttk.Frame):
         self.guideline_colour: str = "gray65"
         self.note_colour: str = "red"
 
-        self.pattern: list[int] = pattern # list of note numbers (or None) in pattern
-        self.pattern_rectangles: list[int] = [] # contains ids of corresponding rectangles
+        self.notes: list[int] = pattern # list of note numbers (or None) in pattern
+        self.note_rectangles: list[int] = [] # contains ids of corresponding rectangles
 
         # create the frame
         super().__init__(parent, *args, **kwargs)
@@ -82,21 +82,21 @@ class PianoRoll(ttk.Frame):
 
     def draw_pattern_notes(self):
         """Draws all notes in the pattern and adds the corresponding rectangle ids to pattern_rectangles."""
-        self.pattern_rectangles = []
-        for tick, note in enumerate(self.pattern):
+        self.note_rectangles = []
+        for tick, note in enumerate(self.notes):
             if note is not None:
-                self.pattern_rectangles.append(self.draw_note(note, tick, length=1, fill=self.note_colour))
+                self.note_rectangles.append(self.draw_note(note, tick, length=1, fill=self.note_colour))
             else:
-                self.pattern_rectangles.append(None)
+                self.note_rectangles.append(None)
 
     def draw_guide_bars(self):
         """Draws the horizontal guide bars."""
         for note in self.black_notes(self.pitch_count):
-            self.draw_note(note, 0, length=len(self.pattern), fill=self.guidebar_colour, outline="")
+            self.draw_note(note, 0, length=len(self.notes), fill=self.guidebar_colour, outline="")
 
     def draw_guide_lines(self):
         """Draws the vertical guide lines. TODO: make this snap smart."""
-        for index, _ in enumerate(self.pattern):
+        for index, _ in enumerate(self.notes):
             self.canvas.create_line(
                 index * self.note_width,
                 0,
@@ -127,17 +127,17 @@ class PianoRoll(ttk.Frame):
     def delete_note(self, event: tk.Event):
         """Deletes a note at the given event coordinates."""
         note, tick = self.get_note_at_coords(event.x, event.y)
-        if self.pattern[tick] == note:
-            self.canvas.delete(self.pattern_rectangles[tick])
-            self.pattern[tick] = None
-            self.pattern_rectangles[tick] = None
+        if self.notes[tick] == note:
+            self.canvas.delete(self.note_rectangles[tick])
+            self.notes[tick] = None
+            self.note_rectangles[tick] = None
 
     def set_note(self, event: tk.Event):
         """Sets a note at the given event coordinates. If a note is already at that tick it is replaced."""
         note, tick = self.get_note_at_coords(event.x, event.y)
-        self.pattern[tick] = note
-        self.canvas.delete(self.pattern_rectangles[tick])
-        self.pattern_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.note_colour)
+        self.notes[tick] = note
+        self.canvas.delete(self.note_rectangles[tick])
+        self.note_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.note_colour)
 
     def black_notes(self, pitch_count: int) -> list[int]:
         """Helper function which returns a list of black notes within the given pitch range."""
@@ -151,7 +151,7 @@ class PianoRoll(ttk.Frame):
 
     def target_canvas_length(self) -> int:
         """Helper function to calculate how long the canvas should be."""
-        return self.note_width * len(self.pattern)
+        return self.note_width * len(self.notes)
 
 
 def main():
