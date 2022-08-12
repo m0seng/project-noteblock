@@ -20,6 +20,8 @@ class UndoManager:
     def __init__(self):
         self.past: list[Transaction] = []
         self.future: list[Transaction] = []
+        self.past_length = 10
+        self.future_length = 5
 
     def begin_transaction(self, obj: Savable):
         self.trans = Transaction()
@@ -34,8 +36,16 @@ class UndoManager:
         trans = self.past.pop()
         trans.undo()
         self.future.append(trans)
+        self.prune_history()
 
     def redo(self):
         trans = self.future.pop()
         trans.redo()
         self.past.append(trans)
+        self.prune_history()
+
+    def prune_history(self):
+        if len(self.past) > self.past_length:
+            self.past = self.past[-self.past_length:]
+        if len(self.future) > self.future_length:
+            self.future = self.future[-self.future_length:]
