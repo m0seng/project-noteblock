@@ -3,11 +3,12 @@ import random
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from pattern import Pattern
 
 class PianoRoll(ttk.Frame):
     """UI for editing patterns. Subclassed from ttk.Frame."""
 
-    def __init__(self, parent, pattern: list[int], *args, **kwargs):
+    def __init__(self, parent, pattern: Pattern, *args, **kwargs):
         """Constructs the piano roll UI. kwargs are passed to ttk.Frame."""
         # drawing constants
         self.note_width: float = 20
@@ -22,7 +23,7 @@ class PianoRoll(ttk.Frame):
         self.guideline_colour: str = "gray65"
         self.note_colour: str = "red"
 
-        self.notes: list[int] = pattern # list of note numbers (or None) in pattern
+        self.notes: list[int] = pattern.notes # list of note numbers (or None) in pattern
         self.note_rectangles: list[int] = [] # contains ids of corresponding rectangles
 
         # create the frame
@@ -155,7 +156,7 @@ class PianoRoll(ttk.Frame):
 
 
 def main():
-    """Bare bones testing code for the piano roll."""
+    """Bare bones testing code for the piano roll. (obsolete)"""
     # Make and configure the window
     window = tk.Tk()
     window.title("Piano Roll")

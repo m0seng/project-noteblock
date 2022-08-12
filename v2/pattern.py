@@ -7,6 +7,20 @@ class Pattern(Savable):
         self.colour: str = "red"
         self.notes: list[int] = []
 
+    @property
+    def length(self):
+        return len(self.notes)
+
+    @length.setter
+    def length(self, value):
+        # probably pretty slow idk
+        if self.length < value:
+            self.notes[self.length:value] = None
+        elif self.length > value:
+            self.notes = self.notes[:value]
+        else:
+            pass
+
     def to_dict(self):
         return {
             "id": self.id,

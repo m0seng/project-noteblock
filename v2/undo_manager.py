@@ -3,6 +3,7 @@
 from savable import Savable
 
 class Transaction:
+    # TODO: make this __slots__ for speed?
     def begin(self, obj: Savable):
         self.obj = obj
         self.before = self.obj.to_dict()
