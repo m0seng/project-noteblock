@@ -1,8 +1,8 @@
 from collections import deque
-from savable import Savable
+from save_mixin import SaveMixin
 
 class Transaction:
-    def begin(self, obj: Savable):
+    def begin(self, obj: SaveMixin):
         self.obj = obj
         self.before = self.obj.to_dict()
 
@@ -22,7 +22,7 @@ class UndoManager:
         self.past: deque[Transaction] = deque(maxlen=self.past_length)
         self.future: deque[Transaction] = deque(maxlen=self.future_length)
 
-    def begin_transaction(self, obj: Savable):
+    def begin_transaction(self, obj: SaveMixin):
         self.trans = Transaction()
         self.trans.begin(obj)
 

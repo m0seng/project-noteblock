@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
-class Savable(ABC):
+class SaveMixin(ABC):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
     @abstractmethod
     def to_dict(self) -> dict:
         """MAKE COPIES OF MUTABLES!!!"""
@@ -16,5 +19,5 @@ class Savable(ABC):
         obj.from_dict(source)
         return obj
 
-    def copy(self) -> "Savable":
+    def copy(self) -> "SaveMixin":
         return self.__class__.create_from_dict(self.to_dict)
