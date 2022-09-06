@@ -12,6 +12,7 @@ from callbacks_mixin import CallbacksMixin
 class Processor(SaveMixin, CallbacksMixin, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.reset_state()
 
     @abstractmethod
     def reset_state(self):
