@@ -1,6 +1,6 @@
-from savable import Savable
+from save_mixin import SaveMixin
 
-class Pattern(Savable):
+class Pattern(SaveMixin):
     def __init__(self, id: int = None):
         self.id: int = id
         self.name: str = "pattern bruh"
@@ -15,11 +15,12 @@ class Pattern(Savable):
     def length(self, value):
         # probably pretty slow idk
         if self.length < value:
-            self.notes[self.length:value] = None
+            self.notes.extend(None for _ in range(value - self.length))
         elif self.length > value:
             self.notes = self.notes[:value]
         else:
             pass
+        # TODO: add event here
 
     def to_dict(self):
         return {
@@ -34,3 +35,4 @@ class Pattern(Savable):
         self.name = source["name"]
         self.colour = source["colour"]
         self.notes = source["notes"]
+        # TODO: add event here

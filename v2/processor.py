@@ -12,7 +12,16 @@ from event import Event
 class Processor(SaveMixin, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.props = {}
+        self.state = {}
         self.reset_state()
+
+    def from_dict(self, source: dict):
+        self.props.update(source)
+        # TODO: add event here
+
+    def to_dict(self) -> dict:
+        return self.props
 
     @abstractmethod
     def reset_state(self):
