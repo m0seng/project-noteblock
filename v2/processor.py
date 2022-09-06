@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from save_mixin import SaveMixin
-from callbacks_mixin import CallbacksMixin
+from event import Event
 
 # props = stuff that gets saved
 # state = stuff that doesn't
@@ -9,7 +9,7 @@ from callbacks_mixin import CallbacksMixin
 # seq_tick: tick in sequence, can go back
 # rt_tick: mono_tick but no lookahead
 
-class Processor(SaveMixin, CallbacksMixin, ABC):
+class Processor(SaveMixin, ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.reset_state()
