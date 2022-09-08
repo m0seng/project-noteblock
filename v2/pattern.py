@@ -7,6 +7,9 @@ class Pattern(SaveMixin):
         self.colour: str = "red"
         self.notes: list[int] = []
 
+    def tick(self, pat_tick: int) -> int:
+        return self.notes[pat_tick]
+
     @property
     def length(self):
         return len(self.notes)
