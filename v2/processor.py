@@ -25,6 +25,7 @@ class Processor(SaveMixin, ABC):
 
     @abstractmethod
     def reset_state(self):
+        # also init state in here
         ...
 
     @abstractmethod

@@ -13,7 +13,6 @@ class Pattern(SaveMixin):
 
     @length.setter
     def length(self, value):
-        # probably pretty slow idk
         if self.length < value:
             self.notes.extend(None for _ in range(value - self.length))
         elif self.length > value:
