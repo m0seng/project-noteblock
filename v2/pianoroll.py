@@ -10,6 +10,8 @@ class PianoRoll(ttk.Frame):
 
     def __init__(self, parent, pattern: Pattern, *args, **kwargs):
         """Constructs the piano roll UI. kwargs are passed to ttk.Frame."""
+        self.pattern: Pattern = pattern
+
         # drawing constants
         self.note_width: float = 20
         self.canvas_height: int = 400
@@ -21,9 +23,8 @@ class PianoRoll(ttk.Frame):
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
-        self.note_colour: str = "red"
+        self.note_colour: str = self.pattern.colour
 
-        self.pattern: Pattern = pattern
         self.notes: list[int] = pattern.notes # list of note numbers (or None) in pattern
         self.note_rectangles: list[int] = [] # contains ids of corresponding rectangles
 
@@ -175,7 +176,7 @@ def main():
         else:
             notes.append(None)
 
-    pattern = Pattern(notes=notes)
+    pattern = Pattern(notes=notes, colour="blue")
 
     # Create the piano roll
     roll = PianoRoll(window, pattern)
