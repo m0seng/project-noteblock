@@ -23,6 +23,7 @@ class PianoRoll(ttk.Frame):
         self.guideline_colour: str = "gray65"
         self.note_colour: str = "red"
 
+        self.pattern: Pattern = pattern
         self.notes: list[int] = pattern.notes # list of note numbers (or None) in pattern
         self.note_rectangles: list[int] = [] # contains ids of corresponding rectangles
 
@@ -167,12 +168,14 @@ def main():
     # Randomly generate a pattern
     pattern_length = 60
     pattern_note_chance = 0.5
-    pattern = []
+    notes = []
     for _ in range(pattern_length):
         if random.random() < pattern_note_chance:
-            pattern.append(random.randint(0, 24))
+            notes.append(random.randint(0, 24))
         else:
-            pattern.append(None)
+            notes.append(None)
+
+    pattern = Pattern(notes=notes)
 
     # Create the piano roll
     roll = PianoRoll(window, pattern)

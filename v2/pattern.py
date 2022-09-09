@@ -1,11 +1,12 @@
+from dataclasses import dataclass, field
 from save_mixin import SaveMixin
 
+@dataclass
 class Pattern(SaveMixin):
-    def __init__(self, id: int = None):
-        self.id: int = id
-        self.name: str = "pattern bruh"
-        self.colour: str = "red"
-        self.notes: list[int] = []
+    id: int = None
+    name: str = "pattern bruh"
+    colour: str = "red"
+    notes: list[int] = field(default_factory=lambda: [])
 
     def tick(self, pat_tick: int) -> int:
         return self.notes[pat_tick]
