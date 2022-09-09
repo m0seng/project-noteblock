@@ -20,4 +20,9 @@ class SaveMixin(ABC):
         return obj
 
     def copy(self) -> "SaveMixin":
-        return self.__class__.create_from_dict(self.to_dict)
+        return self.__class__.create_from_dict(self.to_dict())
+
+    def altered_copy(self, **kwargs) -> "SaveMixin":
+        temp_dict = self.to_dict()
+        temp_dict.update(kwargs)
+        return self.__class__.create_from_dict(temp_dict)

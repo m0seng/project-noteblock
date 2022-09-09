@@ -20,8 +20,7 @@ def main():
     
     print("test starts here")
     for key, value in test_dict.items():
-        temp = test_dict[key]
-        temp.append(6)
+        test_dict[key].append(6)
     print("test ends here")
     print(test_dict)
 
