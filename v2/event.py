@@ -11,6 +11,6 @@ class Event(ABC):
     def remove_listener(self, listener):
         self.listeners.remove(listener)
 
-    def trigger(self):
+    def trigger(self, **kwargs):
         for listener in self.listeners:
-            listener()
+            listener(**kwargs)

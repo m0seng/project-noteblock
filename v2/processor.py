@@ -30,7 +30,7 @@ class Processor(SaveMixin, ABC):
         ...
 
     @abstractmethod
-    def tick(self, input: list[Note] = [], mono_tick: int = 0, seq_tick: int = 0) -> list[Note]:
+    def audio_tick(self, input: list[Note] = [], mono_tick: int = 0, seq_tick: int = 0) -> list[Note]:
         ...
 
     @abstractmethod
