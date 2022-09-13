@@ -4,15 +4,21 @@ import tkinter.ttk as ttk
 from event import Event
 
 class LoopHijack:
-    def __init__(self, root: tk.Tk, event: Event):
+    def __init__(
+            self,
+            root: tk.Tk,
+            event: Event,
+            tps: int = 20,
+            lookahead_ticks: int = 5,
+            repeat_ms: int = 25
+    ):
         self.root = root
         self.event = event
+        self.tps = tps
+        self.lookahead_ticks = lookahead_ticks
+        self.repeat_ms = repeat_ms
 
-        self.tps = 20
         self.tick_ms = 1000 / self.tps
-
-        self.lookahead_ticks = 5
-        self.repeat_ms = 25
         self.reset()
 
     def reset(self):
