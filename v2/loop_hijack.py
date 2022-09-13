@@ -20,6 +20,7 @@ class LoopHijack:
 
         self.tick_ms = 1000 / self.tps
         self.reset()
+        self.hijack_root()
 
     def reset(self):
         self.start_time = self.time_ms()
