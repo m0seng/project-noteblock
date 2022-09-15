@@ -18,9 +18,8 @@ class LoopHijack:
         self.lookahead_ticks = lookahead_ticks
         self.repeat_ms = repeat_ms
 
-        self.tick_ms = 1000 / self.tps
         self.reset()
-        self.hijack_root()
+        self.tick()
 
     def reset(self):
         self.start_time = self.time_ms()
@@ -30,7 +29,7 @@ class LoopHijack:
         return int(perf_counter_ns() * 0.001)
 
     def ms_to_tick(self, ms: int) -> int:
-        return ms // self.tick_ms
+        return ms * self.tps * 0.001
 
     def hijack_root(self):
         self.root.after(self.repeat_ms, self.tick)
@@ -39,6 +38,6 @@ class LoopHijack:
         elapsed_time = self.time_ms() - self.start_time
         current_tick = self.ms_to_tick(elapsed_time) + self.lookahead_ticks
         while current_tick >= self.next_tick:
-            self.event.trigger(tick=self.next_tick)
+            self.event.trigger(time=elapsed_time, tick=self.next_tick)
             self.next_tick += 1
         self.hijack_root()
