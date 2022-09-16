@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import copy
 from save_mixin import SaveMixin
 from note import Note
 from event import Event
@@ -11,23 +12,29 @@ from event import Event
 # rt_tick: mono_tick but no lookahead
 
 class Processor(SaveMixin, ABC):
-    def __init__(self, *args, **kwargs):
+    default_props = {}
+    default_state = {}
+
+    def __init__(self, source: dict = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.props = {}
-        self.state = {}
-        self.reset_state()
+        if source is not None:
+            self.from_dict(source)
+        else:
+            self.init_props()
+        self.init_state()
 
     def from_dict(self, source: dict):
-        self.props.update(source)
+        self.props = copy.deepcopy(source)
         # TODO: add event here
 
     def to_dict(self) -> dict:
-        return self.props
+        return copy.deepcopy(self.props)
 
-    @abstractmethod
-    def reset_state(self):
-        # also init state in here
-        ...
+    def init_props(self):
+        self.props = copy.deepcopy(self.__class__.default_props)
+
+    def init_state(self):
+        self.state = copy.deepcopy(self.__class__.default_state)
 
     @abstractmethod
     def audio_tick(self, input: list[Note] = [], mono_tick: int = 0, seq_tick: int = 0) -> list[Note]:
