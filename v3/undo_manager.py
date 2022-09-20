@@ -1,4 +1,5 @@
 from collections import deque
+from event import Event
 from save_mixin import SaveMixin
 from transaction import Transaction
 
@@ -7,6 +8,7 @@ future_length = 5
 past: deque[Transaction] = deque(maxlen=past_length)
 future: deque[Transaction] = deque(maxlen=future_length)
 trans: Transaction = None
+event: Event = Event()
 
 def begin_transaction(obj: SaveMixin):
     trans = Transaction()
@@ -21,8 +23,10 @@ def undo():
     trans = past.pop()
     trans.undo()
     future.append(trans)
+    event.trigger()
 
 def redo(self):
     trans = future.pop()
     trans.redo()
     past.append(trans)
+    event.trigger()

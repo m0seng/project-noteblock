@@ -1,8 +1,5 @@
-from abc import ABC, abstractmethod
-
-class Event(ABC):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class Event:
+    def __init__(self):
         self.listeners: list = []
 
     def add_listener(self, listener):
