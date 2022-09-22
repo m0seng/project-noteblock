@@ -1,8 +1,18 @@
 from abc import ABC, abstractmethod
+from event import Event
+import undo_manager as undoman
 
 class SaveMixin(ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.change_event = Event()
+    
+    def __enter__(self):
+        undoman.begin_transaction(self)
+        
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        undoman.end_transaction()
+        self.change_event.trigger()
         
     @abstractmethod
     def to_dict(self) -> dict:

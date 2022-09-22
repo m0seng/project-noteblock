@@ -15,19 +15,11 @@ from event import Event
 class Processor(SaveMixin, ABC):
     def __init__(self, source: dict = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.event = Event()
         if source is not None:
             self.from_dict(source)
         else:
             self.init_props()
         self.init_state()
-
-    def __enter__(self):
-        undoman.begin_transaction(self)
-        
-    def __exit__(self, exc_type, exc_value, exc_tb):
-        undoman.end_transaction()
-        self.event.trigger()
 
     @abstractmethod
     def init_props(self):
@@ -35,14 +27,6 @@ class Processor(SaveMixin, ABC):
 
     @abstractmethod
     def init_state(self):
-        ...
-
-    @abstractmethod
-    def from_dict(self, source: dict):
-        ...
-
-    @abstractmethod
-    def to_dict(self) -> dict:
         ...
 
     @abstractmethod
