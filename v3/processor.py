@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 from save_mixin import SaveMixin
-import undo_manager as undoman
-from event import Event
 from note import Note
 
 # props = stuff that gets saved
@@ -14,12 +12,10 @@ from note import Note
 # use with statement to modify props from outside!
 
 class Processor(SaveMixin, ABC):
-    def __init__(self, source: dict = None, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init_props()
         self.init_state()
-        if source is not None:
-            self.from_dict(source)
 
     @abstractmethod
     def init_props(self):

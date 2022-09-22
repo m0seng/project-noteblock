@@ -20,12 +20,14 @@ def end_transaction():
 
 def undo():
     trans = past.pop()
-    trans.undo()
-    future.append(trans)
-    trans.obj.change_event.trigger()
+    if trans is not None:
+        trans.undo()
+        future.append(trans)
+        trans.obj.change_event.trigger()
 
 def redo(self):
     trans = future.pop()
-    trans.redo()
-    past.append(trans)
-    trans.obj.change_event.trigger()
+    if trans is not None:
+        trans.redo()
+        past.append(trans)
+        trans.obj.change_event.trigger()

@@ -1,3 +1,6 @@
+# TODO: custom exception to auto delete bloat listeners?
+# required in order to delete old objects
+
 class Event:
     def __init__(self):
         self.listeners: list = []
