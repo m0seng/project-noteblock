@@ -1,11 +1,12 @@
 import numpy as np
 from note import Note
-import sound_loader
+from sound_loader import SoundLoader
 
 class Player():
     """Turns lists of Notes into blocks of audio."""
     def __init__(self, block_size: int):
         self.block_size = block_size
+        self.sounds = SoundLoader()
         self.current_sounds: list[tuple[np.ndarray, int]] = []
 
     def stereo_volumes(self, note: Note) -> np.ndarray:
@@ -19,7 +20,7 @@ class Player():
         
     def process_new_notes(self, notes: list[Note]):
         for note in notes:
-            sound = sound_loader.get_sound(note.instrument, note.pitch) * self.stereo_volumes(note)
+            sound = self.sounds.get_sound(note.instrument, note.pitch) * self.stereo_volumes(note)
             self.current_sounds.append((sound, 0))
 
     def tick_audio(self) -> np.ndarray:
