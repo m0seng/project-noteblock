@@ -23,7 +23,6 @@ class Pattern(SaveMixin):
             self.notes = self.notes[:value]
         else:
             pass
-        # TODO: add event here
 
     def to_dict(self):
         return {
@@ -38,4 +37,3 @@ class Pattern(SaveMixin):
         self.name = source["name"]
         self.colour = source["colour"]
         self.notes = source["notes"]
-        # TODO: add event here
