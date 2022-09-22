@@ -5,7 +5,7 @@ import soundfile
 
 from instrument import Instrument, instruments
 
-class Sounds():
+class Sounds:
     '''Loads every instrument at every pitch into memory. Does not actually consume much memory.'''
     def __init__(self, block_size: int):
         self.block_size = block_size

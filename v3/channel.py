@@ -3,6 +3,9 @@ from note import Note
 from pattern import Pattern
 import bisect
 
+# effects belong to a channel so storing direct references to them is fine (I think)
+# patterns DO NOT belong to a channel and storing direct references would prevent them from being deleted
+
 class Channel(Processor):
     def __init__(self, pattern_dict: dict[int, Pattern], *args, **kwargs):
         super().__init__(*args, **kwargs)

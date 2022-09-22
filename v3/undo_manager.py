@@ -1,5 +1,4 @@
 from collections import deque
-from event import Event
 from save_mixin import SaveMixin
 from transaction import Transaction
 
