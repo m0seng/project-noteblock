@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from save_mixin import SaveMixin
-from note import Note
+from .save_mixin import SaveMixin
+from .note import Note
 
 @dataclass
 class Pattern(SaveMixin):
@@ -10,6 +10,7 @@ class Pattern(SaveMixin):
     notes: list[int] = field(default_factory=lambda: [None for _ in range(16)])
 
     def tick(self, pat_tick: int) -> list[Note]:
+        # TODO: handle index error just in case
         return [Note(pitch=self.notes[pat_tick]),]
 
     @property

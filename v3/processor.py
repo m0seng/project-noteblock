@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from save_mixin import SaveMixin
-from note import Note
+from .save_mixin import SaveMixin
+from .note import Note
+from .event import Event
 
 # props = stuff that gets saved
 # state = stuff that doesn't
@@ -16,6 +17,7 @@ class Processor(SaveMixin, ABC):
         super().__init__(*args, **kwargs)
         self.init_props()
         self.init_state()
+        self.visual_event = Event()
 
     @abstractmethod
     def init_props(self):
@@ -30,5 +32,6 @@ class Processor(SaveMixin, ABC):
         ...
 
     @abstractmethod
-    def visual_tick(self, rt_tick: int = 0) -> list[Note]:
+    def visual_tick(self, rt_tick: int = 0):
+        """TRIGGER VISUAL EVENT AT THE END!"""
         ...

@@ -1,4 +1,4 @@
-from save_mixin import SaveMixin
+from .save_mixin import SaveMixin
 
 class Transaction:
     def begin(self, obj: SaveMixin):

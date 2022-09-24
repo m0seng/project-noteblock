@@ -1,11 +1,16 @@
-from processor import Processor
-from note import Note
-from pattern import Pattern
-import effects
 import bisect
+from .processor import Processor
+from .note import Note
+from .pattern import Pattern
+import effects
 
 # effects belong to a channel so storing direct references to them is fine (I think)
 # patterns DO NOT belong to a channel and storing direct references would prevent them from being deleted
+
+# TODO: completely rework this?
+# channels subscribe to pattern length changes
+# pattern holder class with event for pattern additions/deletions
+# channels cache pattern end ticks to speed up lookup
 
 class Channel(Processor):
     def __init__(self, pattern_dict: dict[int, Pattern], *args, **kwargs):

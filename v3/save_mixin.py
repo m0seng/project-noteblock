@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from event import Event
+from .event import Event
 import undo_manager as undoman
 
 class SaveMixin(ABC):

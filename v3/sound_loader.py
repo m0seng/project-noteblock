@@ -2,7 +2,7 @@ import math
 import numpy as np
 import samplerate
 import soundfile
-from instrument import instruments
+from .instrument import instruments
 
 class SoundLoader:
     '''Loads every instrument at every pitch into memory. Does not actually consume much memory.'''

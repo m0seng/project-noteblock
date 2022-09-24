@@ -1,6 +1,6 @@
 import numpy as np
-from note import Note
-from sound_loader import SoundLoader
+from .note import Note
+from .sound_loader import SoundLoader
 
 class Player():
     """Turns lists of Notes into blocks of audio."""
