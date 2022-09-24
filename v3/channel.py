@@ -1,6 +1,7 @@
 from processor import Processor
 from note import Note
 from pattern import Pattern
+import effects
 import bisect
 
 # effects belong to a channel so storing direct references to them is fine (I think)
@@ -12,7 +13,7 @@ class Channel(Processor):
         self.pattern_dict = pattern_dict
 
     def init_props(self):
-        self.patterns: list[Pattern] = []
+        self.placements: list[Pattern] = []
         self.effects: list[Processor] = []
 
     def init_state(self):
@@ -20,27 +21,31 @@ class Channel(Processor):
 
     def to_dict(self) -> dict:
         return {
-            "patterns": self.patterns.copy(),
+            "placements": self.placements.copy(),
             "effects": self.effects.copy()
         }
 
     def from_dict(self, source: dict):
-        # TODO: creating effects from dict does not work yet
-        # need to figure out how to select the right class to instantiate
-        # see https://stackoverflow.com/questions/4821104/dynamic-instantiation-from-string-name-of-a-class-in-dynamically-imported-module
-        self.patterns = source["patterns"].copy()
-        self.effects = [Processor.create_from_dict(effect) for effect in source["effects"]]
+        # TODO: handle no such effect class
+        self.placements = source["placements"].copy()
+        for effect_dict in source["effects"]:
+            effect_class: Processor = getattr(effects, effect_dict["class"])
+            effect_instance = effect_class.create_from_dict(effect_dict)
+            self.effects.append(effect_instance)
 
     def audio_tick(self, input: list[Note] = [], mono_tick: int = 0, seq_tick: int = 0) -> list[Note]:
         # find the only possible pattern - the last one starting before or on the current tick
         if not self.in_pattern(self.last_index, seq_tick):
-            index = bisect.bisect(self.patterns, seq_tick, key=lambda r: r[0]) - 1
+            index = bisect.bisect(self.placements, seq_tick, key=lambda r: r[0]) - 1
             self.last_index = index
 
         # get note from found pattern
-        start_tick, pattern_no = self.patterns[index]
-        current_pattern = self.pattern_dict[pattern_no]
-        notes = current_pattern.tick(seq_tick - start_tick)
+        if self.in_pattern(self.last_index, seq_tick):
+            start_tick, pattern_no = self.placements[self.last_index]
+            current_pattern = self.pattern_dict[pattern_no]
+            notes = current_pattern.tick(seq_tick - start_tick)
+        else:
+            notes = []
 
         for effect in self.effects:
             notes = effect.audio_tick(notes, mono_tick, seq_tick)
@@ -48,7 +53,7 @@ class Channel(Processor):
         return notes
 
     def in_pattern(self, index: int, seq_tick: int):
-        start_tick, pattern_no = self.patterns[index]
+        start_tick, pattern_no = self.placements[index]
         pattern = self.pattern_dict[pattern_no]
         end_tick = start_tick + pattern.length
         return start_tick <= seq_tick < end_tick

@@ -15,9 +15,7 @@ class SoundLoader:
             sound, _ = soundfile.read(instrument.path, dtype="float64", always_2d=True) # automatically scales to [-1, 1]
             for ratio in self.pitch_ratios:
                 pitched_sound = samplerate.resample(sound, ratio, "sinc_best")
-                pad_length = self.block_size - (pitched_sound.shape[0] % self.block_size)
-                padded_sound = np.pad(pitched_sound, pad_width=((0,pad_length),(0,0)))
-                self._sounds[id].append(padded_sound)
+                self._sounds[id].append(pitched_sound)
 
     def get_sound(self, instrument: int, pitch: int) -> np.ndarray:
         """Get the sound data for an instrument at a given pitch. Returns a numpy array."""

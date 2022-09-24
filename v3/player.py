@@ -28,8 +28,12 @@ class Player():
         new_current_sounds = []
         for sound, start_index in self.current_sounds:
             end_index = start_index + self.block_size
-            block += sound[start_index:end_index]
-            if end_index < sound.shape[0]:
-                new_current_sounds.append((sound, end_index))
+            if end_index > sound.shape[0]:
+                remaining_length = sound.shape[0] - start_index
+                block[:remaining_length] += sound[start_index:]
+            else:
+                block += sound[start_index:end_index]
+                if end_index < sound.shape[0]:
+                    new_current_sounds.append((sound, end_index))
         self.current_sounds = new_current_sounds
         return block
