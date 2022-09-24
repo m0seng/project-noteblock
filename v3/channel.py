@@ -22,7 +22,7 @@ class Channel(Processor):
     def to_dict(self) -> dict:
         return {
             "placements": self.placements.copy(),
-            "effects": self.effects.copy()
+            "effects": [effect.to_dict() for effect in self.effects]
         }
 
     def from_dict(self, source: dict):
