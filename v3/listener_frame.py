@@ -28,3 +28,7 @@ class ListenerFrame(ttk.Frame, ABC):
         if self.model is not None:
             self.model.change_event.remove_listener(self.callback)
             self.model = None
+
+    def destroy(self, *args, **kwargs):
+        self.disconnect()
+        super().destroy(*args, **kwargs)
