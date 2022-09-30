@@ -1,15 +1,16 @@
-# TODO: custom exception to auto delete bloat listeners?
-# required in order to delete old objects
+from typing import Callable
 
 class Event:
     def __init__(self):
-        self.listeners: list = []
+        self.listeners: list[Callable] = []
 
-    def add_listener(self, listener):
-        self.listeners.append(listener)
+    def add_listener(self, listener: Callable):
+        if listener not in self.listeners:
+            self.listeners.append(listener)
 
-    def remove_listener(self, listener):
-        self.listeners.remove(listener)
+    def remove_listener(self, listener: Callable):
+        if listener in self.listeners:
+            self.listeners.remove(listener)
 
     def trigger(self, **kwargs):
         for listener in self.listeners:
