@@ -2,7 +2,7 @@ from .save_mixin import SaveMixin
 from abc import ABC, abstractmethod
 from typing import Type
 
-class SavableGroup(SaveMixin):
+class SavableGroup(SaveMixin, ABC):
     def __init__(self, subclass: Type[SaveMixin], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.savables: list[subclass] = []

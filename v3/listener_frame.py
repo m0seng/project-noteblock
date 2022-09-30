@@ -4,7 +4,7 @@ import tkinter.ttk as ttk
 from .save_mixin import SaveMixin
 from .event import Event
 
-class ListenerFrame(ttk.Frame, ABC):
+class SavableFrame(ttk.Frame, ABC):
     def __init__(self, aux_events: list[Event], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.model: SaveMixin = None
@@ -40,5 +40,6 @@ class ListenerFrame(ttk.Frame, ABC):
             event.remove_listener(self.update)
 
     def destroy(self, *args, **kwargs):
+        self.aux_disconnect()
         self.disconnect()
         super().destroy(*args, **kwargs)
