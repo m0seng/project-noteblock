@@ -18,6 +18,8 @@ class Channel(Processor):
         self.pattern_dict = pattern_dict
 
     def init_props(self):
+        self.name: str = "placeholder"
+        self.colour: str = "red"
         self.placements: list[Pattern] = []
         self.effects: list[Processor] = []
 
@@ -26,12 +28,16 @@ class Channel(Processor):
 
     def to_dict(self) -> dict:
         return {
+            "name": self.name,
+            "colour": self.colour,
             "placements": self.placements.copy(),
             "effects": [effect.to_dict() for effect in self.effects]
         }
 
     def from_dict(self, source: dict):
         # TODO: handle no such effect class
+        self.name = source["name"]
+        self.colour = source["colour"]
         self.placements = source["placements"].copy()
         for effect_dict in source["effects"]:
             effect_class: Processor = getattr(effects, effect_dict["class"])
