@@ -2,6 +2,9 @@ from .save_mixin import SaveMixin
 from abc import ABC, abstractmethod
 from typing import Type
 
+# THIS CLASS IS PROBABLY NOT NEEDED...
+# JUST IMPLEMENT GROUPS ONE BY ONE
+
 class SavableGroup(SaveMixin, ABC):
     def __init__(self, subclass: Type[SaveMixin], *args, **kwargs):
         super().__init__(*args, **kwargs)
