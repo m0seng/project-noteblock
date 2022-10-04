@@ -2,7 +2,7 @@ from .savable import Savable
 
 class Transaction:
     def begin(self, obj: Savable):
-        self.obj = obj
+        self.obj: Savable = obj
         self.before = self.obj.to_dict()
 
     def end(self):

@@ -5,14 +5,16 @@ import undo_manager as undoman
 class Savable(ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.change_event = Event()
+        self.pre_change = Event()
+        self.post_change = Event()
     
     def __enter__(self):
+        self.pre_change.trigger()
         undoman.begin_transaction(self)
         
     def __exit__(self, exc_type, exc_value, exc_tb):
         undoman.end_transaction()
-        self.change_event.trigger()
+        self.post_change.trigger()
         
     @abstractmethod
     def to_dict(self) -> dict:

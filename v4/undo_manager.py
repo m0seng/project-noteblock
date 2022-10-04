@@ -17,16 +17,21 @@ def end_transaction():
     past.append(trans)
     future.clear()
 
+# manually trigger events here
+# as the context manager calls the undo manager
+
 def undo():
     trans = past.pop()
     if trans is not None:
+        trans.obj.pre_change.trigger()
         trans.undo()
         future.append(trans)
-        trans.obj.change_event.trigger()
+        trans.obj.post_change.trigger()
 
 def redo(self):
     trans = future.pop()
     if trans is not None:
+        trans.obj.pre_change.trigger()
         trans.redo()
         past.append(trans)
-        trans.obj.change_event.trigger()
+        trans.obj.post_change.trigger()
