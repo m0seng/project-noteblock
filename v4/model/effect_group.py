@@ -24,7 +24,7 @@ class EffectGroup(Processor):
             "effects": effects_list
         }
 
-    def audio_tick(self, notes: list[Note] = ..., mono_tick: int = 0, seq_tick: int = 0) -> list[Note]:
+    def audio_tick(self, notes: list[Note] = [], mono_tick: int = 0, seq_tick: int = 0) -> list[Note]:
         for effect in self.effects:
             notes = effect.audio_tick(notes=notes, mono_tick=mono_tick, seq_tick=seq_tick)
         return notes
