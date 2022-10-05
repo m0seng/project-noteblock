@@ -1,5 +1,4 @@
 from ..basics import Processor, Note
-from .. import effects
 from .channel import Channel
 
 class ChannelGroup(Processor):

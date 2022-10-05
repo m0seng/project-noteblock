@@ -16,10 +16,7 @@ class EffectGroup(Processor):
             self.effects.append(effect)
 
     def to_dict(self) -> dict:
-        effects_list = []
-        for effect in self.effects:
-            effect_dict = effect.to_dict()
-            effects_list.append(effect_dict)
+        effects_list = [effect.to_dict() for effect in self.effects]
         return {
             "effects": effects_list
         }
