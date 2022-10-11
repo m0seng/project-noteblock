@@ -11,7 +11,11 @@ class Pattern(Savable):
 
     def tick(self, pat_tick: int) -> list[Note]:
         # TODO: handle index error just in case
-        return [Note(pitch=self.notes[pat_tick]),]
+        note = self.notes[pat_tick]
+        if note is not None:
+            return [Note(pitch=self.notes[pat_tick]),]
+        else:
+            return []
 
     @property
     def length(self):
