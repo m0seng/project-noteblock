@@ -23,6 +23,9 @@ class ChannelGroup(Processor):
             channel = Channel.create_from_dict(channel_dict)
             self.channels.append(channel)
 
+    def has_pattern(self, pattern: Pattern) -> bool:
+        return any(c.has_pattern(pattern) for c in self.channels)
+
     def purge_pattern(self, pattern: Pattern):
         for channel in self.channels:
             channel.purge_pattern(pattern)

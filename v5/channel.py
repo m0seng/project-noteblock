@@ -30,6 +30,9 @@ class Channel(Processor):
         }
         return channel_dict
 
+    def has_pattern(self, pattern: Pattern) -> bool:
+        return any(p == pattern for p, _ in self.placements)
+
     def purge_pattern(self, pattern: Pattern):
         new_placements = []
         for placement in self.placements:
