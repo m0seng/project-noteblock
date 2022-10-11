@@ -33,7 +33,7 @@ class UndoManager:
         self.past.append(self.trans)
         self.future.clear()
 
-    # manually trigger events here
+    # manually triggering events
     # as the context manager calls the undo manager
 
     def undo(self):
