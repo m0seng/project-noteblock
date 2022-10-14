@@ -1,13 +1,13 @@
-from dataclasses import dataclass, field
 from .savable import Savable
 from .note import Note
 
-@dataclass
 class Pattern(Savable):
-    id: int = None
-    name: str = "pattern name"
-    colour: str = "red"
-    notes: list[int] = field(default_factory=lambda: [None for _ in range(16)])
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.id: int = None
+        self.name: str = "pattern name"
+        self.colour: str = "red"
+        self.notes: list[int] = []
 
     def tick(self, pat_tick: int) -> list[Note]:
         # TODO: handle index error just in case

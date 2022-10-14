@@ -1,14 +1,19 @@
 from .processor import Processor
 from .pattern import Pattern
+from .pattern_group import PatternGroup
 from .note import Note
 
 class Channel(Processor):
+    def __init__(self, pattern_group: PatternGroup, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.pattern_group = pattern_group
+
     def init_props(self):
         self.name = "default channel name"
         self.colour = "red"
         self.volume = 1.0
         self.pan = 0.0
-        self.placements: list[tuple[Pattern, int]] = []
+        self.placements: list[tuple[int, int]] = [] # pattern id, start tick
     
     def init_state(self):
         self.last_index: int = 0
@@ -30,13 +35,13 @@ class Channel(Processor):
         }
         return channel_dict
 
-    def has_pattern(self, pattern: Pattern) -> bool:
-        return any(p == pattern for p, _ in self.placements)
+    def has_pattern(self, id: int) -> bool:
+        return any(p == id for p, _ in self.placements)
 
-    def purge_pattern(self, pattern: Pattern):
+    def purge_pattern(self, id: int):
         new_placements = []
         for placement in self.placements:
-            if placement[0] != pattern:
+            if placement[0] != id:
                 new_placements.append(placement)
         self.placements = new_placements
 
@@ -49,14 +54,14 @@ class Channel(Processor):
 
     def in_index(self, tick: int, index: int):
         pattern, start = self.placements[index]
-        return start <= tick < (start + pattern.length)
+        return start <= tick < (start + self.pattern_group.data[pattern].length)
 
-    def audio_tick(self, notes, mono_tick, seq_tick, is_next) -> list[Note]:
+    def audio_tick(self, notes: list[Note] = [], mono_tick: int = 0, seq_tick: int = 0, is_next: bool = True) -> list[Note]:
         if not is_next or not self.in_index(seq_tick, self.last_index):
             self.last_index = self.index_of_tick(seq_tick)
         if self.in_index(seq_tick, self.last_index):
             pattern, start = self.placements[self.last_index]
-            return pattern.tick(seq_tick - start)
+            return self.pattern_group.data[pattern].tick(seq_tick - start)
         else:
             return []
 
