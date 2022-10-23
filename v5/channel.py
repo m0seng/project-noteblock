@@ -39,18 +39,14 @@ class Channel(Processor):
         return any(p == id for p, _ in self.placements)
 
     def purge_pattern(self, id: int):
-        new_placements = []
-        for placement in self.placements:
-            if placement[0] != id:
-                new_placements.append(placement)
-        self.placements = new_placements
+        self.placements = [pm for pm in self.placements if pm[0] != id]
 
     def index_of_tick(self, tick: int):
         # TODO: convert this to a binary search - algorithm!
-        for index, item in enumerate(self.placements):
-            if item[1] > tick:
-                return index - 1
-        return len(self.placements) - 1
+        return next(
+            (index - 1 for index, item in enumerate(self.placements) if item[1] > tick),
+            len(self.placements - 1) # default
+        )
 
     def in_index(self, tick: int, index: int):
         pattern, start = self.placements[index]
