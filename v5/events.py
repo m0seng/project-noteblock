@@ -16,7 +16,8 @@ class Event:
         for listener in self.listeners:
             listener(**kwargs)
 
-# TODO: instantiate custom events here!
-# pass sender as argument
+# instantiate custom events here!
+# can pass sender as argument
 
+tick = Event()
 edit = Event()
