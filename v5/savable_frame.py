@@ -12,6 +12,7 @@ class SavableFrame(ttk.Frame, ABC):
         super().__init__(*args, **kwargs)
         self.model: Savable = None
         self.suppress_sync = False # use when this Frame is making the edits
+        events.edit.add_listener(self.update)
 
     @abstractmethod
     def sync(self):
@@ -22,14 +23,15 @@ class SavableFrame(ttk.Frame, ABC):
             self.sync()
 
     def connect(self, model: Savable):
+        if self.model is not None:
+            self.disconnect()
         self.model = model
-        events.edit.add_listener(self.update)
         self.sync()
 
     def disconnect(self):
-        events.edit.remove_listener(self.update)
         self.model = None
 
     def destroy(self, *args, **kwargs):
         self.disconnect()
+        events.edit.remove_listener(self.update)
         super().destroy(*args, **kwargs)
