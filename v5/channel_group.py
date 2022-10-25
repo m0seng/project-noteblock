@@ -11,18 +11,21 @@ class ChannelGroup(Processor, UserList):
     def init_props(self):
         self.data: list[Channel] = []
 
+    # ATTENTION: CHANNEL GROUP IS NOW SAVED AS DICT (but stored as list)
+
     def to_dict(self) -> dict:
-        return {
-            "channels": [channel.to_dict() for channel in self.data]
-        }
+        return {index: channel.to_dict() for index, channel in enumerate(self.data)}
 
     def from_dict(self, source: dict):
         # don't worry about the old channels here
         # the context manager event will take care of them
         self.data = []
-        for channel_dict in source["channels"]:
+        for _, channel_dict in source.items():
             channel = Channel.create_from_dict(channel_dict)
             self.data.append(channel)
+
+    def song_length(self) -> int:
+        return max(c.channel_length() for c in self.data)
 
     def has_pattern(self, id: int) -> bool:
         return any(c.has_pattern(id) for c in self.data)
