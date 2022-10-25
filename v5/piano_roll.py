@@ -1,5 +1,4 @@
 import math
-import random
 import tkinter as tk
 import tkinter.ttk as ttk
 
@@ -7,18 +6,19 @@ from pattern import Pattern
 from pattern_group import PatternGroup
 from savable_frame import SavableFrame
 
-# TODO: HANDLE WHEN MODEL IS NONE
+# TODO: HANDLE WHEN MODEL IS NONE?
+# or just avoid it ever being none...
 
 class PianoRoll(SavableFrame):
     """UI for editing patterns. Subclassed from SavableFrame."""
 
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, model: Pattern, *args, **kwargs):
         """Constructs the piano roll UI. kwargs are passed to ttk.Frame."""
         # create the frame and SavableFrame variables
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
 
-        self.model: Pattern = None
+        self.model: Pattern = model
 
         # drawing constants
         self.note_width: float = 20
@@ -27,7 +27,7 @@ class PianoRoll(SavableFrame):
         self.note_height: float = self.canvas_height / self.pitch_count
 
         # colour constants
-        # TODO: derive these from global state
+        # TODO: derive these from global theme???
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
@@ -44,7 +44,7 @@ class PianoRoll(SavableFrame):
         if sender is self.model and not self.suppress_sync:
             self.draw_everything()
         elif sender.__class__ is PatternGroup and remove is self.model:
-            self.model = None
+            self.model = sender.data.values()[0]
 
     def init_canvas(self):
         """Initializes and grids the canvas with click bindings."""
@@ -108,11 +108,11 @@ class PianoRoll(SavableFrame):
 
     def draw_guide_lines(self):
         """Draws the vertical guide lines. TODO: make this snap smart."""
-        for index, _ in enumerate(self.model.notes):
+        for i in range(self.model.length):
             self.canvas.create_line(
-                index * self.note_width,
+                i * self.note_width,
                 0,
-                index * self.note_width,
+                i * self.note_width,
                 self.canvas_height,
                 fill=self.guideline_colour,
                 width=0
