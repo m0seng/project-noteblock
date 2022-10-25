@@ -43,7 +43,7 @@ class PianoRoll(SavableFrame):
     def update(self, sender, remove: Pattern = None):
         if sender is self.model and not self.suppress_sync:
             self.draw_everything()
-        elif sender.__class__ is PatternGroup and remove is self.model:
+        elif isinstance(sender, PatternGroup) and remove is self.model:
             self.model = sender.data.values()[0]
 
     def init_canvas(self):
