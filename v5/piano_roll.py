@@ -49,7 +49,8 @@ class PianoRoll(SavableFrame):
     def init_canvas(self):
         """Initializes and grids the canvas with click bindings."""
         self.canvas = tk.Canvas(
-            self, height=self.canvas_height,
+            self,
+            height=self.canvas_height,
             scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height),
             highlightthickness=0,
             bg=self.bg_colour
