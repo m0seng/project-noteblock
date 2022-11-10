@@ -11,11 +11,12 @@ from undoable_action import UndoableAction
 from value_tree_listener import ValueTreeListener
 
 class ValueTree:
-    def __init__(self):
+    def __init__(self, uman: UndoManager):
         self.parent: ValueTree | None = None
         self.properties: dict = {}
         self.children: list[ValueTree] = []
         self.listeners: list[ValueTreeListener] = []
+        self.uman = uman
 
     def add_listener(self, listener: ValueTreeListener):
         if listener not in self.listeners:
@@ -24,6 +25,21 @@ class ValueTree:
     def remove_listener(self, listener: ValueTreeListener):
         if listener in self.listeners:
             self.listeners.remove(listener)
+
+    def __getattr__(self, key: str):
+        return self.properties[key]
+
+    def __setattr__(self, key: str, value):
+        self.set_property(key, value, self.uman)
+
+    def __delattr__(self, key: str):
+        self.remove_property(key, self.uman)
+
+    def __getitem__(self, key: int):
+        return self.children[key]
+
+    def __delitem__(self, key: int):
+        self.remove_child(key, self.uman)
 
     def set_property(self, key: str, value, uman: UndoManager | None):
         if uman is None:
@@ -79,24 +95,18 @@ class ValueTree:
     
     def to_dict(self) -> dict:
         output = {}
-        output.update(self.properties)
-        child_list = [child.to_dict() for child in self.children]
-        output["children"] = child_list
+        output["properties"] = self.properties
+        output["children"] = [child.to_dict() for child in self.children]
         output["type"] = self.__class__.__name__ # use a class mapping here?
         return output
 
     @classmethod
     def from_dict(cls, source: dict, class_mapping: dict):
         obj = cls()
-        for k, v in source.items():
-            if k == "children":
-                for child_dict in v:
-                    child_type = class_mapping.get(child_dict["type"], ValueTree)
-                    obj.children.append(child_type.from_dict(child_dict, class_mapping))
-            elif k == "type":
-                pass
-            else:
-                obj.properties[k] = v
+        obj.properties = source["properties"]
+        for child_dict in source["children"]:
+            child_class = class_mapping.get(child_dict["type"], ValueTree)
+            obj.children.append(child_class.from_dict(child_dict, class_mapping))
 
 
 class SetPropertyAction(UndoableAction):
