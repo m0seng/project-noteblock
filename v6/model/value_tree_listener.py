@@ -2,8 +2,9 @@ from abc import ABC, abstractmethod
 from value_tree import ValueTree
 
 class ValueTreeListener(ABC):
+    @abstractmethod
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+       ...
 
     @abstractmethod
     def vt_property_changed(self, tree: ValueTree, key: str):
