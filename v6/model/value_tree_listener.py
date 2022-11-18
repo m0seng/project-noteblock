@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from value_tree import ValueTree
+from .value_tree import ValueTree
 
 class ValueTreeListener(ABC):
     @abstractmethod

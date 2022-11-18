@@ -6,9 +6,13 @@
 
 # see https://docs.juce.com/master/tutorial_value_tree.html for the basis of this system
 
-from undo_manager import UndoManager
-from undoable_action import UndoableAction
-from value_tree_listener import ValueTreeListener
+# magic methods are not used as they create conflicts with state/properties
+# implement in subclasses where appropriate
+# TODO: still make copies in dict methods?
+
+from .undo_manager import UndoManager
+from .undoable_action import UndoableAction
+from .value_tree_listener import ValueTreeListener
 
 class ValueTree:
     def __init__(self, uman: UndoManager):
@@ -18,6 +22,22 @@ class ValueTree:
         self.listeners: list[ValueTreeListener] = []
         self.uman = uman
 
+    # def __getattr__(self, name):
+    #     if name in self.properties:
+    #         return self.get_property(name)
+
+    # def __setattr__(self, name, value):
+    #     if name in self.properties:
+    #         self.set_property(name, value, self.uman)
+    #     else:
+    #         super().__setattr__(name, value)
+
+    # def __delattr__(self, name):
+    #     if name in self.properties:
+    #         self.remove_property(name, self.uman)
+    #     else:
+    #         super().__delattr__(name)
+
     def add_listener(self, listener: ValueTreeListener):
         if listener not in self.listeners:
             self.listeners.append(listener)
@@ -26,20 +46,8 @@ class ValueTree:
         if listener in self.listeners:
             self.listeners.remove(listener)
 
-    def __getattr__(self, key: str):
+    def get_property(self, key: str):
         return self.properties[key]
-
-    def __setattr__(self, key: str, value):
-        self.set_property(key, value, self.uman)
-
-    def __delattr__(self, key: str):
-        self.remove_property(key, self.uman)
-
-    def __getitem__(self, key: int):
-        return self.children[key]
-
-    def __delitem__(self, key: int):
-        self.remove_child(key, self.uman)
 
     def set_property(self, key: str, value, uman: UndoManager | None):
         if uman is None:
@@ -58,6 +66,14 @@ class ValueTree:
         else:
             if key in self.properties:
                 uman.perform(SetPropertyAction(self, key, old_val=self.properties[key], is_deleting=True))
+
+    def get_child(self, index: int):
+        return self.children[index]
+
+    def get_child_of_type(self, t: type):
+        for child in self.children:
+            if isinstance(child, t):
+                return child
 
     def add_child(self, child: "ValueTree", index: int, uman: UndoManager | None):
         if (child.parent is not self) and (child is not self) and (self.parent is not child):
@@ -107,6 +123,7 @@ class ValueTree:
         for child_dict in source["children"]:
             child_class = class_mapping.get(child_dict["type"], ValueTree)
             obj.children.append(child_class.from_dict(child_dict, class_mapping))
+        return obj
 
 
 class SetPropertyAction(UndoableAction):

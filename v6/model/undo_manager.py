@@ -1,5 +1,5 @@
 from collections import deque
-from undoable_action import UndoableAction
+from .undoable_action import UndoableAction
 
 class UndoManager:
     def __init__(self, past_len: int = 10, future_len: int = 10):
