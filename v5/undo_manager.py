@@ -1,10 +1,9 @@
 from collections import deque
-from .savable import Savable
-from . import events
+import events
 
 class Transaction:
-    def begin(self, obj: Savable):
-        self.obj: Savable = obj
+    def begin(self, obj):
+        self.obj = obj
         self.before = self.obj.to_dict()
 
     def end(self):
@@ -24,7 +23,7 @@ class UndoManager:
         self.future: deque[Transaction] = deque(maxlen=self.future_length)
         self.trans: Transaction = None
 
-    def begin_transaction(self, obj: Savable):
+    def begin_transaction(self, obj):
         self.trans = Transaction()
         self.trans.begin(obj)
 

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import tkinter as tk
 import tkinter.ttk as ttk
-from .savable import Savable
-from . import events
+from savable import Savable
+import events
 
 # TODO: HOW TO ATTACH TO MULTIPLE THINGS?
 # e.g.: Piano Roll attaches to Pattern, PatternGroup, Config and Preferences

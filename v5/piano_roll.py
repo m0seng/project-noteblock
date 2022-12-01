@@ -143,9 +143,10 @@ class PianoRoll(SavableFrame):
         if self.model.notes[tick] == note:
             self.suppress_sync = True
             with self.model:
-                self.canvas.delete(self.note_rectangles[tick])
+                # self.canvas.delete(self.note_rectangles[tick])
                 self.model.notes[tick] = None
-                self.note_rectangles[tick] = None
+                # self.note_rectangles[tick] = None
+                self.draw_everything()
             self.suppress_sync = False
 
     def set_note(self, event: tk.Event):
@@ -154,8 +155,9 @@ class PianoRoll(SavableFrame):
         with self.model:
             note, tick = self.get_note_at_coords(event.x, event.y)
             self.model.notes[tick] = note
-            self.canvas.delete(self.note_rectangles[tick])
-            self.note_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.model.colour)
+            # self.canvas.delete(self.note_rectangles[tick])
+            # self.note_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.model.colour)
+            self.draw_everything()
         self.suppress_sync = False
 
     def black_notes(self, pitch_count: int) -> list[int]:

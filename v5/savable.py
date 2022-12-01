@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from . import events
-from .undo_manager import uman
+import events
+from undo_manager import uman
 
 class Savable(ABC):
     def __init__(self, *args, **kwargs):

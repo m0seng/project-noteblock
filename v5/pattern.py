@@ -1,5 +1,5 @@
-from .savable import Savable
-from .note import Note
+from savable import Savable
+from note import Note
 
 class Pattern(Savable):
     def __init__(self, *args, **kwargs):

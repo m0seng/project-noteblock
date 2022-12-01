@@ -1,6 +1,6 @@
 from collections import UserDict
-from .savable import Savable
-from .pattern import Pattern
+from savable import Savable
+from pattern import Pattern
 
 class PatternGroup(Savable, UserDict):
     def init_state(self):

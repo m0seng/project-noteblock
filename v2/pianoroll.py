@@ -131,16 +131,18 @@ class PianoRoll(ttk.Frame):
         """Deletes a note at the given event coordinates."""
         note, tick = self.get_note_at_coords(event.x, event.y)
         if self.notes[tick] == note:
-            self.canvas.delete(self.note_rectangles[tick])
             self.notes[tick] = None
-            self.note_rectangles[tick] = None
+            # self.canvas.delete(self.note_rectangles[tick])
+            # self.note_rectangles[tick] = None
+            self.draw_everything()
 
     def set_note(self, event: tk.Event):
         """Sets a note at the given event coordinates. If a note is already at that tick it is replaced."""
         note, tick = self.get_note_at_coords(event.x, event.y)
         self.notes[tick] = note
-        self.canvas.delete(self.note_rectangles[tick])
-        self.note_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.note_colour)
+        # self.canvas.delete(self.note_rectangles[tick])
+        # self.note_rectangles[tick] = self.draw_note(note, tick, length=1, fill=self.note_colour)
+        self.draw_everything()
 
     def black_notes(self, pitch_count: int) -> list[int]:
         """Helper function which returns a list of black notes within the given pitch range."""
