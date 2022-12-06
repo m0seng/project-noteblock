@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class UndoableAction(ABC):
+class Action(ABC):
     @abstractmethod
     def __init__(self):
         ...
