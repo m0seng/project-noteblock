@@ -1,21 +1,21 @@
 from abc import ABC, abstractmethod
 from node import Node
-from node_contexts import AddChildContext
+from node_contexts import AddChildContext, RemoveChildContext, SetPropertyContext
 
 class NodeListener(ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     @abstractmethod
-    def property_set(self, node: Node, key, old_value, new_value):
+    def property_set(self, ctx: SetPropertyContext):
         ...
 
     @abstractmethod
-    def child_added(self, parent: Node, child: Node, id: int, index: int):
+    def child_added(self, ctx: AddChildContext):
         ...
 
     @abstractmethod
-    def child_removed(self, parent: Node, child: Node, id: int, index: int):
+    def child_removed(self, ctx: RemoveChildContext):
         ...
 
 class NodeEventBus:
@@ -30,14 +30,14 @@ class NodeEventBus:
         if listener in self.listeners:
             self.listeners.remove(listener)
 
-    def property_set(self, node: Node, key, old_value, new_value):
+    def property_set(self, ctx: SetPropertyContext):
         for listener in self.listeners:
-            listener.property_set(node, key, old_value, new_value)
+            listener.property_set(ctx)
 
-    def child_added(self, parent: Node, child: Node, id: int, index: int):
+    def child_added(self, ctx: AddChildContext):
         for listener in self.listeners:
-            listener.child_added(parent, child, id, index)
+            listener.child_added(ctx)
 
-    def child_removed(self, parent: Node, child: Node, id: int, index: int):
+    def child_removed(self, ctx: RemoveChildContext):
         for listener in self.listeners:
-            listener.child_removed(parent, child, id, index)
+            listener.child_removed(ctx)
