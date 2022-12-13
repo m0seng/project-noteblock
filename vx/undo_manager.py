@@ -1,7 +1,7 @@
 from collections import deque
-from dataclasses import dataclass
 from action import Action
 from node import Node
+from node_contexts import AddChildContext, RemoveChildContext
 from node_events import NodeEventBus
 
 class UndoManager:
@@ -32,51 +32,33 @@ class UndoManager:
             action.perform()
             self.past.append(action)
 
-@dataclass
-class AddChildContext:
-    parent: Node
-    child: Node
-    id: int
-    index: int
-    reversed: bool = False
-
 class AddChildAction(Action):
     # assumes child does not have another parent
-    def __init__(
-            self,
-            event_bus: NodeEventBus,
-            parent: Node,
-            child: Node,
-            id: int,
-            index: int,
-            reversed: bool = False
-    ):
+    def __init__(self, event_bus: NodeEventBus, ctx: AddChildContext):
         self.event_bus = event_bus
-        self.parent = parent
-        self.child = child
-        self.id = id
-        self.index = index
-        self.reversed = reversed
+        self.ctx = ctx
 
     def perform(self):
-        if self.reversed:
-            self._remove()
-        else:
-            self._add()
+        self.ctx.parent._add_child(self.ctx.child, self.ctx.id, self.ctx.index)
+        self.event_bus.child_added(self.ctx)
     
     def undo(self):
-        if self.reversed:
-            self._add()
-        else:
-            self._remove()
+        self.ctx.parent._remove_child(self.ctx.child, self.ctx.id, self.ctx.index)
+        self.event_bus.child_removed(self.ctx)
+
+class RemoveChildAction(Action):
+    # assumes child does not have another parent
+    def __init__(self, event_bus: NodeEventBus, ctx: RemoveChildContext):
+        self.event_bus = event_bus
+        self.ctx = ctx
+
+    def perform(self):
+        self.ctx.parent._remove_child(self.ctx.child, self.ctx.id, self.ctx.index)
+        self.event_bus.child_removed(self.ctx)
     
-    def _add(self):
-        self.parent._add_child(self.child, self.id, self.index)
-        self.event_bus.child_added(self.parent, self.child, self.id, self.index)
-    
-    def _remove(self):
-        self.parent._remove_child(self.child, self.id, self.index)
-        self.event_bus.child_removed(self.parent, self.child, self.id, self.index)
+    def undo(self):
+        self.ctx.parent._add_child(self.ctx.child, self.ctx.id, self.ctx.index)
+        self.event_bus.child_added(self.ctx)
 
 class SetPropertyAction(Action):
     def __init__(self, event_bus: NodeEventBus, node: Node, key, old_value, new_value):
