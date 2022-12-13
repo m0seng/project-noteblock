@@ -1,5 +1,6 @@
 from collections import deque
 from action import Action
+from node import Node
 
 class UndoManager:
     def __init__(self, past_len: int = 10, future_len: int = 10):
@@ -28,3 +29,43 @@ class UndoManager:
             action = self.future.pop()
             action.perform()
             self.past.append(action)
+
+class AddChildAction(Action):
+    # assumes child does not have another parent
+    def __init__(self, parent: Node, child: Node, id: int, index: int, reversed: bool = False):
+        self.parent = parent
+        self.child = child
+        self.id = id
+        self.index = index
+        self.reversed = reversed
+
+    def perform(self):
+        if self.reversed:
+            self._remove()
+        else:
+            self._add()
+    
+    def undo(self):
+        if self.reversed:
+            self._add()
+        else:
+            self._remove()
+    
+    def _add(self):
+        self.parent._add_child(self.child, self.id, self.index)
+    
+    def _remove(self):
+        self.parent._remove_child(self.child, self.id, self.index)
+
+class SetPropertyAction(Action):
+    def __init__(self, node: Node, key, old_value, new_value):
+        self.node = node
+        self.key = key
+        self.old_value = old_value
+        self.new_value = new_value
+
+    def perform(self):
+        self.node._set_property(self.key, self.new_value)
+
+    def undo(self):
+        self.node._set_property(self.key, self.old_value)
