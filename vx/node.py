@@ -1,5 +1,3 @@
-# TODO: more specific child manipulation methods
-
 class Node:
     '''
     A simplified adaptation of the ValueTree concept from JUCE.
