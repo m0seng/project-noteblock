@@ -1,5 +1,3 @@
-from action import Action
-
 # TODO: more specific child manipulation methods
 
 class Node:
