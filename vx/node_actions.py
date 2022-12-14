@@ -29,7 +29,7 @@ class SetPropertyAction(Action):
 
     def undo(self):
         self.node._set_property(self.key, self.old_value)
-        self.event_bus.property_set(self.node, self.key, self.old_value, self.new_value)
+        self.event_bus.property_set(self.node, self.key, self.new_value, self.old_value)
 
 class AddChildAction(Action):
     # assumes child does not have another parent
