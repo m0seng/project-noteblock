@@ -1,5 +1,5 @@
 from node import Node
-from node_events import NodeListener, NodeEventBus
+from node_events import NodeEventBus
 from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
 from undo_manager import UndoManager
 
@@ -13,6 +13,11 @@ class NodeEditor:
         self.event_bus = event_bus
 
     def set_property(self, node: Node, key, value):
+        old_value = node.get_property(key)
         self.uman.perform(SetPropertyAction(
-            self.event_bus, ...
+            self.event_bus,
+            node,
+            key,
+            old_value,
+            value
         ))

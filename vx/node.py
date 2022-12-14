@@ -11,25 +11,27 @@ class Node:
         self.child_order: list[int] = []
     
     def get_property(self, key):
-        return self.properties[key]
+        return self.properties.get(key, None)
 
     def get_child_by_id(self, id: int):
-        return self.children[id]
+        return self.children.get(id, None)
 
     def get_child_by_index(self, index: int):
-        return self.get_child_by_id(self.child_order[index])
+        if index < len(self.child_order):
+            return self.get_child_by_id(self.child_order[index])
+        return None
 
     def get_index_of_child(self, child: "Node"):
         child_id = self.get_id_of_child(child)
         if child_id is not None:
             return self.child_order.index(child_id)
-        return None # maybe return -1?
+        return None
 
     def get_id_of_child(self, child: "Node"):
         for k, v in self.children.items():
             if v == child:
                 return k
-        return None # maybe return -1?
+        return None
 
     def _set_property(self, key, value):
         self.properties[key] = value
