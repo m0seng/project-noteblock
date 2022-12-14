@@ -19,6 +19,18 @@ class Node:
     def get_child_by_index(self, index: int):
         return self.get_child_by_id(self.child_order[index])
 
+    def get_index_of_child(self, child: "Node"):
+        child_id = self.get_id_of_child(child)
+        if child_id is not None:
+            return self.child_order.index(child_id)
+        return None # maybe return -1?
+
+    def get_id_of_child(self, child: "Node"):
+        for k, v in self.children.items():
+            if v == child:
+                return k
+        return None # maybe return -1?
+
     def _set_property(self, key, value):
         self.properties[key] = value
 

@@ -21,6 +21,12 @@ class AddChildAction(Action):
     def __init__(self, event_bus: NodeEventBus, ctx: AddChildContext):
         self.event_bus = event_bus
         self.ctx = ctx
+        self.reversed_ctx = RemoveChildContext(
+            self.ctx.parent,
+            self.ctx.child,
+            self.ctx.id,
+            self.ctx.index
+        )
 
     def perform(self):
         self.ctx.parent._add_child(self.ctx.child, self.ctx.id, self.ctx.index)
@@ -28,12 +34,18 @@ class AddChildAction(Action):
     
     def undo(self):
         self.ctx.parent._remove_child(self.ctx.child, self.ctx.id, self.ctx.index)
-        self.event_bus.child_removed(self.ctx)
+        self.event_bus.child_removed(self.reversed_ctx)
 
 class RemoveChildAction(Action):
     def __init__(self, event_bus: NodeEventBus, ctx: RemoveChildContext):
         self.event_bus = event_bus
         self.ctx = ctx
+        self.reversed_ctx = AddChildContext(
+            self.ctx.parent,
+            self.ctx.child,
+            self.ctx.id,
+            self.ctx.index
+        )
 
     def perform(self):
         self.ctx.parent._remove_child(self.ctx.child, self.ctx.id, self.ctx.index)
@@ -41,7 +53,7 @@ class RemoveChildAction(Action):
     
     def undo(self):
         self.ctx.parent._add_child(self.ctx.child, self.ctx.id, self.ctx.index)
-        self.event_bus.child_added(self.ctx)
+        self.event_bus.child_added(self.reversed_ctx)
 
 class SetPropertyAction(Action):
     def __init__(self, event_bus: NodeEventBus, ctx: SetPropertyContext):
