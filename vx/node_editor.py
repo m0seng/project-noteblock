@@ -6,6 +6,7 @@ from undo_manager import UndoManager
 # This is where I stick methods to make editing nodes MUCH easier
 # passing an undo manager for now but it might make its own
 # also partially facades undo manager, for example when making action groups
+# TODO: add moving children as a feature (kind of optional)
 
 class NodeEditor:
     def __init__(self, uman: UndoManager, event_bus: NodeEventBus):
@@ -20,4 +21,76 @@ class NodeEditor:
             key,
             old_value,
             value
+        ))
+
+    def remove_child(self, parent: Node, child: Node):
+        if child.parent is not parent: return
+        child_id = parent.get_id_of_child(child)
+        child_index = parent.get_index_of_child(child)
+        if child_id is None or child_index is None: return
+        self.uman.perform(RemoveChildAction(
+            self.event_bus,
+            parent,
+            child,
+            child_id,
+            child_index
+        ))
+
+    def remove_child_with_id(self, parent: Node, child_id: int):
+        child = parent.get_child_by_id(child_id)
+        child_index = parent.get_index_of_child(child)
+        if child is None or child_index is None: return
+        self.uman.perform(RemoveChildAction(
+            self.event_bus,
+            parent,
+            child,
+            child_id,
+            child_index
+        ))
+
+    def remove_child_at_index(self, parent: Node, child_index: int):
+        child = parent.get_child_at_index(child_index)
+        child_id = parent.get_id_of_child(child)
+        if child is None or child_id is None: return
+        self.uman.perform(RemoveChildAction(
+            self.event_bus,
+            parent,
+            child,
+            child_id,
+            child_index
+        ))
+
+    def add_child(self, parent: Node, child: Node):
+        if child.parent is not None: self.remove_child(parent, child)
+        child_id = parent.next_available_id()
+        child_index = len(parent.child_order)
+        self.uman.perform(AddChildAction(
+            self.event_bus,
+            parent,
+            child,
+            child_id,
+            child_index
+        ))
+
+    def add_child_with_id(self, parent: Node, child: Node, child_id: int):
+        if child_id in parent.children.keys(): return
+        if child.parent is not None: self.remove_child(parent, child)
+        child_index = len(parent.child_order)
+        self.uman.perform(AddChildAction(
+            self.event_bus,
+            parent,
+            child,
+            child_id,
+            child_index
+        ))
+
+    def add_child_at_index(self, parent: Node, child: Node, child_index: int):
+        if child.parent is not None: self.remove_child(parent, child)
+        child_id = parent.next_available_id()
+        self.uman.perform(AddChildAction(
+            self.event_bus,
+            parent,
+            child,
+            child_id,
+            child_index
         ))
