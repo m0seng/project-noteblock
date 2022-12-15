@@ -9,6 +9,19 @@ class Node:
         self.properties = {}
         self.children: dict[int, Node] = {}
         self.child_order: list[int] = []
+
+    def to_string(self, prefix=""):
+        child_string = "".join(child.to_string(prefix="        ") for child in self.children.values())
+        result = "".join((
+            f"{prefix}{self.__class__.__name__}(\n",
+            f"{prefix}    properties = {self.properties},\n",
+            f"{prefix}    child_order = {self.child_order},\n",
+            f"{prefix}    children = {{\n",
+            child_string,
+            f"{prefix}    }}\n"
+            f"{prefix})\n"
+        ))
+        return result
     
     def get_property(self, key):
         return self.properties.get(key, None)
@@ -34,14 +47,14 @@ class Node:
         return None
 
     def next_available_id(self):
-        return max(self.children.keys()) + 1
+        return max(self.children.keys(), default=-1) + 1
 
     def _set_property(self, key, value):
         self.properties[key] = value
 
     def _add_child(self, child: "Node", id: int, index: int):
         self.children[id] = child
-        self.parent.child_order.insert(index, id)
+        self.child_order.insert(index, id)
         child.parent = self
 
     def _remove_child(self, child: "Node", id: int, index: int):
