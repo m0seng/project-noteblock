@@ -17,7 +17,17 @@ def main():
     ed.set_property(child, "ligma", "balls")
     ed.set_property(child, "please", "work")
 
+    sibling = Node()
+    ed.set_property(sibling, "idk", "lol")
+    ed.set_property(sibling, "who", "asked")
+
+    grandchild = Node()
+    ed.set_property(grandchild, "me", "when")
+    ed.set_property(grandchild, "the", "imposter")
+
     ed.add_child(root, child)
+    ed.add_child_at_index(root, sibling, 0)
+    ed.add_child(child, grandchild)
 
     print(root.to_string())
 

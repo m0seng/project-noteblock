@@ -11,14 +11,15 @@ class Node:
         self.child_order: list[int] = []
 
     def to_string(self, prefix=""):
-        child_string = "".join(child.to_string(prefix="        ") for child in self.children.values())
+        # extremely scuffed and spaghetti, fix when possible
+        child_string = "".join(f"{prefix}    {k}: " + v.to_string(prefix=prefix+"    ") for k, v in self.children.items())
         result = "".join((
-            f"{prefix}{self.__class__.__name__}(\n",
-            f"{prefix}    properties = {self.properties},\n",
-            f"{prefix}    child_order = {self.child_order},\n",
-            f"{prefix}    children = {{\n",
+            f"{self.__class__.__name__}(\n",
+            f"{prefix}  properties = {self.properties},\n",
+            f"{prefix}  child_order = {self.child_order},\n",
+            f"{prefix}  children = {{\n",
             child_string,
-            f"{prefix}    }}\n"
+            f"{prefix}  }}\n"
             f"{prefix})\n"
         ))
         return result
