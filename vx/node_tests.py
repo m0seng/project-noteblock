@@ -29,7 +29,7 @@ def main():
     ed.add_child_at_index(root, sibling, 0)
     ed.add_child(child, grandchild)
 
-    print(root.to_string())
+    print(root.to_dict())
 
 if __name__ == "__main__":
     main()

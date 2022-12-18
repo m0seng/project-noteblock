@@ -23,6 +23,14 @@ class Node:
             f"{prefix})\n"
         ))
         return result
+
+    def to_dict(self):
+        return {
+            "class": self.__class__.__name__,
+            "properties": self.properties,
+            "child_order": self.child_order,
+            "children": {k: v.to_dict() for k, v in self.children.items()}
+        }
     
     def get_property(self, key):
         return self.properties.get(key, None)
