@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 class Node:
     '''
     A simplified adaptation of the ValueTree concept from JUCE.
@@ -13,8 +15,8 @@ class Node:
     def to_dict(self):
         return {
             "class": self.__class__.__name__,
-            "properties": self.properties,
-            "child_order": self.child_order,
+            "properties": deepcopy(self.properties),
+            "child_order": deepcopy(self.child_order),
             "children": {str(k): v.to_dict() for k, v in self.children.items()}
         }
     

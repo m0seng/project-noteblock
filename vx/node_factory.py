@@ -1,4 +1,5 @@
 from node import Node
+from copy import deepcopy
 # TODO: import Node subclasses here
 
 class NodeFactory:
@@ -11,8 +12,8 @@ class NodeFactory:
         node_class = self.node_classes.get(source["class"], None)
         if node_class is None: return None
         node = node_class()
-        node.properties = source["properties"]
-        node.child_order = source["child_order"]
+        node.properties = deepcopy(source["properties"])
+        node.child_order = deepcopy(source["child_order"])
         for k, v in source["children"].items():
             child = self.create_node(v)
             node._add_child(child, id=int(k), index=None)

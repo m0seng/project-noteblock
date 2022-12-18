@@ -31,15 +31,14 @@ def main():
     ed.add_child_at_index(root, sibling, 0)
     ed.add_child(child, grandchild)
 
-    tree_dict = root.to_dict()
-    # tree_string = json.dumps(tree_dict, indent=4)
-    # print(tree_string)
+    print(uman.past)
 
-    factory = NodeFactory()
-    new_root = factory.create_node(tree_dict)
-    new_tree_dict = new_root.to_dict()
-    new_tree_string = json.dumps(new_tree_dict, indent=4)
-    print(new_tree_string)
+    # factory = NodeFactory()
+    # tree_dict = root.to_dict()
+    # new_root = factory.create_node(tree_dict)
+    # new_tree_dict = new_root.to_dict()
+    # new_tree_string = json.dumps(new_tree_dict, indent=4)
+    # print(new_tree_string)
 
 if __name__ == "__main__":
     main()

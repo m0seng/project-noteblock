@@ -8,6 +8,10 @@ class UndoManager:
         self.past: deque[Action] = deque(maxlen=past_len)
         self.future: deque[Action] = deque(maxlen=future_len)
 
+    def clear_history(self):
+        self.past.clear()
+        self.future.clear()
+
     def perform(self, new_action: Action):
         new_action.perform()
         self.past.append(new_action)
