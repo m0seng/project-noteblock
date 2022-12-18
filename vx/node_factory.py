@@ -7,11 +7,9 @@ class NodeFactory:
         # TODO: add entries for Node subclasses here
     }
 
-    def __init__(self):
-        ...
-
     def create_node(self, source: dict):
-        node_class = self.node_classes[source["class"]]
+        node_class = self.node_classes.get(source["class"], None)
+        if node_class is None: return None
         node = node_class()
         node.properties = source["properties"]
         node.child_order = source["child_order"]

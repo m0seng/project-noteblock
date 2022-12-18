@@ -49,7 +49,7 @@ class Node:
 
     def _add_child(self, child: "Node", id: int, index: int):
         self.children[id] = child
-        if index is not None: self.child_order.insert(index, id)
+        if index is not None: self.child_order.insert(index, id) # allows no index insertion for factory
         child.parent = self
 
     def _remove_child(self, child: "Node", id: int, index: int):
