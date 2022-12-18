@@ -1,3 +1,4 @@
+import json
 from node import Node
 from node_events import NodeEventBus
 from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
@@ -29,7 +30,9 @@ def main():
     ed.add_child_at_index(root, sibling, 0)
     ed.add_child(child, grandchild)
 
-    print(root.to_dict())
+    tree_dict = root.to_dict()
+    tree_string = json.dumps(tree_dict, indent=4)
+    print(tree_string)
 
 if __name__ == "__main__":
     main()
