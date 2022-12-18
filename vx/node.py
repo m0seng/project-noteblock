@@ -15,7 +15,7 @@ class Node:
             "class": self.__class__.__name__,
             "properties": self.properties,
             "child_order": self.child_order,
-            "children": {k: v.to_dict() for k, v in self.children.items()}
+            "children": {str(k): v.to_dict() for k, v in self.children.items()}
         }
     
     def get_property(self, key):
@@ -49,7 +49,7 @@ class Node:
 
     def _add_child(self, child: "Node", id: int, index: int):
         self.children[id] = child
-        self.child_order.insert(index, id)
+        if index is not None: self.child_order.insert(index, id)
         child.parent = self
 
     def _remove_child(self, child: "Node", id: int, index: int):

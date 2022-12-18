@@ -4,6 +4,7 @@ from node_events import NodeEventBus
 from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
 from undo_manager import UndoManager
 from node_editor import NodeEditor
+from node_factory import NodeFactory
 
 def main():
     uman = UndoManager()
@@ -31,8 +32,14 @@ def main():
     ed.add_child(child, grandchild)
 
     tree_dict = root.to_dict()
-    tree_string = json.dumps(tree_dict, indent=4)
-    print(tree_string)
+    # tree_string = json.dumps(tree_dict, indent=4)
+    # print(tree_string)
+
+    factory = NodeFactory()
+    new_root = factory.create_node(tree_dict)
+    new_tree_dict = new_root.to_dict()
+    new_tree_string = json.dumps(new_tree_dict, indent=4)
+    print(new_tree_string)
 
 if __name__ == "__main__":
     main()
