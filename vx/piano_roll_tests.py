@@ -1,12 +1,9 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from node import Node
 from node_events import NodeEventBus
-from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
 from undo_manager import UndoManager
 from node_editor import NodeEditor
-from node_factory import NodeFactory
 
 from pattern_group import PatternGroup
 from pattern import Pattern
