@@ -155,7 +155,6 @@ class PianoRoll(NodeListener, ttk.Frame):
                 notes = self.pattern.get_property("notes")
                 notes[tick] = -1
                 self.ed.set_property(self.pattern, "notes", notes)
-                self.draw_everything()
 
     def set_note(self, event: tk.Event):
         """Sets a note at the given event coordinates. If a note is already at that tick it is replaced."""
@@ -165,7 +164,6 @@ class PianoRoll(NodeListener, ttk.Frame):
                 notes = self.pattern.get_property("notes")
                 notes[tick] = note
                 self.ed.set_property(self.pattern, "notes", notes)
-                self.draw_everything()
 
     def black_notes(self, pitch_count: int) -> list[int]:
         """Helper function which returns a list of black notes within the given pitch range."""
