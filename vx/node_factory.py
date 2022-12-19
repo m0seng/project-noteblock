@@ -1,5 +1,5 @@
-from node import Node
 from copy import deepcopy
+from node import Node
 # TODO: import Node subclasses here
 
 class NodeFactory:

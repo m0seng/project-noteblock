@@ -17,6 +17,9 @@ class UndoManager:
         self.past.append(new_action)
         self.future.clear()
 
+    def perform_without_undo(self, new_action: Action):
+        new_action.perform()
+
     def can_undo(self):
         return len(self.past) > 0
 
