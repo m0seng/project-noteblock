@@ -21,7 +21,7 @@ class Node:
         }
     
     def get_property(self, key):
-        return self.properties.get(key, None)
+        return deepcopy(self.properties.get(key, None))
 
     def get_child_by_id(self, id: int):
         return self.children.get(id, None)
