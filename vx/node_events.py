@@ -6,15 +6,15 @@ class NodeListener(ABC):
         super().__init__(*args, **kwargs)
 
     @abstractmethod
-    def property_set(self, node: Node, key, old_value, new_value):
+    def node_property_set(self, node: Node, key, old_value, new_value):
         ...
 
     @abstractmethod
-    def child_added(self, parent: Node, child: Node, id: int, index: int):
+    def node_child_added(self, parent: Node, child: Node, id: int, index: int):
         ...
 
     @abstractmethod
-    def child_removed(self, parent: Node, child: Node, id: int, index: int):
+    def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         ...
 
 class NodeEventBus:
@@ -31,12 +31,12 @@ class NodeEventBus:
 
     def property_set(self, node: Node, key, old_value, new_value):
         for listener in self.listeners:
-            listener.property_set(node, key, old_value, new_value)
+            listener.node_property_set(node, key, old_value, new_value)
 
     def child_added(self, parent: Node, child: Node, id: int, index: int):
         for listener in self.listeners:
-            listener.child_added(parent, child, id, index)
+            listener.node_child_added(parent, child, id, index)
 
     def child_removed(self, parent: Node, child: Node, id: int, index: int):
         for listener in self.listeners:
-            listener.child_removed(parent, child, id, index)
+            listener.node_child_removed(parent, child, id, index)
