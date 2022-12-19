@@ -31,6 +31,10 @@ class Node:
             return self.get_child_by_id(self.child_order[index])
         return None
 
+    def get_child_by_class(self, _class):
+        for child in self.children.values():
+            if isinstance(child, _class): return child
+
     def get_index_of_child(self, child: "Node"):
         child_id = self.get_id_of_child(child)
         if child_id is not None:
@@ -45,6 +49,10 @@ class Node:
 
     def next_available_id(self):
         return max(self.children.keys(), default=-1) + 1
+
+    def children_iterator(self):
+        for child_id in self.child_order:
+            yield self.get_child_by_id(child_id)
 
     def _set_property(self, key, value):
         self.properties[key] = value
