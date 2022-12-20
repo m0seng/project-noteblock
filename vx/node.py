@@ -54,6 +54,9 @@ class Node:
         for child_id in self.child_order:
             yield self.get_child_by_id(child_id)
 
+    def children_count(self):
+        return len(self.children)
+
     def _set_property(self, key, value):
         self.properties[key] = value
 
