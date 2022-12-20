@@ -27,7 +27,7 @@ class Node:
         return self.children.get(id, None)
 
     def get_child_at_index(self, index: int):
-        if index < len(self.child_order):
+        if 0 <= index < len(self.child_order):
             return self.get_child_by_id(self.child_order[index])
         return None
 

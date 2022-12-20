@@ -13,30 +13,37 @@ class Channel(Node):
         self._set_property("sustain_mix", 0.5)
         self._set_property("volume", 1.0)
         self._set_property("pan", 0.0)
+        self._set_property("mute", False)
+        self._set_property("solo", False)
         self._set_property("placements", [-1 for _ in range(seq_length)])
         self.pattern_group = pattern_group
         self.sustained_note = None
 
     def tick(self, mono_tick: int, bar_number: int, pat_tick: int) -> list[Note]:
-        # get note numbers from pattern
-        pattern_id = self.get_property("placements")[bar_number]
-        pattern: Pattern = self.pattern_group.get_child_by_id(pattern_id)
-        note_numbers = pattern.get_notes(pat_tick)
+        if self.get_property("mute"):
+            # TODO: handle mute here and solo elsewhere...
+            return []
+        else:
+            # get note numbers from pattern
+            pattern_id = self.get_property("placements")[bar_number]
+            pattern: Pattern = self.pattern_group.get_child_by_id(pattern_id)
+            note_numbers = pattern.get_notes(pat_tick)
 
-        # convert to Note objects
-        notes: list[Note] = self.convert_numbers_to_notes(note_numbers)
+            # convert to Note objects
+            notes: list[Note] = self.convert_numbers_to_notes(note_numbers)
 
-        # apply effects in sequence
-        for effect in self.children_iterator():
-            notes = effect.tick(notes, mono_tick)
+            # apply effects in sequence
+            for effect in self.children_iterator():
+                notes = effect.tick(notes, mono_tick)
+            
+            # apply volume and pan
+            notes = [note.apply_volume_and_pan(
+                volume=self.get_property("volume"),
+                pan=self.get_property("pan")
+            ) for note in notes]
+
+            return notes
         
-        # apply volume and pan
-        notes = [note.apply_volume_and_pan(
-            volume=self.get_property("volume"),
-            pan=self.get_property("pan")
-        ) for note in notes]
-
-        return notes
 
     def convert_numbers_to_notes(self, note_numbers: list[int]) -> list[Note]:
         notes = []

@@ -22,6 +22,19 @@ class NodeEditor:
             old_value,
             value
         ))
+    
+    def toggle_bool(self, node: Node, key):
+        old_value = node.get_property(key)
+        if not isinstance(old_value, bool):
+            return
+        new_value = False if old_value else True
+        self.uman.perform(SetPropertyAction(
+            self.event_bus,
+            node,
+            key,
+            old_value,
+            new_value
+        ))
 
     def remove_child(self, parent: Node, child: Node):
         if child.parent is not parent: return

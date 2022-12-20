@@ -51,17 +51,17 @@ class PianoRoll(NodeListener, ttk.Frame):
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
-        if node is self.pattern: self.update()
+        if node is self.pattern: self.update_ui()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         if parent is self.pattern_group and child is self.pattern:
             self.pattern = None
-            self.update()
+            self.update_ui()
 
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
         ...
 
-    def update(self):
+    def update_ui(self):
         self.draw_everything()
 
     def init_canvas(self):
