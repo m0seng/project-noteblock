@@ -7,7 +7,6 @@ from node_editor import NodeEditor
 
 from pattern_group import PatternGroup
 from pattern import Pattern
-
 from piano_roll import PianoRoll
 
 def main():
@@ -17,7 +16,7 @@ def main():
 
     pattern_group = PatternGroup()
     pattern = Pattern()
-    ed.set_property(pattern, "notes", [1,2,3,4,5,6,7,8,-2])
+    ed.set_property(pattern, "notes", [-1 for _ in range(16)])
 
     ed.add_child(pattern_group, pattern)
 
@@ -27,7 +26,7 @@ def main():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    piano_roll = PianoRoll(window, ed, event_bus, pattern_group)
+    piano_roll = PianoRoll(window, ed=ed, event_bus=event_bus, pattern_group=pattern_group)
     piano_roll.attach_pattern(pattern)
     piano_roll.grid(column=0, row=0, sticky="nsew")
 

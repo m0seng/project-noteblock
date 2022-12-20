@@ -9,7 +9,7 @@ from pattern import Pattern
 from pattern_group import PatternGroup
 
 class PianoRoll(NodeListener, ttk.Frame):
-    def __init__(self, parent, ed: NodeEditor, event_bus: NodeEventBus, pattern_group: PatternGroup, *args, **kwargs):
+    def __init__(self, parent, *args, ed: NodeEditor, event_bus: NodeEventBus, pattern_group: PatternGroup, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.ed = ed
         self.event_bus = event_bus
@@ -33,7 +33,7 @@ class PianoRoll(NodeListener, ttk.Frame):
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
-        self.no_note_bar_colour: str = "gray60"
+        self.no_note_bar_colour: str = "gray65"
 
         self.init_canvas()
         self.init_scrollbar()

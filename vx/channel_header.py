@@ -7,7 +7,7 @@ from node_editor import NodeEditor
 from channel import Channel
 
 class ChannelHeader(NodeListener, ttk.Frame):
-    def __init__(self, parent, channel: Channel, ed: NodeEditor, event_bus: NodeEventBus, *args, **kwargs):
+    def __init__(self, parent, *args, channel: Channel, ed: NodeEditor, event_bus: NodeEventBus, **kwargs):
         super().__init__(parent, *args, padding=(5, 5, 5, 5), **kwargs)
         self.channel = channel
         self.ed = ed

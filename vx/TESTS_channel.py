@@ -23,7 +23,7 @@ def main():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    header = ChannelHeader(window, channel, ed, event_bus)
+    header = ChannelHeader(window, channel=channel, ed=ed, event_bus=event_bus)
     header.grid(column=0, row=0)
 
     undo_frame = ttk.Frame(window)
