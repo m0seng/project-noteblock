@@ -27,8 +27,7 @@ def main():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    piano_roll = PianoRoll(window, ed, pattern_group)
-    event_bus.add_listener(piano_roll)
+    piano_roll = PianoRoll(window, ed, event_bus, pattern_group)
     piano_roll.attach_pattern(pattern)
     piano_roll.grid(column=0, row=0, sticky="nsew")
 

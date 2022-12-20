@@ -3,15 +3,16 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from node import Node
-from node_events import NodeListener
+from node_events import NodeListener, NodeEventBus
 from node_editor import NodeEditor
 from pattern import Pattern
 from pattern_group import PatternGroup
 
 class PianoRoll(NodeListener, ttk.Frame):
-    def __init__(self, parent, ed: NodeEditor, pattern_group: PatternGroup, *args, **kwargs):
+    def __init__(self, parent, ed: NodeEditor, event_bus: NodeEventBus, pattern_group: PatternGroup, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.ed = ed
+        self.event_bus = event_bus
         self.pattern_group = pattern_group
         self.pattern: Pattern | None = None
 
@@ -21,8 +22,9 @@ class PianoRoll(NodeListener, ttk.Frame):
         # drawing constants
         self.note_width: float = 20
         self.canvas_height: int = 400
-        self.pitch_count: int = 27
+        self.non_neg_pitch_count: int = 25
         self.negative_pitch_count: int = 2
+        self.pitch_count: int = self.non_neg_pitch_count + self.negative_pitch_count
         self.draw_no_note: bool = False # for debugging idk
         self.note_height: float = self.canvas_height / self.pitch_count
 
@@ -38,9 +40,15 @@ class PianoRoll(NodeListener, ttk.Frame):
         self.init_controls()
         self.draw_everything()
 
+        self.event_bus.add_listener(self)
+
     def attach_pattern(self, pattern: Pattern | None):
         self.pattern = pattern
         self.draw_everything()
+
+    def destroy(self, *args, **kwargs):
+        self.event_bus.remove_listener(self)
+        super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
         if node is self.pattern: self.update()
@@ -133,9 +141,9 @@ class PianoRoll(NodeListener, ttk.Frame):
         """Draws a note on the canvas."""
         self.canvas.create_rectangle(
             tick * self.note_width,
-            self.note_height * (self.pitch_count - self.negative_pitch_count - 1 - note),
+            self.note_height * (self.non_neg_pitch_count - 1 - note),
             (tick + length) * self.note_width,
-            self.note_height * (self.pitch_count - self.negative_pitch_count - note),
+            self.note_height * (self.non_neg_pitch_count - note),
             **kwargs
         )
 
@@ -144,7 +152,7 @@ class PianoRoll(NodeListener, ttk.Frame):
         canvas_x = self.canvas.canvasx(x)
         canvas_y = self.canvas.canvasy(y)
         tick = int(canvas_x // self.note_width)
-        note = int(self.pitch_count - self.negative_pitch_count - 1 - (canvas_y // self.note_height))
+        note = int(self.non_neg_pitch_count - 1 - (canvas_y // self.note_height))
         return note, tick
 
     def delete_note(self, event: tk.Event):
