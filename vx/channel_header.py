@@ -45,10 +45,12 @@ class ChannelHeader(NodeListener, ttk.Frame):
             command=lambda: self.ed.toggle_bool(self.channel, "solo")
         )
 
+        self.lbl_colour = ttk.Label(self, width=2)
+
         self.var_name = tk.StringVar(self)
         self.inp_name = ttk.Entry(
             self,
-            width=20,
+            width=15,
             textvariable=self.var_name,
         )
         self.inp_name.bind("<Return>", lambda e: self.ed.set_property(self.channel, "name", self.var_name.get()))
@@ -64,6 +66,7 @@ class ChannelHeader(NodeListener, ttk.Frame):
             textvariable=self.var_volume,
             command=lambda: self.ed.set_property(self.channel, "volume", self.var_volume.get())
         )
+        self.inp_volume.bind("<Return>", lambda e: self.ed.set_property(self.channel, "volume", self.var_volume.get()))
 
         self.lbl_pan = ttk.Label(self, text="P:")
         self.var_pan = tk.DoubleVar(self, value=0.0)
@@ -76,8 +79,10 @@ class ChannelHeader(NodeListener, ttk.Frame):
             textvariable=self.var_pan,
             command=lambda: self.ed.set_property(self.channel, "pan", self.var_pan.get())
         )
+        self.inp_pan.bind("<Return>", lambda e: self.ed.set_property(self.channel, "pan", self.var_pan.get()))
 
-        self.inp_name.grid(column=0, row=0, columnspan=4, sticky="w")
+        self.lbl_colour.grid(column=0, row=0)
+        self.inp_name.grid(column=1, row=0, columnspan=3, sticky="w")
         self.lbl_volume.grid(column=0, row=1)
         self.inp_volume.grid(column=1, row=1)
         self.lbl_pan.grid(column=2, row=1)
@@ -89,6 +94,7 @@ class ChannelHeader(NodeListener, ttk.Frame):
             child.grid_configure(padx=2, pady=2)
 
     def update_ui(self):
+        self.lbl_colour.config(background=self.channel.get_property("colour"))
         self.btn_mute.state(["pressed" if self.channel.get_property("mute") else "!pressed"])
         self.btn_solo.state(["pressed" if self.channel.get_property("solo") else "!pressed"])
         self.var_name.set(self.channel.get_property("name"))
