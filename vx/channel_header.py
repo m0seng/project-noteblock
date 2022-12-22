@@ -2,25 +2,23 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from node import Node
-from node_events import NodeListener, NodeEventBus
-from general_events import GeneralListener
+from events import EventBus, Listener
 from node_editor import NodeEditor
-from coordinator import Coordinator
 from channel import Channel
 
-class ChannelHeader(NodeListener, GeneralListener, ttk.Frame):
-    def __init__(self, parent, *args, coordinator: Coordinator, channel: Channel, **kwargs):
+class ChannelHeader(Listener, ttk.Frame):
+    def __init__(self, parent, *args, ed: NodeEditor, event_bus: EventBus, channel: Channel, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.channel = channel
-        self.coordinator = coordinator
-        self.ed: NodeEditor = self.coordinator.ed
+        self.ed = ed
+        self.event_bus = event_bus
         
         self.init_ui()
-        self.coordinator.add_listener(self)
+        self.event_bus.add_listener(self)
         self.update_ui()
 
     def destroy(self, *args, **kwargs):
-        self.coordinator.remove_listener(self)
+        self.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):

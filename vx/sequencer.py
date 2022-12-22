@@ -2,20 +2,20 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from node import Node
-from node_events import NodeListener, NodeEventBus
+from events import EventBus, Listener
 from node_editor import NodeEditor
 from pattern import Pattern
 from pattern_group import PatternGroup
 from channel import Channel
 from channel_group import ChannelGroup
 
-class Sequencer(NodeListener, tk.Canvas):
+class Sequencer(Listener, tk.Canvas):
     def __init__(
             self,
             parent,
             *args,
             ed: NodeEditor,
-            event_bus: NodeEventBus,
+            event_bus: EventBus,
             pattern_group: PatternGroup,
             channel_group: ChannelGroup,
             **kwargs

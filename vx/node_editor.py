@@ -1,5 +1,5 @@
 from node import Node
-from node_events import NodeEventBus
+from events import EventBus
 from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
 from undo_manager import UndoManager
 
@@ -9,7 +9,7 @@ from undo_manager import UndoManager
 # TODO: add moving children as a feature (kind of optional)
 
 class NodeEditor:
-    def __init__(self, uman: UndoManager, event_bus: NodeEventBus):
+    def __init__(self, uman: UndoManager, event_bus: EventBus):
         self.uman = uman
         self.event_bus = event_bus
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from node import Node
-from node_events import NodeEventBus
+from events import EventBus
 
 class Action(ABC):
     @abstractmethod
@@ -16,7 +16,7 @@ class Action(ABC):
         ...
 
 class SetPropertyAction(Action):
-    def __init__(self, event_bus: NodeEventBus, node: Node, key, old_value, new_value):
+    def __init__(self, event_bus: EventBus, node: Node, key, old_value, new_value):
         self.event_bus = event_bus
         self.node = node
         self.key = key
@@ -33,7 +33,7 @@ class SetPropertyAction(Action):
 
 class AddChildAction(Action):
     # assumes child does not have another parent
-    def __init__(self, event_bus: NodeEventBus, parent: Node, child: Node, id: int, index: int):
+    def __init__(self, event_bus: EventBus, parent: Node, child: Node, id: int, index: int):
         self.event_bus = event_bus
         self.parent = parent
         self.child = child
@@ -49,7 +49,7 @@ class AddChildAction(Action):
         self.event_bus.node_child_removed(self.parent, self.child, self.id, self.index)
 
 class RemoveChildAction(Action):
-    def __init__(self, event_bus: NodeEventBus, parent: Node, child: Node, id: int, index: int):
+    def __init__(self, event_bus: EventBus, parent: Node, child: Node, id: int, index: int):
         self.event_bus = event_bus
         self.parent = parent
         self.child = child

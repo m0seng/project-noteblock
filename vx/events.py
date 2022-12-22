@@ -1,31 +1,31 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from node import Node
 
-class NodeListener(ABC):
+class Listener(ABC):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    @abstractmethod
     def node_property_set(self, node: Node, key, old_value, new_value):
         ...
 
-    @abstractmethod
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
         ...
 
-    @abstractmethod
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         ...
 
-class NodeEventBus:
-    def __init__(self):
-        self.listeners: list[NodeListener] = []
+    def node_selected(self, node: Node):
+        ...
 
-    def add_listener(self, listener: NodeListener):
+class EventBus:
+    def __init__(self):
+        self.listeners: list[Listener] = []
+
+    def add_listener(self, listener: Listener):
         if listener not in self.listeners:
             self.listeners.append(listener)
 
-    def remove_listener(self, listener: NodeListener):
+    def remove_listener(self, listener: Listener):
         if listener in self.listeners:
             self.listeners.remove(listener)
 
@@ -40,3 +40,7 @@ class NodeEventBus:
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         for listener in self.listeners:
             listener.node_child_removed(parent, child, id, index)
+
+    def node_selected(self, node: Node):
+        for listener in self.listeners:
+            listener.node_selected(node)

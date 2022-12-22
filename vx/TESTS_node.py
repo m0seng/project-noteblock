@@ -1,6 +1,6 @@
 import json
 from node import Node
-from node_events import NodeEventBus
+from events import EventBus
 from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
 from undo_manager import UndoManager
 from node_editor import NodeEditor
@@ -8,7 +8,7 @@ from node_factory import NodeFactory
 
 def main():
     uman = UndoManager()
-    event_bus = NodeEventBus()
+    event_bus = EventBus()
     ed = NodeEditor(uman, event_bus)
 
     root = Node()

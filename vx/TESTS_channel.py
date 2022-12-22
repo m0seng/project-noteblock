@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from node_events import NodeEventBus
+from events import EventBus
 from undo_manager import UndoManager
 from node_editor import NodeEditor
 
@@ -14,7 +14,7 @@ from sequencer import Sequencer
 
 def test_header():
     uman = UndoManager()
-    event_bus = NodeEventBus()
+    event_bus = EventBus()
     ed = NodeEditor(uman, event_bus)
 
     pattern_group = PatternGroup()
@@ -41,7 +41,7 @@ def test_header():
 
 def test_sequencer():
     uman = UndoManager()
-    event_bus = NodeEventBus()
+    event_bus = EventBus()
     ed = NodeEditor(uman, event_bus)
 
     pattern_group = PatternGroup()
