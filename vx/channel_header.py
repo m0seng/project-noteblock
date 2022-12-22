@@ -26,15 +26,6 @@ class ChannelHeader(Listener, ttk.Frame):
         if node is self.channel:
             self.update_ui()
 
-    def node_child_added(self, parent: Node, child: Node, id: int, index: int):
-        ...
-
-    def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
-        ...
-
-    def node_selected(self, node: Node):
-        ...
-
     def init_ui(self):
         self.btn_mute = ttk.Button(
             self,
@@ -66,9 +57,7 @@ class ChannelHeader(Listener, ttk.Frame):
         self.var_volume = tk.DoubleVar(self, value=1.0)
         self.inp_volume = ttk.Spinbox(
             self,
-            from_=0.0,
-            to=1.0,
-            increment=0.1,
+            from_=0.0, to=1.0, increment=0.1,
             width=5,
             textvariable=self.var_volume,
             command=lambda: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
@@ -82,9 +71,7 @@ class ChannelHeader(Listener, ttk.Frame):
         self.var_pan = tk.DoubleVar(self, value=0.0)
         self.inp_pan = ttk.Spinbox(
             self,
-            from_=-1.0,
-            to=1.0,
-            increment=0.1,
+            from_=-1.0, to=1.0, increment=0.1,
             width=5,
             textvariable=self.var_pan,
             command=lambda: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())

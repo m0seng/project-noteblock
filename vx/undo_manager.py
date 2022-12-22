@@ -1,8 +1,6 @@
 from collections import deque
 from node_actions import Action
 
-# TODO: implement action groups!
-
 class UndoManager:
     def __init__(self, past_len: int = 10, future_len: int = 10):
         self.past: deque[Action | list[Action]] = deque(maxlen=past_len)

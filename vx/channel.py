@@ -4,7 +4,7 @@ from pattern import Pattern
 from pattern_group import PatternGroup
 
 class Channel(Node):
-    def __init__(self, *args, pattern_group: PatternGroup, seq_length: int = 20, **kwargs):
+    def __init__(self, *args, pattern_group: PatternGroup, sequence_length: int = 20, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_property("name", "channel name")
         self._set_property("colour", "blue")
@@ -15,13 +15,13 @@ class Channel(Node):
         self._set_property("pan", 0.0)
         self._set_property("mute", False)
         self._set_property("solo", False)
-        self._set_property("placements", [-1 for _ in range(seq_length)])
+        self._set_property("placements", [-1] * sequence_length)
         self.pattern_group = pattern_group
         self.sustained_note = None
 
     def tick(self, mono_tick: int, bar_number: int, pat_tick: int) -> list[Note]:
         if self.get_property("mute"):
-            # TODO: handle mute here and solo elsewhere...
+            # TODO: handle solo elsewhere...
             return []
         else:
             # get note numbers from pattern
