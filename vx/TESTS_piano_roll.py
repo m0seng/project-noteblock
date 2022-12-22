@@ -4,21 +4,20 @@ import tkinter.ttk as ttk
 from node_events import NodeEventBus
 from undo_manager import UndoManager
 from node_editor import NodeEditor
+from coordinator import Coordinator
 
 from pattern_group import PatternGroup
 from pattern import Pattern
 from piano_roll import PianoRoll
 
 def main():
-    uman = UndoManager()
-    event_bus = NodeEventBus()
-    ed = NodeEditor(uman, event_bus)
+    coordinator = Coordinator()
 
     pattern_group = PatternGroup()
     pattern = Pattern()
-    ed.set_property(pattern, "notes", [-1 for _ in range(16)])
+    coordinator.ed.set_property(pattern, "notes", [-1 for _ in range(16)])
 
-    ed.add_child(pattern_group, pattern)
+    coordinator.ed.add_child(pattern_group, pattern)
 
     window = tk.Tk()
     window.title("Piano Roll")
@@ -26,7 +25,7 @@ def main():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    piano_roll = PianoRoll(window, ed=ed, event_bus=event_bus, pattern_group=pattern_group)
+    piano_roll = PianoRoll(window, coordinator=coordinator, pattern_group=pattern_group)
     piano_roll.attach_pattern(pattern)
     piano_roll.grid(column=0, row=0, sticky="nsew")
 
@@ -44,8 +43,8 @@ def main():
     # good_button.grid(column=0, row=1)
 
     undo_frame = ttk.Frame(window)
-    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: uman.undo())
-    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: uman.redo())
+    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: coordinator.uman.undo())
+    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: coordinator.uman.redo())
     undo_btn.grid(column=0, row=0)
     redo_btn.grid(column=0, row=1)
     undo_frame.grid(column=1, row=0)

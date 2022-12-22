@@ -3,16 +3,19 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from node import Node
-from node_events import NodeListener, NodeEventBus
+from node_events import NodeListener
+from general_events import GeneralListener
 from node_editor import NodeEditor
+from coordinator import Coordinator
+
 from pattern import Pattern
 from pattern_group import PatternGroup
 
-class PianoRoll(NodeListener, ttk.Frame):
-    def __init__(self, parent, *args, ed: NodeEditor, event_bus: NodeEventBus, pattern_group: PatternGroup, **kwargs):
+class PianoRoll(NodeListener, GeneralListener, ttk.Frame):
+    def __init__(self, parent, *args, coordinator: Coordinator, pattern_group: PatternGroup, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.ed = ed
-        self.event_bus = event_bus
+        self.coordinator = coordinator
+        self.ed: NodeEditor = coordinator.ed
         self.pattern_group = pattern_group
         self.pattern: Pattern | None = None
 
@@ -40,14 +43,14 @@ class PianoRoll(NodeListener, ttk.Frame):
         self.init_controls()
         self.draw_everything()
 
-        self.event_bus.add_listener(self)
+        self.coordinator.add_listener(self)
 
     def attach_pattern(self, pattern: Pattern | None):
         self.pattern = pattern
         self.draw_everything()
 
     def destroy(self, *args, **kwargs):
-        self.event_bus.remove_listener(self)
+        self.coordinator.remove_listener(self)
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
@@ -60,6 +63,10 @@ class PianoRoll(NodeListener, ttk.Frame):
 
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
         ...
+
+    def node_selected(self, node: Node):
+        if isinstance(node, Pattern):
+            self.pattern = node
 
     def update_ui(self):
         self.draw_everything()

@@ -81,4 +81,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_sequencer()
+    test_header()
