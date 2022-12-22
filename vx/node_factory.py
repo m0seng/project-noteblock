@@ -1,10 +1,22 @@
 from copy import deepcopy
+from typing import Type
+
 from node import Node
+from pattern import Pattern
+from pattern_group import PatternGroup
+from channel import Channel
+from channel_group import ChannelGroup
+from effect import Effect
 # TODO: import Node subclasses here
 
 class NodeFactory:
-    node_classes = {
+    node_classes: dict[str, Type[Node]] = {
         "Node": Node,
+        "Pattern": Pattern,
+        "PatternGroup": PatternGroup,
+        "Channel": Channel,
+        "ChannelGroup": ChannelGroup,
+        "Effect": Effect,
         # TODO: add entries for Node subclasses here
     }
 

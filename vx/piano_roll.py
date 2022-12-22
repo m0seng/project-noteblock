@@ -5,16 +5,16 @@ import tkinter.ttk as ttk
 from node import Node
 from events import EventBus, Listener
 from node_editor import NodeEditor
+from model import Model
 
 from pattern import Pattern
 from pattern_group import PatternGroup
 
+
 class PianoRoll(Listener, ttk.Frame):
-    def __init__(self, parent, *args, ed: NodeEditor, event_bus: EventBus, pattern_group: PatternGroup, **kwargs):
+    def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)
-        self.ed = ed
-        self.event_bus = event_bus
-        self.pattern_group = pattern_group
+        self.model = model
         self.pattern: Pattern | None = None
 
         # make this wide
@@ -41,21 +41,21 @@ class PianoRoll(Listener, ttk.Frame):
         self.init_controls()
         self.draw_everything()
 
-        self.event_bus.add_listener(self)
+        self.model.event_bus.add_listener(self)
 
     def attach_pattern(self, pattern: Pattern | None):
         self.pattern = pattern
         self.draw_everything()
 
     def destroy(self, *args, **kwargs):
-        self.event_bus.remove_listener(self)
+        self.model.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
         if node is self.pattern: self.update_ui()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.pattern_group and child is self.pattern:
+        if parent is self.model.pattern_group and child is self.pattern:
             self.pattern = None
             self.update_ui()
 
@@ -167,7 +167,7 @@ class PianoRoll(Listener, ttk.Frame):
             if tick < self.pattern_length() and self.pattern.get_property("notes")[tick] == note:
                 notes = self.pattern.get_property("notes")
                 notes[tick] = -1
-                self.ed.set_property(self.pattern, "notes", notes)
+                self.model.ed.set_property(self.pattern, "notes", notes)
 
     def set_note(self, event: tk.Event):
         """Sets a note at the given event coordinates. If a note is already at that tick it is replaced."""
@@ -176,7 +176,7 @@ class PianoRoll(Listener, ttk.Frame):
             if tick < self.pattern_length():
                 notes = self.pattern.get_property("notes")
                 notes[tick] = note
-                self.ed.set_property(self.pattern, "notes", notes)
+                self.model.ed.set_property(self.pattern, "notes", notes)
 
     def black_notes(self, pitch_count: int) -> list[int]:
         """Helper function which returns a list of black notes within the given pitch range."""
