@@ -41,6 +41,6 @@ class Model:
         return pattern
 
     def new_channel(self) -> Channel:
-        channel = Channel()
+        channel = Channel(pattern_group=self.pattern_group)
         self.ed.add_child(self.channel_group, channel)
         return channel

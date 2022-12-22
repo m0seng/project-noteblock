@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 from events import EventBus
 from undo_manager import UndoManager
 from node_editor import NodeEditor
+from model import Model
 
 from pattern import Pattern
 from pattern_group import PatternGroup
@@ -13,12 +14,8 @@ from channel_header import ChannelHeader
 from sequencer import Sequencer
 
 def test_header():
-    uman = UndoManager()
-    event_bus = EventBus()
-    ed = NodeEditor(uman, event_bus)
-
-    pattern_group = PatternGroup()
-    channel = Channel(pattern_group=pattern_group)
+    model = Model()
+    channel = model.new_channel()
 
     window = tk.Tk()
     window.title("Channel Header")
@@ -26,13 +23,13 @@ def test_header():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    header = ChannelHeader(window, channel=channel, ed=ed, event_bus=event_bus)
+    header = ChannelHeader(window, model=model, channel=channel)
     header.grid(column=0, row=0, padx=5, pady=5)
     window.rowconfigure(0, minsize=100)
 
     undo_frame = ttk.Frame(window)
-    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: uman.undo())
-    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: uman.redo())
+    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: model.uman.undo())
+    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: model.uman.redo())
     undo_btn.grid(column=0, row=0)
     redo_btn.grid(column=0, row=1)
     undo_frame.grid(column=1, row=0)
@@ -40,19 +37,10 @@ def test_header():
     window.mainloop()
 
 def test_sequencer():
-    uman = UndoManager()
-    event_bus = EventBus()
-    ed = NodeEditor(uman, event_bus)
-
-    pattern_group = PatternGroup()
-    channel_group = ChannelGroup()
-
-    pattern = Pattern()
-    ed.add_child(pattern_group, pattern)
-
-    channel = Channel(pattern_group=pattern_group)
-    ed.add_child(channel_group, channel)
-    ed.set_property(channel, "placements", [-1, 0, 0, -1])
+    model = Model()
+    pattern = model.new_pattern()
+    channel = model.new_channel()
+    model.ed.set_property(channel, "placements", [-1, 0, 0, -1])
 
     window = tk.Tk()
     window.title("Sequencer")
@@ -62,18 +50,15 @@ def test_sequencer():
 
     sequencer = Sequencer(
         window,
-        ed=ed,
-        event_bus=event_bus,
-        pattern_group=pattern_group,
-        channel_group=channel_group,
+        model=model,
         height=500,
         width=500
     )
     sequencer.grid(column=0, row=0, padx=5, pady=5)
 
     undo_frame = ttk.Frame(window)
-    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: uman.undo())
-    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: uman.redo())
+    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: model.uman.undo())
+    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: model.uman.redo())
     undo_btn.grid(column=0, row=0)
     redo_btn.grid(column=0, row=1)
     undo_frame.grid(column=1, row=0)
@@ -81,4 +66,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_header()
+    test_sequencer()

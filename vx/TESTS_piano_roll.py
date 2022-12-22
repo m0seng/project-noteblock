@@ -1,13 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-
-from events import EventBus
-from undo_manager import UndoManager
-from node_editor import NodeEditor
 from model import Model
-
-from pattern_group import PatternGroup
-from pattern import Pattern
 from piano_roll import PianoRoll
 
 def main():

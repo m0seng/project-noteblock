@@ -4,6 +4,8 @@ import tkinter.ttk as ttk
 from node import Node
 from events import EventBus, Listener
 from node_editor import NodeEditor
+from model import Model
+
 from pattern import Pattern
 from pattern_group import PatternGroup
 from channel import Channel
@@ -14,16 +16,10 @@ class Sequencer(Listener, tk.Canvas):
             self,
             parent,
             *args,
-            ed: NodeEditor,
-            event_bus: EventBus,
-            pattern_group: PatternGroup,
-            channel_group: ChannelGroup,
+            model: Model,
             **kwargs
     ):
-        self.ed = ed
-        self.event_bus = event_bus
-        self.pattern_group = pattern_group
-        self.channel_group = channel_group
+        self.model = model
 
         self.pattern_width: float = 100
         self.pattern_height: float = 100
@@ -41,11 +37,11 @@ class Sequencer(Listener, tk.Canvas):
             **kwargs
         )
 
-        self.event_bus.add_listener(self)
+        self.model.event_bus.add_listener(self)
         self.draw_everything()
 
     def destroy(self, *args, **kwargs):
-        self.event_bus.remove_listener(self)
+        self.model.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
@@ -55,11 +51,11 @@ class Sequencer(Listener, tk.Canvas):
             self.draw_everything()
 
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.channel_group or parent is self.pattern_group:
+        if parent is self.model.channel_group or parent is self.model.pattern_group:
             self.draw_everything()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.channel_group or parent is self.pattern_group:
+        if parent is self.model.channel_group or parent is self.model.pattern_group:
             self.draw_everything()
 
     def draw_everything(self):
@@ -69,11 +65,11 @@ class Sequencer(Listener, tk.Canvas):
     def configure_canvas(self):
         self.delete("all")
 
-        channel_count = self.channel_group.children_count()
+        channel_count = self.model.channel_group.children_count()
         if channel_count == 0:
             placement_count = 0
         else:
-            first_channel = self.channel_group.get_child_at_index(0)
+            first_channel = self.model.channel_group.get_child_at_index(0)
             placement_count = len(first_channel.get_property("placements"))
 
         canvas_height = channel_count * self.pattern_height
@@ -102,10 +98,10 @@ class Sequencer(Listener, tk.Canvas):
             )
 
     def draw_placements(self):
-        for channel_number, channel in enumerate(self.channel_group.children_iterator()):
+        for channel_number, channel in enumerate(self.model.channel_group.children_iterator()):
             for bar, pattern_id in enumerate(channel.get_property("placements")):
                 if pattern_id == -1: continue # no placement here
-                pattern = self.pattern_group.get_child_by_id(pattern_id)
+                pattern = self.model.pattern_group.get_child_by_id(pattern_id)
                 pattern_colour = pattern.get_property("colour")
                 self.draw_pattern(channel=channel_number, bar=bar, length=1, fill=pattern_colour)
 

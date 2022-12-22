@@ -4,21 +4,22 @@ import tkinter.ttk as ttk
 from node import Node
 from events import EventBus, Listener
 from node_editor import NodeEditor
+from model import Model
+
 from channel import Channel
 
 class ChannelHeader(Listener, ttk.Frame):
-    def __init__(self, parent, *args, ed: NodeEditor, event_bus: EventBus, channel: Channel, **kwargs):
+    def __init__(self, parent, *args, model: Model, channel: Channel, **kwargs):
         super().__init__(parent, *args, **kwargs)
+        self.model = model
         self.channel = channel
-        self.ed = ed
-        self.event_bus = event_bus
         
         self.init_ui()
-        self.event_bus.add_listener(self)
+        self.model.event_bus.add_listener(self)
         self.update_ui()
 
     def destroy(self, *args, **kwargs):
-        self.event_bus.remove_listener(self)
+        self.model.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
@@ -39,13 +40,13 @@ class ChannelHeader(Listener, ttk.Frame):
             self,
             text="M",
             width=3,
-            command=lambda: self.ed.toggle_bool(self.channel, "mute")
+            command=lambda: self.model.ed.toggle_bool(self.channel, "mute")
         )
         self.btn_solo = ttk.Button(
             self,
             text="S",
             width=3,
-            command=lambda: self.ed.toggle_bool(self.channel, "solo")
+            command=lambda: self.model.ed.toggle_bool(self.channel, "solo")
         )
 
         self.lbl_colour = ttk.Label(self, width=2)
@@ -56,7 +57,10 @@ class ChannelHeader(Listener, ttk.Frame):
             width=15,
             textvariable=self.var_name,
         )
-        self.inp_name.bind("<Return>", lambda e: self.ed.set_property(self.channel, "name", self.var_name.get()))
+        self.inp_name.bind(
+            "<Return>",
+            lambda e: self.model.ed.set_property(self.channel, "name", self.var_name.get())
+        )
 
         self.lbl_volume = ttk.Label(self, text="V:")
         self.var_volume = tk.DoubleVar(self, value=1.0)
@@ -67,9 +71,12 @@ class ChannelHeader(Listener, ttk.Frame):
             increment=0.1,
             width=5,
             textvariable=self.var_volume,
-            command=lambda: self.ed.set_property(self.channel, "volume", self.var_volume.get())
+            command=lambda: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
         )
-        self.inp_volume.bind("<Return>", lambda e: self.ed.set_property(self.channel, "volume", self.var_volume.get()))
+        self.inp_volume.bind(
+            "<Return>",
+            lambda e: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
+        )
 
         self.lbl_pan = ttk.Label(self, text="P:")
         self.var_pan = tk.DoubleVar(self, value=0.0)
@@ -80,9 +87,12 @@ class ChannelHeader(Listener, ttk.Frame):
             increment=0.1,
             width=5,
             textvariable=self.var_pan,
-            command=lambda: self.ed.set_property(self.channel, "pan", self.var_pan.get())
+            command=lambda: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())
         )
-        self.inp_pan.bind("<Return>", lambda e: self.ed.set_property(self.channel, "pan", self.var_pan.get()))
+        self.inp_pan.bind(
+            "<Return>",
+            lambda e: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())
+        )
 
         self.lbl_colour.grid(column=0, row=0)
         self.inp_name.grid(column=1, row=0, columnspan=3, sticky="w")
