@@ -12,13 +12,7 @@ from channel import Channel
 from channel_group import ChannelGroup
 
 class Sequencer(Listener, tk.Canvas):
-    def __init__(
-            self,
-            parent,
-            *args,
-            model: Model,
-            **kwargs
-    ):
+    def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
 
         self.pattern_width: float = 100

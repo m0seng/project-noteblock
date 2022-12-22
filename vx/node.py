@@ -47,6 +47,9 @@ class Node:
                 return k
         return None
 
+    def is_root(self):
+        return True if self.parent is None else False
+
     def next_available_id(self):
         return max(self.children.keys(), default=-1) + 1
 
