@@ -30,18 +30,25 @@ def main():
     piano_roll.attach_pattern(pattern)
     piano_roll.grid(column=0, row=0, sticky="nsew")
 
-    test_buttons = ttk.Frame(window)
-    test_buttons.grid(column=1, row=0, sticky="ns", padx=5, pady=5)
+    # test_buttons = ttk.Frame(window)
+    # test_buttons.grid(column=1, row=0, sticky="ns", padx=5, pady=5)
 
-    evil_button = ttk.Button(test_buttons, text="evil button", command=lambda: ed.remove_child(pattern_group, pattern))
-    evil_button.grid(column=0, row=0)
+    # evil_button = ttk.Button(test_buttons, text="evil button", command=lambda: ed.remove_child(pattern_group, pattern))
+    # evil_button.grid(column=0, row=0)
 
-    def good_function():
-        ed.add_child(pattern_group, pattern)
-        piano_roll.attach_pattern(pattern)
+    # def good_function():
+    #     ed.add_child(pattern_group, pattern)
+    #     piano_roll.attach_pattern(pattern)
 
-    good_button = ttk.Button(test_buttons, text="good button", command=good_function)
-    good_button.grid(column=0, row=1)
+    # good_button = ttk.Button(test_buttons, text="good button", command=good_function)
+    # good_button.grid(column=0, row=1)
+
+    undo_frame = ttk.Frame(window)
+    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: uman.undo())
+    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: uman.redo())
+    undo_btn.grid(column=0, row=0)
+    redo_btn.grid(column=0, row=1)
+    undo_frame.grid(column=1, row=0)
 
     window.mainloop()
 

@@ -25,11 +25,11 @@ class SetPropertyAction(Action):
 
     def perform(self):
         self.node._set_property(self.key, self.new_value)
-        self.event_bus.property_set(self.node, self.key, self.old_value, self.new_value)
+        self.event_bus.node_property_set(self.node, self.key, self.old_value, self.new_value)
 
     def undo(self):
         self.node._set_property(self.key, self.old_value)
-        self.event_bus.property_set(self.node, self.key, self.new_value, self.old_value)
+        self.event_bus.node_property_set(self.node, self.key, self.new_value, self.old_value)
 
 class AddChildAction(Action):
     # assumes child does not have another parent
@@ -42,11 +42,11 @@ class AddChildAction(Action):
 
     def perform(self):
         self.parent._add_child(self.child, self.id, self.index)
-        self.event_bus.child_added(self.parent, self.child, self.id, self.index)
+        self.event_bus.node_child_added(self.parent, self.child, self.id, self.index)
     
     def undo(self):
         self.parent._remove_child(self.child, self.id, self.index)
-        self.event_bus.child_removed(self.parent, self.child, self.id, self.index)
+        self.event_bus.node_child_removed(self.parent, self.child, self.id, self.index)
 
 class RemoveChildAction(Action):
     def __init__(self, event_bus: NodeEventBus, parent: Node, child: Node, id: int, index: int):
@@ -58,8 +58,8 @@ class RemoveChildAction(Action):
 
     def perform(self):
         self.parent._remove_child(self.child, self.id, self.index)
-        self.event_bus.child_removed(self.parent, self.child, self.id, self.index)
+        self.event_bus.node_child_removed(self.parent, self.child, self.id, self.index)
     
     def undo(self):
         self.parent._add_child(self.child, self.id, self.index)
-        self.event_bus.child_added(self.parent, self.child, self.id, self.index)
+        self.event_bus.node_child_added(self.parent, self.child, self.id, self.index)
