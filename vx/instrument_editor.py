@@ -28,6 +28,8 @@ class InstrumentEditor(Listener, ttk.Frame):
         "pling",
     ]
 
+    padding = {"padx": 2, "pady": 2}
+
     def __init__(self, parent, *args, model: Model, channel: Channel, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model
@@ -99,6 +101,7 @@ class InstrumentEditor(Listener, ttk.Frame):
                 self.instrument_names.index(self.var_sustain_instrument.get()))
         )
 
+        self.lbl_sustain_mix = ttk.Label(self.lf_sustain, text="mix:")
         self.var_sustain_mix = tk.DoubleVar(self.lf_sustain)
         self.inp_sustain_mix = ttk.Spinbox(
             self.lf_sustain,
@@ -112,13 +115,14 @@ class InstrumentEditor(Listener, ttk.Frame):
             lambda e: self.model.ed.set_property(self.channel, "volume", self.var_sustain_mix.get())
         )
 
-        self.cmb_main_instrument.grid(column=0, row=0)
-        self.chk_sustain_enabled.grid(column=0, row=0)
-        self.cmb_sustain_instrument.grid(column=0, row=1)
-        self.inp_sustain_mix.grid(column=0, row=2)
-        self.inp_name.grid(column=0, row=0)
-        self.lf_main.grid(column=0, row=1)
-        self.lf_sustain.grid(column=0, row=2)
+        self.cmb_main_instrument.grid(column=0, row=0, sticky="w", **self.padding)
+        self.chk_sustain_enabled.grid(column=0, row=0, columnspan=2, **self.padding)
+        self.cmb_sustain_instrument.grid(column=0, row=1, columnspan=2, sticky="w", **self.padding)
+        self.lbl_sustain_mix.grid(column=0, row=2, **self.padding)
+        self.inp_sustain_mix.grid(column=1, row=2, **self.padding)
+        self.inp_name.grid(column=0, row=0, sticky="ew", **self.padding)
+        self.lf_main.grid(column=0, row=1, sticky="ew", **self.padding)
+        self.lf_sustain.grid(column=0, row=2, sticky="ew", **self.padding)
 
     def update_ui(self):
         self.var_name.set(self.channel.get_property("name"))
@@ -126,3 +130,6 @@ class InstrumentEditor(Listener, ttk.Frame):
         self.var_sustain_enabled.set(self.channel.get_property("sustain_enabled"))
         self.var_sustain_instrument.set(self.instrument_names[self.channel.get_property("sustain_instrument")])
         self.var_sustain_mix.set(self.channel.get_property("sustain_mix"))
+        self.cmb_sustain_instrument.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
+        self.inp_sustain_mix.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
+        self.lbl_sustain_mix.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
