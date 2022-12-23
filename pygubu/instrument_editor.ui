@@ -9,6 +9,7 @@
     <child>
       <object class="ttk.Entry" id="inp_name" named="True">
         <property name="state">normal</property>
+        <property name="textvariable">string:var_name</property>
         <layout manager="grid">
           <property name="column">0</property>
           <property name="padx">5</property>
@@ -107,6 +108,8 @@
             <property name="text" translatable="yes">mix:</property>
             <layout manager="grid">
               <property name="column">0</property>
+              <property name="padx">5</property>
+              <property name="pady">5</property>
               <property name="row">2</property>
             </layout>
           </object>
