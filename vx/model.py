@@ -1,3 +1,5 @@
+import json
+
 from node import Node
 from events import EventBus
 from undo_manager import UndoManager
@@ -39,6 +41,14 @@ class Model:
     def to_dict(self) -> dict:
         return self.root.to_dict()
 
+    def from_file(self, filename: str):
+        with open(filename, "r", encoding="utf-8") as file:
+            self.from_dict(json.load(file))
+
+    def to_file(self, filename: str):
+        with open(filename, "w", encoding="utf-8") as file:
+            json.dump(self.to_dict(), file)
+
     def new_pattern(self) -> Pattern:
         pattern_length = self.song_config.get_property("pattern_length")
         pattern = Pattern(pattern_length=pattern_length)
@@ -53,23 +63,23 @@ class Model:
 
     def change_pattern_length(self, new_length: int):
         # TODO: note priority logic?
-        old_length = self.song_config.get_property("pattern_length")
         self.uman.start_group()
+        old_length: int = self.song_config.get_property("pattern_length")
         for pattern in self.pattern_group.children_iterator():
             old_notes = pattern.get_property("notes")
             new_notes = [-1] * new_length
             ratio = new_length / old_length
-            for old_tick, note in enumerate(old_notes):
+            for old_tick, note in reversed(enumerate(old_notes)):
                 if note != -1:
-                    new_tick = old_tick * ratio
+                    new_tick = int(old_tick * ratio)
                     new_notes[new_tick] = note
             self.ed.set_property(pattern, "notes", new_notes)
         self.ed.set_property(self.song_config, "pattern_length", new_length)
         self.uman.end_group()
 
     def change_sequence_length(self, new_length: int):
-        old_length = self.song_config.get_property("sequence_length")
         self.uman.start_group()
+        old_length = self.song_config.get_property("sequence_length")
         for channel in self.channel_group.children_iterator():
             old_placements = channel.get_property("placements")
             if new_length > old_length:
@@ -79,4 +89,15 @@ class Model:
                 new_placements = old_placements[:new_length]
             self.ed.set_property(channel, "placements", new_placements)
         self.ed.set_property(self.song_config, "sequence_length", new_length)
+        self.uman.end_group()
+
+    def remove_pattern(self, pattern: Pattern):
+        self.uman.start_group()
+        pattern_id = self.pattern_group.get_id_of_child(pattern)
+        if pattern_id is None: return
+        for channel in self.channel_group.children_iterator():
+            old_placements = channel.get_property("placements")
+            new_placements = [id for id in old_placements if id != pattern_id]
+            self.ed.set_property(channel, "placements", new_placements)
+        self.ed.remove_child(self.pattern_group, pattern)
         self.uman.end_group()

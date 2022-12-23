@@ -52,12 +52,12 @@ class PianoRoll(Listener, ttk.Frame):
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
-        if node is self.pattern: self.update_ui()
+        if node is self.pattern: self.draw_everything()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         if parent is self.model.pattern_group and child is self.pattern:
             self.pattern = None
-            self.update_ui()
+            self.draw_everything()
 
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
         ...
@@ -65,9 +65,6 @@ class PianoRoll(Listener, ttk.Frame):
     def node_selected(self, node: Node):
         if isinstance(node, Pattern):
             self.pattern = node
-
-    def update_ui(self):
-        self.draw_everything()
 
     def init_canvas(self):
         """Initializes and grids the canvas with click bindings."""

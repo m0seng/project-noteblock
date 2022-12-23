@@ -9,6 +9,7 @@ class Channel(Node):
         self._set_property("name", "channel name")
         self._set_property("colour", "blue")
         self._set_property("main_instrument", 0)
+        self._set_property("sustain_enabled", False)
         self._set_property("sustain_instrument", 0)
         self._set_property("sustain_mix", 0.5)
         self._set_property("volume", 1.0)
@@ -43,7 +44,6 @@ class Channel(Node):
             ) for note in notes]
 
             return notes
-        
 
     def convert_numbers_to_notes(self, note_numbers: list[int]) -> list[Note]:
         notes = []

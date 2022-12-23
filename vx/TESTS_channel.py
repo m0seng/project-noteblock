@@ -12,6 +12,7 @@ from channel import Channel
 from channel_group import ChannelGroup
 from channel_header import ChannelHeader
 from sequencer import Sequencer
+from instrument_editor import InstrumentEditor
 
 def test_header():
     model = Model()
@@ -26,6 +27,28 @@ def test_header():
     header = ChannelHeader(window, model=model, channel=channel)
     header.grid(column=0, row=0, padx=5, pady=5)
     window.rowconfigure(0, minsize=100)
+
+    undo_frame = ttk.Frame(window)
+    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: model.uman.undo())
+    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: model.uman.redo())
+    undo_btn.grid(column=0, row=0)
+    redo_btn.grid(column=0, row=1)
+    undo_frame.grid(column=1, row=0)
+
+    window.mainloop()
+
+def test_instrument_editor():
+    model = Model()
+    channel = model.new_channel()
+
+    window = tk.Tk()
+    window.title("Instrument Editor")
+    window.resizable(False, False)
+    window.columnconfigure(0, weight=1)
+    window.rowconfigure(0, weight=1)
+
+    editor = InstrumentEditor(window, model=model, channel=channel)
+    editor.grid(column=0, row=0, padx=5, pady=5)
 
     undo_frame = ttk.Frame(window)
     undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: model.uman.undo())
@@ -66,4 +89,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_sequencer()
+    test_instrument_editor()
