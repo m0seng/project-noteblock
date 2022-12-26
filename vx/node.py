@@ -1,4 +1,4 @@
-from copy import deepcopy
+from copy import copy, deepcopy
 
 class Node:
     '''
@@ -21,7 +21,8 @@ class Node:
         }
     
     def get_property(self, key):
-        return deepcopy(self.properties.get(key, None))
+        # shouldn't need deepcopy here - nested data should be separated into nodes
+        return copy(self.properties.get(key, None))
 
     def get_child_by_id(self, id: int):
         return self.children.get(id, None)

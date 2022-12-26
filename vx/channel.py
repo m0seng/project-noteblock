@@ -20,30 +20,30 @@ class Channel(Node):
         self.pattern_group = pattern_group
         self.sustained_note = None
 
-    def tick(self, mono_tick: int, bar_number: int, pat_tick: int) -> list[Note]:
-        if self.get_property("mute"):
-            # TODO: handle solo elsewhere...
-            return []
+    def tick(self, mono_tick: int, sequence_enabled: bool, bar_number: int, pat_tick: int) -> list[Note]:
+        if not sequence_enabled: # NO-PATTERN TICK!
+            note_numbers = []
         else:
             # get note numbers from pattern
             pattern_id = self.get_property("placements")[bar_number]
             pattern: Pattern = self.pattern_group.get_child_by_id(pattern_id)
             note_numbers = pattern.get_notes(pat_tick)
 
-            # convert to Note objects
-            notes: list[Note] = self.convert_numbers_to_notes(note_numbers)
+        # convert to Note objects
+        notes: list[Note] = self.convert_numbers_to_notes(note_numbers)
 
-            # apply effects in sequence
-            for effect in self.children_iterator():
-                notes = effect.tick(notes, mono_tick)
-            
-            # apply volume and pan
-            notes = [note.apply_volume_and_pan(
-                volume=self.get_property("volume"),
-                pan=self.get_property("pan")
-            ) for note in notes]
+        # apply effects in sequence
+        for effect in self.children_iterator():
+            notes = effect.tick(notes, mono_tick)
 
-            return notes
+        # apply volume and pan
+        notes = [note.apply_volume_and_pan(
+            volume=self.get_property("volume"),
+            pan=self.get_property("pan")
+        ) for note in notes]
+
+        return notes
+
 
     def convert_numbers_to_notes(self, note_numbers: list[int]) -> list[Note]:
         notes = []

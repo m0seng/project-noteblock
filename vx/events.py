@@ -29,6 +29,9 @@ class EventBus:
         if listener in self.listeners:
             self.listeners.remove(listener)
 
+    def clear_listeners(self):
+        self.listeners = []
+
     def node_property_set(self, node: Node, key, old_value, new_value):
         for listener in self.listeners:
             listener.node_property_set(node, key, old_value, new_value)
