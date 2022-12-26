@@ -47,6 +47,7 @@ class Channel(Node):
 
     def convert_numbers_to_notes(self, note_numbers: list[int]) -> list[Note]:
         notes = []
+        sustain_enabled = self.get_property("sustain_enabled")
         for note_number in note_numbers:
             if 0 <= note_number <= 24: # normal note
                 notes.append(Note(
@@ -55,7 +56,7 @@ class Channel(Node):
                 ))
                 self.sustained_note = note_number
             elif note_number == -1: # no note
-                if self.sustained_note is not None:
+                if sustain_enabled and self.sustained_note is not None:
                     notes.append(Note(
                         instrument=self.get_property("sustain_instrument"),
                         pitch=self.sustained_note,
