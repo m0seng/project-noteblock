@@ -15,6 +15,7 @@ def main():
 
     channel = model.new_channel()
     model.ed.set_property(channel, "placements", [0, 1] + [-1] * 18)
+    model.ed.set_property(channel, "main_instrument", 4)
 
     window = tk.Tk()
     window.title("Playback Test")
