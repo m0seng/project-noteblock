@@ -45,7 +45,7 @@ class Playback(Listener):
 
     def tick(self):
         next_tick = self.tick_manager.next_tick()
-        print(next_tick)
+        # print(next_tick)
         notes = self.model.channel_group.tick(*next_tick)
         audio_block: np.ndarray = self.audio_generator.tick(notes)
         self.audio_queue.put(audio_block)

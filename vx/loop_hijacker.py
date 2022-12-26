@@ -26,6 +26,7 @@ class LoopHijacker:
     def enable(self):
         if not self.enabled:
             self.enabled = True
+            self.reset()
             self.update()
 
     def disable(self):
@@ -38,12 +39,12 @@ class LoopHijacker:
         elapsed_time = self.time_ms() - self.start_time
         current_tick = self.ms_to_tick(elapsed_time) + self.lookahead_ticks
         while current_tick >= self.next_tick:
-            self.callback() # TODO: add parameters here?
+            self.callback()
             self.next_tick += 1
         if self.enabled: self.hijack_root()
 
     def time_ms(self) -> int:
-        return int(perf_counter_ns() * 0.001)
+        return int(perf_counter_ns() * 0.000001)
 
     def ms_to_tick(self, ms: int) -> int:
         return int(ms * self.tps * 0.001)
