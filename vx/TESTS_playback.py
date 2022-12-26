@@ -14,7 +14,7 @@ def main():
         [-1, -1, 13, -1, -1, -1, 11, -1, -1, -1, 8, -1, 11, -1, 13, -1])
 
     channel = model.new_channel()
-    model.ed.set_property(channel, "placements", [0, 1] * 10)
+    model.ed.set_property(channel, "placements", [0, 1] + [-1] * 18)
 
     window = tk.Tk()
     window.title("Playback Test")

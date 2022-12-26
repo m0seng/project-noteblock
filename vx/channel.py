@@ -26,8 +26,11 @@ class Channel(Node):
         else:
             # get note numbers from pattern
             pattern_id = self.get_property("placements")[bar_number]
-            pattern: Pattern = self.pattern_group.get_child_by_id(pattern_id)
-            note_numbers = pattern.get_notes(pat_tick)
+            if pattern_id == -1: # no pattern
+                note_numbers = []
+            else:
+                pattern: Pattern = self.pattern_group.get_child_by_id(pattern_id)
+                note_numbers = pattern.get_notes(pat_tick)
 
         # convert to Note objects
         notes: list[Note] = self.convert_numbers_to_notes(note_numbers)
