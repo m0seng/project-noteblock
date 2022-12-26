@@ -17,6 +17,9 @@ class Listener(ABC):
     def node_selected(self, node: Node):
         ...
 
+    def bar_selected(self, bar: int):
+        ...
+
 class EventBus:
     def __init__(self):
         self.listeners: list[Listener] = []
@@ -47,3 +50,7 @@ class EventBus:
     def node_selected(self, node: Node):
         for listener in self.listeners:
             listener.node_selected(node)
+
+    def bar_selected(self, bar: int):
+        for listener in self.listeners:
+            listener.bar_selected(bar)

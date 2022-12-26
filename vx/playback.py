@@ -1,31 +1,46 @@
-from node import Node
+import numpy as np
 from events import Listener
 from model import Model
-from note import Note
+from tick_manager import TickManager
+from loop_hijacker import LoopHijacker
+from audio_generator import AudioGenerator
 
 class Playback(Listener):
-    def __init__(self, model: Model):
+    def __init__(self, model: Model, window, block_size: int = 2048):
         self.model = model
-        self.mono_tick: int = 0
-        self.sequence_enabled: bool = False
-        self.bar_number: int = 0
-        self.pat_tick: int = 0
+        self.model.event_bus.add_listener(self)
+
+        self.tick_manager = TickManager(model=model)
+        self.loop_hijacker = LoopHijacker(
+            root=window,
+            callback=self.tick,
+            tps=20,
+            lookahead_ticks=3,
+            repeat_ms=25
+        )
+        self.audio_generator = AudioGenerator(block_size=block_size)
+
+        self.playback_enabled: bool = False
+        self.start_bar: int = 0
+
+    def bar_selected(self, bar: int):
+        self.start_bar = bar
+        if not self.playback_enabled:
+            self.tick_manager.set_tick(bar_number=bar, pat_tick=0)
+
+    def play(self):
+        self.loop_hijacker.enable()
+        self.playback_enabled = True
+
+    def pause(self):
+        self.loop_hijacker.disable()
+        self.playback_enabled = False
+
+    def stop(self):
+        self.pause()
+        self.tick_manager.set_tick(bar_number=self.start_bar, pat_tick=0)
 
     def tick(self):
-        notes = self.model.channel_group.tick(
-            mono_tick=self.mono_tick,
-            sequence_enabled=self.sequence_enabled,
-            bar_number=self.bar_number,
-            pat_tick=self.pat_tick)
-        self.increment_tick()
-
-    def increment_tick(self):
-        # increment tick
-        self.mono_tick += 1
-        if self.sequence_enabled: # normal pattern playback
-            self.pat_tick += 1
-            if self.pat_tick >= self.model.song_config.get_property("pattern_length"):
-                self.pat_tick = 0
-                self.bar_number += 1
-                if self.bar_number >= self.model.song_config.get_property("sequence_length"):
-                    self.sequence_enabled = False
+        next_tick = self.tick_manager.next_tick()
+        notes = self.model.channel_group.tick(*next_tick)
+        audio_block: np.ndarray = self.audio_generator.tick(notes)
