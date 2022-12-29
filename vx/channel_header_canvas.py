@@ -99,3 +99,4 @@ class ChannelHeaderCanvas(Listener, tk.Canvas):
             self.internal_frame.rowconfigure(index, minsize=self.header_height)
 
         print(self.internal_frame.winfo_reqwidth())
+        self.config(width=self.internal_frame.winfo_reqwidth())
