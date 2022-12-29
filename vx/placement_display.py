@@ -14,6 +14,7 @@ from channel_group import ChannelGroup
 class PlacementDisplay(Listener, tk.Canvas):
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
+        self.selected_bar: int = 0
 
         self.pattern_width: float = 60
         self.pattern_height: float = 60
@@ -21,6 +22,7 @@ class PlacementDisplay(Listener, tk.Canvas):
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
+        self.selected_bar_colour: str = "red"
 
         super().__init__(
             parent,
@@ -51,6 +53,10 @@ class PlacementDisplay(Listener, tk.Canvas):
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         if parent is self.model.channel_group or parent is self.model.pattern_group:
             self.draw_everything()
+
+    def bar_selected(self, bar: int):
+        self.selected_bar = bar
+        self.draw_everything()
 
     def draw_everything(self):
         self.configure_canvas()
@@ -89,6 +95,16 @@ class PlacementDisplay(Listener, tk.Canvas):
                 bar * self.pattern_width,
                 canvas_height,
                 fill=self.guideline_colour,
+                width=0
+            )
+
+        if 0 <= self.selected_bar < placement_count:
+            self.create_line(
+                self.selected_bar * self.pattern_width,
+                0,
+                self.selected_bar * self.pattern_width,
+                canvas_height,
+                fill=self.selected_bar_colour,
                 width=0
             )
 
