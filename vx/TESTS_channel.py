@@ -13,6 +13,7 @@ from channel_group import ChannelGroup
 from channel_header import ChannelHeader
 from channel_header_canvas import ChannelHeaderCanvas
 from placement_display import PlacementDisplay
+from sequencer import Sequencer
 from instrument_editor import InstrumentEditor
 
 def test_header():
@@ -115,5 +116,33 @@ def test_placement_display():
 
     window.mainloop()
 
+def test_sequencer():
+    model = Model()
+    pattern = model.new_pattern()
+    channel = model.new_channel()
+    model.ed.set_property(channel, "placements", [-1, 0, 0, -1] + [-1] * 16)
+
+    model.new_channel()
+    model.new_channel()
+
+    window = tk.Tk()
+    window.title("Sequencer")
+    window.columnconfigure(0, weight=1)
+    window.rowconfigure(0, weight=1)
+
+    sequencer = Sequencer(window, model=model)
+    sequencer.grid(column=0, row=0, padx=5, pady=5, sticky="nsew")
+
+    stuff_frame = ttk.Frame(window)
+    undo_btn = ttk.Button(stuff_frame, text="undo", command=lambda: model.uman.undo())
+    redo_btn = ttk.Button(stuff_frame, text="redo", command=lambda: model.uman.redo())
+    add_channel_btn = ttk.Button(stuff_frame, text="add channel", command=model.new_channel)
+    undo_btn.grid(column=0, row=0)
+    redo_btn.grid(column=0, row=1)
+    add_channel_btn.grid(column=0, row=2)
+    stuff_frame.grid(column=1, row=0)
+
+    window.mainloop()
+
 if __name__ == "__main__":
-    test_placement_display()
+    test_sequencer()

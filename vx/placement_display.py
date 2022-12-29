@@ -60,11 +60,12 @@ class PlacementDisplay(Listener, tk.Canvas):
         self.delete("all")
 
         channel_count = self.model.channel_group.children_count()
-        if channel_count == 0:
-            placement_count = 0
-        else:
-            first_channel = self.model.channel_group.get_child_at_index(0)
-            placement_count = len(first_channel.get_property("placements"))
+        # if channel_count == 0:
+        #     placement_count = 0
+        # else:
+        #     first_channel = self.model.channel_group.get_child_at_index(0)
+        #     placement_count = len(first_channel.get_property("placements"))
+        placement_count = self.model.song_config.get_property("sequence_length")
 
         canvas_height = channel_count * self.pattern_height
         canvas_width = placement_count * self.pattern_width
@@ -96,6 +97,7 @@ class PlacementDisplay(Listener, tk.Canvas):
             for bar, pattern_id in enumerate(channel.get_property("placements")):
                 if pattern_id == -1: continue # no placement here
                 pattern = self.model.pattern_group.get_child_by_id(pattern_id)
+                if pattern is None: continue
                 pattern_colour = pattern.get_property("colour")
                 self.draw_pattern(channel=channel_number, bar=bar, length=1, fill=pattern_colour)
 

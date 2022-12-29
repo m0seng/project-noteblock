@@ -51,7 +51,8 @@ class PianoRoll(Listener, ttk.Frame):
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
-        if node is self.pattern: self.draw_everything()
+        if node is self.pattern:
+            self.draw_everything()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         if parent is self.model.pattern_group and child is self.pattern:
@@ -108,6 +109,8 @@ class PianoRoll(Listener, ttk.Frame):
     def draw_everything(self):
         """Clears and redraws the canvas."""
         self.canvas.delete("all")
+        # make sure the canvas is the right length if pattern length has changed!
+        self.canvas.configure(scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height))
         self.draw_guide_bars()
         self.draw_guide_lines()
         self.draw_pattern_notes()
