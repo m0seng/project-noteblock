@@ -10,7 +10,6 @@ from model import Model
 from pattern import Pattern
 from pattern_group import PatternGroup
 
-
 class PianoRoll(Listener, ttk.Frame):
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)

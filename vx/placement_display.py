@@ -11,12 +11,12 @@ from pattern_group import PatternGroup
 from channel import Channel
 from channel_group import ChannelGroup
 
-class Sequencer(Listener, tk.Canvas):
+class PlacementDisplay(Listener, tk.Canvas):
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
 
-        self.pattern_width: float = 100
-        self.pattern_height: float = 100
+        self.pattern_width: float = 50
+        self.pattern_height: float = 80
 
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
@@ -108,3 +108,10 @@ class Sequencer(Listener, tk.Canvas):
             self.pattern_height * (channel + 1),
             **kwargs
         )
+
+    def get_bar_at_coords(self, x: int, y: int) -> tuple[int, int]:
+        canvas_x = self.canvasx(x)
+        canvas_y = self.canvasy(y)
+        bar = int(canvas_x // self.pattern_width)
+        channel = int(canvas_y // self.pattern_height)
+        return channel, bar

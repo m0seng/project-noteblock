@@ -3,6 +3,9 @@ import numpy as np
 from note import Note
 from instrument_sounds import InstrumentSounds
 
+# NOTE: this code is reliant on block size being 1/20th of a second
+# this is fine and it works but is something to keep in mind
+
 class AudioGenerator():
     """Turns lists of Notes into blocks of audio."""
     def __init__(self, block_size: int):

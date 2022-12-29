@@ -11,7 +11,7 @@ from pattern_group import PatternGroup
 from channel import Channel
 from channel_group import ChannelGroup
 from channel_header import ChannelHeader
-from sequencer import Sequencer
+from placement_display import PlacementDisplay
 from instrument_editor import InstrumentEditor
 
 def test_header():
@@ -71,13 +71,13 @@ def test_sequencer():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    sequencer = Sequencer(
+    placement_display = PlacementDisplay(
         window,
         model=model,
         height=500,
         width=500
     )
-    sequencer.grid(column=0, row=0, padx=5, pady=5)
+    placement_display.grid(column=0, row=0, padx=5, pady=5)
 
     undo_frame = ttk.Frame(window)
     undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: model.uman.undo())
@@ -89,4 +89,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_instrument_editor()
+    test_sequencer()

@@ -6,7 +6,6 @@ from pattern import Pattern
 from pattern_group import PatternGroup
 from channel import Channel
 from channel_group import ChannelGroup
-from effect import Effect
 # TODO: import Node subclasses here
 
 class NodeFactory:
@@ -16,7 +15,6 @@ class NodeFactory:
         "PatternGroup": PatternGroup,
         "Channel": Channel,
         "ChannelGroup": ChannelGroup,
-        "Effect": Effect,
         # TODO: add entries for Node subclasses here
     }
 

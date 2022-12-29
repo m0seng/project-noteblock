@@ -29,6 +29,7 @@ class InstrumentSounds:
         self.pitch_ratios = tuple(2 * math.pow(2, -pitch/12) for pitch in range(25))
         self._sounds: dict[int, list[np.ndarray]] = {}
         for id, path in instrument_paths.items():
+            print(f"loading instrument id {id}...")
             self._sounds[id] = []
             sound, _ = soundfile.read(path, dtype="float64", always_2d=True) # automatically scales to [-1, 1]
             for ratio in self.pitch_ratios:
@@ -36,7 +37,7 @@ class InstrumentSounds:
                 pad_length = self.block_size - (pitched_sound.shape[0] % self.block_size)
                 padded_sound = np.pad(pitched_sound, pad_width=((0,pad_length),(0,0)))
                 self._sounds[id].append(padded_sound)
-                print(f"loaded instrument id {id} with ratio {ratio}")
+                # print(f"loaded instrument id {id} with ratio {ratio}")
 
     def get_sound(self, instrument: int, pitch: int) -> np.ndarray:
         """Get the sound data for an instrument at a given pitch. Returns a numpy array."""
