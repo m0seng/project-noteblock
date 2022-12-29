@@ -15,8 +15,8 @@ class PlacementDisplay(Listener, tk.Canvas):
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
 
-        self.pattern_width: float = 50
-        self.pattern_height: float = 80
+        self.pattern_width: float = 30
+        self.pattern_height: float = 60
 
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
