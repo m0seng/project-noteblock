@@ -32,6 +32,7 @@ class PlacementDisplay(Listener, tk.Canvas):
             bg=self.bg_colour,
             **kwargs
         )
+        self.bind("<ButtonPress-1>", self.select_things)
 
         self.model.event_bus.add_listener(self)
         self.draw_everything()
@@ -66,11 +67,6 @@ class PlacementDisplay(Listener, tk.Canvas):
         self.delete("all")
 
         channel_count = self.model.channel_group.children_count()
-        # if channel_count == 0:
-        #     placement_count = 0
-        # else:
-        #     first_channel = self.model.channel_group.get_child_at_index(0)
-        #     placement_count = len(first_channel.get_property("placements"))
         placement_count = self.model.song_config.get_property("sequence_length")
 
         canvas_height = channel_count * self.pattern_height
@@ -98,6 +94,7 @@ class PlacementDisplay(Listener, tk.Canvas):
                 width=0
             )
 
+        # selected bar line
         if 0 <= self.selected_bar < placement_count:
             self.create_line(
                 self.selected_bar * self.pattern_width,
@@ -126,6 +123,15 @@ class PlacementDisplay(Listener, tk.Canvas):
             self.pattern_height * (channel + 1),
             **kwargs
         )
+
+    def select_things(self, event: tk.Event):
+        channel_index, bar = self.get_bar_at_coords(event.x, event.y)
+        channel = self.model.channel_group.get_child_at_index(channel_index)
+        self.model.event_bus.node_selected(channel)
+        pattern_id = channel.get_property("placements")[bar]
+        if pattern_id != -1:
+            pattern = self.model.pattern_group.get_child_by_id(pattern_id)
+            self.model.event_bus.node_selected(pattern)
 
     def get_bar_at_coords(self, x: int, y: int) -> tuple[int, int]:
         canvas_x = self.canvasx(x)

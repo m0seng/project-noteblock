@@ -48,6 +48,7 @@ class EventBus:
             listener.node_child_removed(parent, child, id, index)
 
     def node_selected(self, node: Node):
+        print(f"node {node} selected")
         for listener in self.listeners:
             listener.node_selected(node)
 

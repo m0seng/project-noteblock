@@ -57,11 +57,13 @@ class ChannelHeaderCanvas(Listener, tk.Canvas):
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
         self.bg_colour: str = "gray75"
+        self.header_width: int = 220
         self.header_height: int = 60
 
         super().__init__(
             parent,
             *args,
+            width=self.header_width,
             scrollregion=(0, 0, 0, 0),
             highlightthickness=0,
             bg=self.bg_colour,
@@ -93,10 +95,9 @@ class ChannelHeaderCanvas(Listener, tk.Canvas):
         channel_count = self.model.channel_group.children_count()
         self.configure(scrollregion=(0, 0, 0, self.header_height * channel_count))
 
+        self.internal_frame.columnconfigure(0, minsize=self.header_width)
+
         for index, channel in enumerate(self.model.channel_group.children_iterator()):
             header = ChannelHeader(self.internal_frame, model=self.model, channel=channel)
             header.grid(column=0, row=index, sticky="nsew")
             self.internal_frame.rowconfigure(index, minsize=self.header_height)
-
-        print(self.internal_frame.winfo_reqwidth())
-        self.config(width=self.internal_frame.winfo_reqwidth())

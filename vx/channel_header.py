@@ -16,6 +16,7 @@ class ChannelHeader(Listener, ttk.Frame):
         
         self.init_ui()
         self.model.event_bus.add_listener(self)
+        self.bind("<ButtonPress-1>", lambda e: self.model.event_bus.node_selected(self.channel))
         self.update_ui()
 
     def destroy(self, *args, **kwargs):
