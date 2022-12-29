@@ -53,12 +53,14 @@ def test_header_canvas():
     header = ChannelHeaderCanvas(window, model=model)
     header.grid(column=0, row=0, padx=5, pady=5)
 
-    undo_frame = ttk.Frame(window)
-    undo_btn = ttk.Button(undo_frame, text="undo", command=lambda: model.uman.undo())
-    redo_btn = ttk.Button(undo_frame, text="redo", command=lambda: model.uman.redo())
+    stuff_frame = ttk.Frame(window)
+    undo_btn = ttk.Button(stuff_frame, text="undo", command=lambda: model.uman.undo())
+    redo_btn = ttk.Button(stuff_frame, text="redo", command=lambda: model.uman.redo())
+    add_channel_btn = ttk.Button(stuff_frame, text="add button", command=model.new_channel)
     undo_btn.grid(column=0, row=0)
     redo_btn.grid(column=0, row=1)
-    undo_frame.grid(column=1, row=0)
+    add_channel_btn.grid(column=0, row=2)
+    stuff_frame.grid(column=1, row=0)
 
     window.mainloop()
 
@@ -84,7 +86,7 @@ def test_instrument_editor():
 
     window.mainloop()
 
-def test_sequencer():
+def test_placement_display():
     model = Model()
     pattern = model.new_pattern()
     channel = model.new_channel()
@@ -114,4 +116,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_header_canvas()
+    test_placement_display()

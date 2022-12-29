@@ -31,6 +31,14 @@ class ChannelHeaderCanvas(Listener, tk.Canvas):
         self.model.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)
 
+    def node_child_added(self, parent: Node, child: Node, id: int, index: int):
+        if parent is self.model.channel_group:
+            self.update_ui()
+
+    def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
+        if parent is self.model.channel_group:
+            self.update_ui()
+
     def update_ui(self):
         for header in self.headers:
             header.destroy()
