@@ -85,7 +85,6 @@ class BarDisplay(Listener, tk.Canvas):
                 (self.selected_bar * self.bar_width) - 5,
                 self.strip_height - 5,
                 fill=self.selected_bar_colour,
-                outline="black"
             )
 
     def select_bar(self, event: tk.Event):

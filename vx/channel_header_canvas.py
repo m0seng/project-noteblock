@@ -12,7 +12,7 @@ class ChannelHeaderCanvas(Listener, tk.Canvas):
         self.model = model
         self.bg_colour: str = "gray75"
         self.headers: list[ChannelHeader] = []
-        self.header_width: int = 180
+        self.header_width: int = 250
         self.header_height: int = 60
 
         super().__init__(

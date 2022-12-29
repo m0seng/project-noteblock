@@ -26,7 +26,61 @@ class ChannelHeader(Listener, ttk.Frame):
         if node is self.channel:
             self.update_ui()
 
+    padding = {"padx": 2, "pady": 2}
+
     def init_ui(self):
+        self.top_frame = ttk.Frame(self)
+
+        self.lbl_colour = ttk.Label(self.top_frame, width=3)
+
+        self.var_name = tk.StringVar(self)
+        self.inp_name = ttk.Entry(
+            self.top_frame,
+            width=15,
+            textvariable=self.var_name,
+        )
+        self.inp_name.bind(
+            "<Return>",
+            lambda e: self.model.ed.set_property(self.channel, "name", self.var_name.get())
+        )
+
+        self.btn_delete = ttk.Button(
+            self.top_frame,
+            text="🗑",
+            width=3,
+            command=lambda: self.model.ed.remove_child(self.model.channel_group, self.channel)
+        )
+
+        self.bottom_frame = ttk.Frame(self)
+
+        self.lbl_volume = ttk.Label(self.bottom_frame, text="V:")
+        self.var_volume = tk.DoubleVar(self, value=1.0)
+        self.inp_volume = ttk.Spinbox(
+            self.bottom_frame,
+            from_=0.0, to=1.0, increment=0.1,
+            width=5,
+            textvariable=self.var_volume,
+            command=lambda: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
+        )
+        self.inp_volume.bind(
+            "<Return>",
+            lambda e: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
+        )
+
+        self.lbl_pan = ttk.Label(self.bottom_frame, text="P:")
+        self.var_pan = tk.DoubleVar(self, value=0.0)
+        self.inp_pan = ttk.Spinbox(
+            self.bottom_frame,
+            from_=-1.0, to=1.0, increment=0.1,
+            width=5,
+            textvariable=self.var_pan,
+            command=lambda: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())
+        )
+        self.inp_pan.bind(
+            "<Return>",
+            lambda e: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())
+        )
+
         self.btn_mute = ttk.Button(
             self,
             text="M",
@@ -40,58 +94,34 @@ class ChannelHeader(Listener, ttk.Frame):
             command=lambda: self.model.ed.toggle_bool(self.channel, "solo")
         )
 
-        self.lbl_colour = ttk.Label(self, width=2)
-
-        self.var_name = tk.StringVar(self)
-        self.inp_name = ttk.Entry(
+        self.btn_move_up = ttk.Button(
             self,
-            width=15,
-            textvariable=self.var_name,
+            text="▲",
+            width=2,
+            command=lambda: self.move_channel(-1)
         )
-        self.inp_name.bind(
-            "<Return>",
-            lambda e: self.model.ed.set_property(self.channel, "name", self.var_name.get())
-        )
-
-        self.lbl_volume = ttk.Label(self, text="V:")
-        self.var_volume = tk.DoubleVar(self, value=1.0)
-        self.inp_volume = ttk.Spinbox(
+        self.btn_move_down = ttk.Button(
             self,
-            from_=0.0, to=1.0, increment=0.1,
-            width=5,
-            textvariable=self.var_volume,
-            command=lambda: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
-        )
-        self.inp_volume.bind(
-            "<Return>",
-            lambda e: self.model.ed.set_property(self.channel, "volume", self.var_volume.get())
+            text="▼",
+            width=2,
+            command=lambda: self.move_channel(1)
         )
 
-        self.lbl_pan = ttk.Label(self, text="P:")
-        self.var_pan = tk.DoubleVar(self, value=0.0)
-        self.inp_pan = ttk.Spinbox(
-            self,
-            from_=-1.0, to=1.0, increment=0.1,
-            width=5,
-            textvariable=self.var_pan,
-            command=lambda: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())
-        )
-        self.inp_pan.bind(
-            "<Return>",
-            lambda e: self.model.ed.set_property(self.channel, "pan", self.var_pan.get())
-        )
+        self.lbl_colour.grid(column=0, row=0, **self.padding)
+        self.inp_name.grid(column=1, row=0, **self.padding)
+        self.btn_delete.grid(column=2, row=0, **self.padding)
+        self.top_frame.grid(column=0, row=0, sticky="w")
 
-        self.lbl_colour.grid(column=0, row=0)
-        self.inp_name.grid(column=1, row=0, columnspan=3, sticky="w")
-        self.lbl_volume.grid(column=0, row=1)
-        self.inp_volume.grid(column=1, row=1)
-        self.lbl_pan.grid(column=2, row=1)
-        self.inp_pan.grid(column=3, row=1)
-        self.btn_mute.grid(column=4, row=0)
-        self.btn_solo.grid(column=4, row=1)
+        self.lbl_volume.grid(column=0, row=0, **self.padding)
+        self.inp_volume.grid(column=1, row=0, **self.padding)
+        self.lbl_pan.grid(column=2, row=0, **self.padding)
+        self.inp_pan.grid(column=3, row=0, **self.padding)
+        self.bottom_frame.grid(column=0, row=1, sticky="w")
 
-        for child in self.winfo_children():
-            child.grid_configure(padx=2, pady=2)
+        self.btn_mute.grid(column=1, row=0, **self.padding)
+        self.btn_solo.grid(column=1, row=1, **self.padding)
+        self.btn_move_up.grid(column=2, row=0, **self.padding)
+        self.btn_move_down.grid(column=2, row=1, **self.padding)
 
     def update_ui(self):
         self.lbl_colour.config(background=self.channel.get_property("colour"))
@@ -100,3 +130,11 @@ class ChannelHeader(Listener, ttk.Frame):
         self.var_name.set(self.channel.get_property("name"))
         self.var_volume.set(self.channel.get_property("volume"))
         self.var_pan.set(self.channel.get_property("pan"))
+
+    def move_channel(self, delta: int):
+        self.model.uman.start_group()
+        old_index = self.model.channel_group.get_index_of_child(self.channel)
+        new_index = old_index + delta
+        self.model.ed.remove_child(self.model.channel_group, self.channel)
+        self.model.ed.add_child_at_index(self.model.channel_group, self.channel, new_index)
+        self.model.uman.end_group()
