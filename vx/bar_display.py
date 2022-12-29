@@ -65,13 +65,27 @@ class BarDisplay(Listener, tk.Canvas):
                 fill=self.guideline_colour
             )
         if 0 <= self.selected_bar < sequence_length:
-            self.create_line(
-                self.selected_bar * self.bar_width,
+            # self.create_line(
+            #     self.selected_bar * self.bar_width,
+            #     0,
+            #     self.selected_bar * self.bar_width,
+            #     self.strip_height,
+            #     fill=self.selected_bar_colour,
+            #     width=0
+            # )
+            self.create_polygon(
+                (self.selected_bar * self.bar_width) - 5,
                 0,
-                self.selected_bar * self.bar_width,
+                (self.selected_bar * self.bar_width) + 5,
+                0,
+                (self.selected_bar * self.bar_width) + 5,
+                self.strip_height - 5,
+                (self.selected_bar * self.bar_width),
                 self.strip_height,
+                (self.selected_bar * self.bar_width) - 5,
+                self.strip_height - 5,
                 fill=self.selected_bar_colour,
-                width=0
+                outline="black"
             )
 
     def select_bar(self, event: tk.Event):
