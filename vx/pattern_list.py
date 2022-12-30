@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import dnd
 
 from node import Node
 from pattern import Pattern
@@ -40,6 +41,10 @@ class PatternList(Listener, ttk.Frame):
 
         self.internal_frame = ttk.Frame(self.canvas)
         self.canvas.create_window(0, 0, anchor="nw", window=self.internal_frame)
+
+        # NOTE: this is the magic line
+        # resizing canvas to frame here instead of in update_ui() avoids the
+        # problem of having 1 pixel width/height at init
         self.internal_frame.bind(
             "<Configure>",
             lambda e: self.canvas.configure(width=self.internal_frame.winfo_reqwidth())
@@ -63,8 +68,9 @@ class PatternList(Listener, ttk.Frame):
                 self.internal_frame,
                 text=pattern_name,
                 width=self.name_width,
-                background=pattern_colour
+                background=pattern_colour,
             )
+            pattern_label.bind("<ButtonPress-1>", lambda e: dnd.dnd_start(pattern, e))
             pattern_label.grid(column=0, row=index, ipadx=5, ipady=5, padx=2, pady=2)
 
         self.canvas.configure(scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))

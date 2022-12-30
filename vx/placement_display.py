@@ -59,6 +59,15 @@ class PlacementDisplay(Listener, tk.Canvas):
         self.selected_bar = bar
         self.draw_everything()
 
+    def dnd_commit(self, source, event: tk.Event):
+        if isinstance(source, Pattern):
+            pattern_id = self.model.pattern_group.get_id_of_child(source)
+            channel_index, bar = self.get_bar_at_coords(event.x, event.y)
+            channel = self.model.channel_group.get_child_at_index(channel_index)
+            placements_copy = channel.get_property("placements")[:]
+            placements_copy[bar] = pattern_id
+            self.model.ed.set_property(channel, "placements", placements_copy)
+
     def draw_everything(self):
         self.configure_canvas()
         self.draw_placements()
@@ -137,5 +146,5 @@ class PlacementDisplay(Listener, tk.Canvas):
         canvas_x = self.canvasx(x)
         canvas_y = self.canvasy(y)
         bar = int(canvas_x // self.pattern_width)
-        channel = int(canvas_y // self.pattern_height)
-        return channel, bar
+        channel_index = int(canvas_y // self.pattern_height)
+        return channel_index, bar

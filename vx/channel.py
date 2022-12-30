@@ -7,7 +7,7 @@ class Channel(Node):
     def __init__(self, *args, pattern_group: PatternGroup, sequence_length: int = 20, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_property("name", "channel name")
-        self._set_property("colour", "blue")
+        self._set_property("colour", "gray50")
         self._set_property("main_instrument", 0)
         self._set_property("sustain_enabled", False)
         self._set_property("sustain_instrument", 0)
