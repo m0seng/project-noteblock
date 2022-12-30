@@ -58,12 +58,18 @@ class PatternList(Listener, ttk.Frame):
         self.scrollbar["command"] = self.canvas.yview
         self.scrollbar.grid(column=1, row=0, sticky="ns")
 
+        self.btn_add_pattern = ttk.Button(
+            self,
+            text="+ add pattern",
+            command=self.model.new_pattern
+        )
+        self.btn_add_pattern.grid(column=0, row=1)
+
     def update_ui(self):
         for child in self.internal_frame.winfo_children():
             child.destroy()
 
-        pattern_count = self.model.pattern_group.children_count()
-
+        # empty function that gets added to every pattern label
         def dnd_end(target, event):
             ...
 

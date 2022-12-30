@@ -133,9 +133,10 @@ class ChannelHeader(Listener, ttk.Frame):
         self.var_pan.set(self.channel.get_property("pan"))
 
     def move_channel(self, delta: int):
-        self.model.uman.start_group()
         old_index = self.model.channel_group.get_index_of_child(self.channel)
         new_index = old_index + delta
+        if new_index < 0 or new_index >= self.model.channel_group.children_count(): return
+        self.model.uman.start_group()
         self.model.ed.remove_child(self.model.channel_group, self.channel)
         self.model.ed.add_child_at_index(self.model.channel_group, self.channel, new_index)
         self.model.uman.end_group()
