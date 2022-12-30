@@ -5,7 +5,7 @@ from model import Model
 
 from pattern_list import PatternList
 from sequencer import Sequencer
-from bottom_notebook import BottomNotebook
+from bottom_frame import BottomFrame
 
 def test_sequencer():
     model = Model()
@@ -36,8 +36,8 @@ def test_sequencer():
 
     main_frame.grid(column=0, row=1, sticky="nsew")
 
-    bottom_notebook = BottomNotebook(window, model=model)
-    bottom_notebook.grid(column=0, row=2, sticky="nsew")
+    bottom_frame = BottomFrame(window, model=model)
+    bottom_frame.grid(column=0, row=2, sticky="nsew")
 
     window.mainloop()
 
