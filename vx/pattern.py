@@ -9,7 +9,3 @@ class Pattern(Node):
 
     def get_notes(self, pat_tick: int) -> list[int]:
         return [self.get_property("notes")[pat_tick]]
-
-    # NOTE: stupid workaround
-    def dnd_end(self, target, event):
-        ...

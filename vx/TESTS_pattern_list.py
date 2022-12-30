@@ -8,6 +8,8 @@ from sequencer import Sequencer
 
 def test_sequencer():
     model = Model()
+    model.new_channel()
+    model.new_pattern()
 
     window = tk.Tk()
     window.title("Pattern List")

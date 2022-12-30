@@ -61,6 +61,9 @@ class PatternList(Listener, ttk.Frame):
 
         pattern_count = self.model.pattern_group.children_count()
 
+        def dnd_end(target, event):
+            ...
+
         for index, pattern in enumerate(self.model.pattern_group.children_iterator()):
             pattern_name = pattern.get_property("name")
             pattern_colour = pattern.get_property("colour")
@@ -70,7 +73,9 @@ class PatternList(Listener, ttk.Frame):
                 width=self.name_width,
                 background=pattern_colour,
             )
-            pattern_label.bind("<ButtonPress-1>", lambda e: dnd.dnd_start(pattern, e))
+            pattern_label.pattern = pattern # cheeky monkey patch
+            pattern_label.dnd_end = dnd_end
+            pattern_label.bind("<ButtonPress-1>", lambda e: dnd.dnd_start(pattern_label, e))
             pattern_label.grid(column=0, row=index, ipadx=5, ipady=5, padx=2, pady=2)
 
         self.canvas.configure(scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))

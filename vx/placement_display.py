@@ -59,6 +59,9 @@ class PlacementDisplay(Listener, tk.Canvas):
         self.selected_bar = bar
         self.draw_everything()
 
+    # NOTE: apparently all of the following are needed to use Tkinter's drag and drop library
+    # maybe I should have written my own...
+
     def dnd_accept(self, source, event):
         return self
 
@@ -72,10 +75,13 @@ class PlacementDisplay(Listener, tk.Canvas):
         ...
 
     def dnd_commit(self, source, event: tk.Event):
-        if isinstance(source, Pattern):
-            pattern_id = self.model.pattern_group.get_id_of_child(source)
-            channel_index, bar = self.get_bar_at_coords(event.x, event.y)
-            channel = self.model.channel_group.get_child_at_index(channel_index)
+        pattern = getattr(source, "pattern", None)
+        if isinstance(pattern, Pattern):
+            pattern_id = self.model.pattern_group.get_id_of_child(pattern)
+            bar, channel, _ = self.get_everything_at_coords(
+                event.x_root - self.winfo_rootx(),
+                event.y_root - self.winfo_rooty()
+            )
             placements_copy = channel.get_property("placements")[:]
             placements_copy[bar] = pattern_id
             self.model.ed.set_property(channel, "placements", placements_copy)
@@ -146,13 +152,12 @@ class PlacementDisplay(Listener, tk.Canvas):
         )
 
     def select_things(self, event: tk.Event):
-        channel_index, bar = self.get_bar_at_coords(event.x, event.y)
-        channel = self.model.channel_group.get_child_at_index(channel_index)
-        self.model.event_bus.node_selected(channel)
-        pattern_id = channel.get_property("placements")[bar]
-        if pattern_id != -1:
-            pattern = self.model.pattern_group.get_child_by_id(pattern_id)
-            self.model.event_bus.node_selected(pattern)
+        bar, channel, pattern = self.get_everything_at_coords(event.x, event.y)
+        if channel is not None: self.model.event_bus.node_selected(channel)
+        if pattern is not None: self.model.event_bus.node_selected(pattern)
+
+    def delete_placement(self, event: tk.Event):
+        ...
 
     def get_bar_at_coords(self, x: int, y: int) -> tuple[int, int]:
         canvas_x = self.canvasx(x)
@@ -160,3 +165,11 @@ class PlacementDisplay(Listener, tk.Canvas):
         bar = int(canvas_x // self.pattern_width)
         channel_index = int(canvas_y // self.pattern_height)
         return channel_index, bar
+
+    def get_everything_at_coords(self, x: int, y: int):
+        channel_index, bar = self.get_bar_at_coords(x, y)
+        channel = self.model.channel_group.get_child_at_index(channel_index)
+        if channel is None: return (bar, channel, None)
+        pattern_id = channel.get_property("placements")[bar]
+        pattern = self.model.pattern_group.get_child_by_id(pattern_id)
+        return (bar, channel, pattern)
