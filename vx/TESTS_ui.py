@@ -33,13 +33,6 @@ def test_sequencer():
     sequencer = Sequencer(main_frame, model=model)
     sequencer.grid(column=1, row=0, padx=5, pady=5, sticky="nsew")
 
-    stuff_frame = ttk.Frame(main_frame)
-    undo_btn = ttk.Button(stuff_frame, text="undo", command=lambda: model.uman.undo())
-    redo_btn = ttk.Button(stuff_frame, text="redo", command=lambda: model.uman.redo())
-    undo_btn.grid(column=0, row=0)
-    redo_btn.grid(column=0, row=1)
-    stuff_frame.grid(column=2, row=0)
-
     bottom_frame = BottomFrame(window, model=model)
 
     top_frame.grid(column=0, row=0, sticky="ew")

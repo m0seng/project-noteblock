@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import colorchooser
 
 from node import Node
 from events import EventBus, Listener
@@ -33,6 +34,10 @@ class ChannelHeader(Listener, ttk.Frame):
         self.top_frame = ttk.Frame(self)
 
         self.lbl_colour = ttk.Label(self.top_frame, width=3)
+        self.lbl_colour.bind(
+            "<ButtonPress-1>",
+            lambda e: self.model.ed.set_property(self.channel, "colour", colorchooser.askcolor()[1])
+        )
 
         self.var_name = tk.StringVar(self)
         self.inp_name = ttk.Entry(

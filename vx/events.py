@@ -20,6 +20,9 @@ class Listener(ABC):
     def bar_selected(self, bar: int):
         ...
 
+    def bar_playing(self, bar: int):
+        ...
+
     def reset_ui(self):
         # Used when a project is loaded from file
         # All links to old Nodes need to be broken
@@ -60,6 +63,10 @@ class EventBus:
     def bar_selected(self, bar: int):
         for listener in self.listeners:
             listener.bar_selected(bar)
+
+    def bar_playing(self, bar: int):
+        for listener in self.listeners:
+            listener.bar_playing(bar)
 
     def reset_ui(self):
         for listener in self.listeners:
