@@ -4,7 +4,7 @@ class TickManager:
     def __init__(self, model: Model):
         self.model = model
         self.mono_tick: int = 0
-        self.sequence_enabled: bool = True
+        self.sequence_enabled: bool = False
         self.bar_number: int = 0
         self.pat_tick: int = 0
 

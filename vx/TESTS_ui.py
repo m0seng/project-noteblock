@@ -2,9 +2,11 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from model import Model
+from playback import Playback
 
 from pattern_list import PatternList
 from sequencer import Sequencer
+from top_frame import TopFrame
 from bottom_frame import BottomFrame
 
 def test_sequencer():
@@ -16,6 +18,10 @@ def test_sequencer():
     window.title("humu humu")
     window.columnconfigure(0, weight=1)
     window.rowconfigure(1, weight=1)
+
+    playback = Playback(model=model, window=window)
+
+    top_frame = TopFrame(window, model=model, playback=playback)
 
     main_frame = ttk.Frame(window)
     main_frame.columnconfigure(1, weight=1)
@@ -34,9 +40,10 @@ def test_sequencer():
     redo_btn.grid(column=0, row=1)
     stuff_frame.grid(column=2, row=0)
 
-    main_frame.grid(column=0, row=1, sticky="nsew")
-
     bottom_frame = BottomFrame(window, model=model)
+
+    top_frame.grid(column=0, row=0, sticky="ew")
+    main_frame.grid(column=0, row=1, sticky="nsew")
     bottom_frame.grid(column=0, row=2, sticky="nsew")
 
     window.mainloop()
