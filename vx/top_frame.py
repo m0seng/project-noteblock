@@ -32,6 +32,13 @@ class TopFrame(ttk.Frame):
             self, text="↺", width=3,
             command=self.model.uman.redo
         )
+        self.btn_load = ttk.Button(
+            self, text="📁", width=3,
+            command=lambda: self.model.from_file(fd.askopenfilename(
+                defaultextension=".json",
+                filetypes=[("JSON project file", "*.json")]
+            ))
+        )
         self.btn_save = ttk.Button(
             self, text="💾", width=3,
             command=lambda: self.model.to_file(fd.asksaveasfilename(
@@ -45,4 +52,5 @@ class TopFrame(ttk.Frame):
         self.btn_stop.grid(column=2, row=0)
         self.btn_undo.grid(column=3, row=0)
         self.btn_redo.grid(column=4, row=0)
-        self.btn_save.grid(column=5, row=0)
+        self.btn_load.grid(column=5, row=0)
+        self.btn_save.grid(column=6, row=0)
