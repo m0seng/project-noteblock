@@ -85,8 +85,11 @@ class PatternList(Listener, ttk.Frame):
             )
             pattern_label.pattern = pattern # cheeky monkey patch
             pattern_label.dnd_end = dnd_end
-            pattern_label.bind("<ButtonPress-1>", lambda e: self.model.event_bus.node_selected(pattern))
-            pattern_label.bind("<ButtonPress-1>", lambda e: dnd.dnd_start(pattern_label, e), add=True)
+
+            # cursed hack around Python closures in lambda functions
+            pattern_label.bind("<ButtonPress-1>", lambda e, p=pattern: self.model.event_bus.node_selected(p))
+            pattern_label.bind("<ButtonPress-1>", lambda e, p=pattern_label: dnd.dnd_start(p, e), add=True)
+            
             pattern_label.grid(column=0, row=index, ipadx=5, ipady=5, padx=2, pady=2)
 
         self.canvas.configure(scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))
