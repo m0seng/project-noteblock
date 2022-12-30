@@ -42,6 +42,9 @@ class BarDisplay(Listener, tk.Canvas):
 
     def bar_selected(self, bar: int):
         self.selected_bar = bar
+        self.draw_everything() # TODO: probably don't have to redraw everything here
+
+    def reset_ui(self):
         self.draw_everything()
 
     def draw_everything(self):
@@ -65,14 +68,6 @@ class BarDisplay(Listener, tk.Canvas):
                 fill=self.guideline_colour
             )
         if 0 <= self.selected_bar < sequence_length:
-            # self.create_line(
-            #     self.selected_bar * self.bar_width,
-            #     0,
-            #     self.selected_bar * self.bar_width,
-            #     self.strip_height,
-            #     fill=self.selected_bar_colour,
-            #     width=0
-            # )
             self.create_polygon(
                 (self.selected_bar * self.bar_width) - 5,
                 0,

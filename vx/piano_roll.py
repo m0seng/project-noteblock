@@ -65,6 +65,11 @@ class PianoRoll(Listener, ttk.Frame):
     def node_selected(self, node: Node):
         if isinstance(node, Pattern):
             self.pattern = node
+            self.draw_everything()
+
+    def reset_ui(self):
+        self.pattern = None
+        self.draw_everything()
 
     def init_canvas(self):
         """Initializes and grids the canvas with click bindings."""

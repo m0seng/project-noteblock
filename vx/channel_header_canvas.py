@@ -44,6 +44,9 @@ class ChannelHeaderCanvas(Listener, tk.Canvas):
         if parent is self.model.channel_group:
             self.update_ui()
 
+    def reset_ui(self):
+        self.update_ui()
+
     def update_ui(self):
         for header in self.internal_frame.winfo_children():
             header.destroy()

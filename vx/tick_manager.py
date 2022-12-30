@@ -33,5 +33,6 @@ class TickManager:
         if self.pat_tick >= self.model.song_config.get_property("pattern_length"):
             self.pat_tick = 0
             self.bar_number += 1
+            # TODO: insert loop logic here
             if self.bar_number >= self.model.song_config.get_property("sequence_length"):
                 self.sequence_enabled = False

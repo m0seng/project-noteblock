@@ -20,6 +20,11 @@ class Listener(ABC):
     def bar_selected(self, bar: int):
         ...
 
+    def reset_ui(self):
+        # Used when a project is loaded from file
+        # All links to old Nodes need to be broken
+        ...
+
 class EventBus:
     def __init__(self):
         self.listeners: list[Listener] = []
@@ -48,10 +53,14 @@ class EventBus:
             listener.node_child_removed(parent, child, id, index)
 
     def node_selected(self, node: Node):
-        print(f"node {node} selected")
+        print(f"node {node} selected") # TODO: remove this
         for listener in self.listeners:
             listener.node_selected(node)
 
     def bar_selected(self, bar: int):
         for listener in self.listeners:
             listener.bar_selected(bar)
+
+    def reset_ui(self):
+        for listener in self.listeners:
+            listener.reset_ui()

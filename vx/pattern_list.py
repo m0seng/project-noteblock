@@ -35,6 +35,9 @@ class PatternList(Listener, ttk.Frame):
         if parent is self.model.pattern_group:
             self.update_ui()
 
+    def reset_ui(self):
+        self.update_ui()
+
     def init_ui(self):
         self.canvas = tk.Canvas(self)
         self.canvas.grid(column=0, row=0, sticky="ns")

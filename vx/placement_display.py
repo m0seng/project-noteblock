@@ -58,6 +58,9 @@ class PlacementDisplay(Listener, tk.Canvas):
 
     def bar_selected(self, bar: int):
         self.selected_bar = bar
+        self.draw_everything() # TODO: probably don't have to redraw everything here
+
+    def reset_ui(self):
         self.draw_everything()
 
     # NOTE: apparently all of the following are needed to use Tkinter's drag and drop library
