@@ -20,6 +20,14 @@ class Sequencer(ttk.Frame):
         self.channel_header_canvas = ChannelHeaderCanvas(self, model=self.model)
         self.bar_display = BarDisplay(self, model=self.model)
 
+        self.buttons_frame = ttk.Frame(self)
+        self.btn_add_channel = ttk.Button(
+            self.buttons_frame,
+            text="+ add channel",
+            command=self.model.new_channel
+        )
+        self.btn_add_channel.grid(column=0, row=0)
+
         def xview_both_canvases(*args):
             self.placement_display.xview(*args)
             self.bar_display.xview(*args)
@@ -39,5 +47,6 @@ class Sequencer(ttk.Frame):
         self.bar_display.grid(column=0, row=0, sticky="ew")
         self.placement_display.grid(column=0, row=1, sticky="nsew")
         self.channel_header_canvas.grid(column=1, row=1, sticky="ns")
+        self.buttons_frame.grid(column=1, row=0, sticky="ew")
         self.horizontal_scroll.grid(column=0, row=2, sticky="ew")
         self.vertical_scroll.grid(column=2, row=1, sticky="ns")

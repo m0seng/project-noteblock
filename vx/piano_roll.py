@@ -21,7 +21,7 @@ class PianoRoll(Listener, ttk.Frame):
 
         # drawing constants
         self.note_width: float = 20
-        self.canvas_height: int = 400
+        self.canvas_height: int = 300
         self.non_neg_pitch_count: int = 25
         self.negative_pitch_count: int = 2
         self.pitch_count: int = self.non_neg_pitch_count + self.negative_pitch_count

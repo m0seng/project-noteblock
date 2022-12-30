@@ -12,6 +12,7 @@ class PatternList(Listener, ttk.Frame):
         super().__init__(parent, *args, **kwargs)
         self.model = model
         self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
 
         self.name_width: int = 20
 
@@ -84,7 +85,8 @@ class PatternList(Listener, ttk.Frame):
             )
             pattern_label.pattern = pattern # cheeky monkey patch
             pattern_label.dnd_end = dnd_end
-            pattern_label.bind("<ButtonPress-1>", lambda e: dnd.dnd_start(pattern_label, e))
+            pattern_label.bind("<ButtonPress-1>", lambda e: self.model.event_bus.node_selected(pattern))
+            pattern_label.bind("<ButtonPress-1>", lambda e: dnd.dnd_start(pattern_label, e), add=True)
             pattern_label.grid(column=0, row=index, ipadx=5, ipady=5, padx=2, pady=2)
 
         self.canvas.configure(scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))
