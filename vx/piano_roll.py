@@ -17,6 +17,7 @@ class PianoRoll(Listener, ttk.Frame):
         self.pattern: Pattern | None = None
 
         # make this wide
+        # TODO: this column will have to change when I add more stuff before it
         self.columnconfigure(0, weight=1)
 
         # drawing constants

@@ -31,6 +31,9 @@ class Model:
         self.root._add_child(self.song_config, 0, 0)
         self.root._add_child(self.pattern_group, 1, 1)
         self.root._add_child(self.channel_group, 2, 2)
+        self.new_pattern()
+        self.new_channel()
+        self.event_bus.reset_ui()
 
     def from_dict(self, source: dict):
         # NOTE: if only it was this simple...
@@ -38,7 +41,7 @@ class Model:
         # self.song_config = self.root.get_child_by_class(SongConfig)
         # self.pattern_group = self.root.get_child_by_class(PatternGroup)
         # self.channel_group = self.root.get_child_by_class(ChannelGroup)
-        
+
         self.song_config = self.factory.create_node(source["children"]["0"])
         self.pattern_group = self.factory.create_node(source["children"]["1"])
         self.channel_group = self.factory.create_node(source["children"]["2"],
@@ -47,6 +50,7 @@ class Model:
         self.root._add_child(self.song_config, 0, 0)
         self.root._add_child(self.pattern_group, 1, 1)
         self.root._add_child(self.channel_group, 2, 2)
+        self.event_bus.reset_ui() # TODO: does this have to be somewhere else?
 
     def to_dict(self) -> dict:
         return self.root.to_dict()
@@ -54,7 +58,6 @@ class Model:
     def from_file(self, filename: str):
         with open(filename, "r", encoding="utf-8") as file:
             self.from_dict(json.load(file))
-        self.event_bus.reset_ui() # TODO: does this have to be somewhere else?
 
     def to_file(self, filename: str):
         with open(filename, "w", encoding="utf-8") as file:

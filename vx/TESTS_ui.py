@@ -11,8 +11,6 @@ from bottom_frame import BottomFrame
 
 def test_sequencer():
     model = Model()
-    model.new_channel()
-    model.new_pattern()
 
     window = tk.Tk()
     window.title("project noteblock")

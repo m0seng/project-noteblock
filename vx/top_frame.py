@@ -32,6 +32,10 @@ class TopFrame(ttk.Frame):
             self, text="↺", width=3,
             command=self.model.uman.redo
         )
+        self.btn_new_song = ttk.Button(
+            self, text="☆", width=3,
+            command=self.model.init_tree
+        ) # TODO: dialog to ask you to save first?
         self.btn_load = ttk.Button(
             self, text="📁", width=3,
             command=lambda: self.model.from_file(fd.askopenfilename(
@@ -52,5 +56,6 @@ class TopFrame(ttk.Frame):
         self.btn_stop.grid(column=2, row=0)
         self.btn_undo.grid(column=3, row=0)
         self.btn_redo.grid(column=4, row=0)
-        self.btn_load.grid(column=5, row=0)
-        self.btn_save.grid(column=6, row=0)
+        self.btn_new_song.grid(column=5, row=0)
+        self.btn_load.grid(column=6, row=0)
+        self.btn_save.grid(column=7, row=0)
