@@ -59,6 +59,18 @@ class PlacementDisplay(Listener, tk.Canvas):
         self.selected_bar = bar
         self.draw_everything()
 
+    def dnd_accept(self, source, event):
+        return self
+
+    def dnd_enter(self, source, event):
+        ...
+
+    def dnd_motion(self, source, event):
+        ...
+
+    def dnd_leave(self, source, event):
+        ...
+
     def dnd_commit(self, source, event: tk.Event):
         if isinstance(source, Pattern):
             pattern_id = self.model.pattern_group.get_id_of_child(source)
