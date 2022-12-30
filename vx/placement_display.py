@@ -82,9 +82,10 @@ class PlacementDisplay(Listener, tk.Canvas):
                 event.x_root - self.winfo_rootx(),
                 event.y_root - self.winfo_rooty()
             )
-            placements_copy = channel.get_property("placements")[:]
-            placements_copy[bar] = pattern_id
-            self.model.ed.set_property(channel, "placements", placements_copy)
+            if channel is not None:
+                placements_copy = channel.get_property("placements")[:]
+                placements_copy[bar] = pattern_id
+                self.model.ed.set_property(channel, "placements", placements_copy)
 
     def draw_everything(self):
         self.configure_canvas()
