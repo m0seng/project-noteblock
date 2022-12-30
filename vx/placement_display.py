@@ -33,6 +33,7 @@ class PlacementDisplay(Listener, tk.Canvas):
             **kwargs
         )
         self.bind("<ButtonPress-1>", self.select_things)
+        self.bind("<ButtonPress-3>", self.delete_placement)
 
         self.model.event_bus.add_listener(self)
         self.draw_everything()
@@ -158,7 +159,11 @@ class PlacementDisplay(Listener, tk.Canvas):
         if pattern is not None: self.model.event_bus.node_selected(pattern)
 
     def delete_placement(self, event: tk.Event):
-        ...
+        bar, channel, pattern = self.get_everything_at_coords(event.x, event.y)
+        if pattern is not None:
+            placements_copy = channel.get_property("placements")[:]
+            placements_copy[bar] = -1
+            self.model.ed.set_property(channel, "placements", placements_copy)
 
     def get_bar_at_coords(self, x: int, y: int) -> tuple[int, int]:
         canvas_x = self.canvasx(x)
