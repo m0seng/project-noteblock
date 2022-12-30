@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import filedialog as fd
 
 from model import Model
 
@@ -31,9 +32,17 @@ class TopFrame(ttk.Frame):
             self, text="↺", width=3,
             command=self.model.uman.redo
         )
+        self.btn_save = ttk.Button(
+            self, text="💾", width=3,
+            command=lambda: self.model.to_file(fd.asksaveasfilename(
+                defaultextension=".json",
+                filetypes=[("JSON project file", "*.json")]
+            ))
+        )
 
         self.btn_play.grid(column=0, row=0)
         self.btn_pause.grid(column=1, row=0)
         self.btn_stop.grid(column=2, row=0)
         self.btn_undo.grid(column=3, row=0)
         self.btn_redo.grid(column=4, row=0)
+        self.btn_save.grid(column=5, row=0)

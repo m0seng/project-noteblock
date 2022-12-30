@@ -15,7 +15,7 @@ def test_sequencer():
     model.new_pattern()
 
     window = tk.Tk()
-    window.title("humu humu")
+    window.title("project noteblock")
     window.columnconfigure(0, weight=1)
     window.rowconfigure(1, weight=1)
 

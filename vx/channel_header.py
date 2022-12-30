@@ -30,13 +30,17 @@ class ChannelHeader(Listener, ttk.Frame):
 
     padding = {"padx": 2, "pady": 2}
 
+    def choose_colour(self, event: tk.Event):
+        colour = colorchooser.askcolor()[1]
+        if colour is not None: self.model.ed.set_property(self.channel, "colour", colour)
+
     def init_ui(self):
         self.top_frame = ttk.Frame(self)
 
         self.lbl_colour = ttk.Label(self.top_frame, width=3)
         self.lbl_colour.bind(
             "<ButtonPress-1>",
-            lambda e: self.model.ed.set_property(self.channel, "colour", colorchooser.askcolor()[1])
+            self.choose_colour
         )
 
         self.var_name = tk.StringVar(self)
