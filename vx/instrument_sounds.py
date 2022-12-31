@@ -3,24 +3,23 @@ import numpy as np
 import samplerate
 import soundfile
 
-# TODO: enable other instruments, they are disabled for testing
 instrument_paths = {
     0: "sounds/harp.ogg",
-    # 1: "sounds/basedrum.ogg",
-    # 2: "sounds/snare.ogg",
-    # 3: "sounds/hat.ogg",
-    # 4: "sounds/bass.ogg",
-    # 5: "sounds/flute.ogg",
-    # 6: "sounds/bell.ogg",
-    # 7: "sounds/guitar.ogg",
-    # 8: "sounds/chime.ogg",
-    # 9: "sounds/xylophone.ogg",
-    # 10: "sounds/iron_xylophone.ogg",
-    # 11: "sounds/cow_bell.ogg",
-    # 12: "sounds/didgeridoo.ogg",
-    # 13: "sounds/bit.ogg",
-    # 14: "sounds/banjo.ogg",
-    # 15: "sounds/pling.ogg",
+    1: "sounds/basedrum.ogg",
+    2: "sounds/snare.ogg",
+    3: "sounds/hat.ogg",
+    4: "sounds/bass.ogg",
+    5: "sounds/flute.ogg",
+    6: "sounds/bell.ogg",
+    7: "sounds/guitar.ogg",
+    8: "sounds/chime.ogg",
+    9: "sounds/xylophone.ogg",
+    10: "sounds/iron_xylophone.ogg",
+    11: "sounds/cow_bell.ogg",
+    12: "sounds/didgeridoo.ogg",
+    13: "sounds/bit.ogg",
+    14: "sounds/banjo.ogg",
+    15: "sounds/pling.ogg",
 }
 
 class InstrumentSounds:
