@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 
 from model import Model
 
-from old_piano_roll import PianoRoll
+from piano_roll import PianoRoll
 
 # TODO: update this to use new piano roll lol
 

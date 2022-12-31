@@ -1,21 +1,22 @@
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter import colorchooser
 
 from node import Node
 from events import Listener
 from model import Model
 
 from pattern import Pattern
+from piano_roll_canvas import PianoRollCanvas
 
 class PatternSettings(Listener, ttk.Frame):
-    padding = {"padx": 5, "pady": 5}
+    padding = {"padx": 2, "pady": 2}
 
-    def __init__(self, parent, *args, model: Model, **kwargs):
+    def __init__(self, parent, *args, model: Model, canvas: PianoRollCanvas, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model
+        self.canvas = canvas
         self.pattern: Pattern | None = None
-
-        self.columnconfigure(0, weight=1)
 
         self.init_ui()
         self.model.event_bus.add_listener(self)
@@ -48,7 +49,18 @@ class PatternSettings(Listener, ttk.Frame):
         self.pattern = None
         self.update_ui()
 
+    def choose_colour(self, event: tk.Event):
+        if self.pattern is not None:
+            colour = colorchooser.askcolor()[1]
+            if colour is not None: self.model.ed.set_property(self.pattern, "colour", colour)
+
     def init_ui(self):
+        self.lbl_colour = ttk.Label(self, width=3)
+        self.lbl_colour.bind(
+            "<ButtonPress-1>",
+            self.choose_colour
+        )
+
         self.var_name = tk.StringVar(self)
         self.inp_name = ttk.Entry(
             self,
@@ -60,9 +72,40 @@ class PatternSettings(Listener, ttk.Frame):
             lambda e: self.model.ed.set_property(self.pattern, "name", self.var_name.get())
         )
 
+        self.btn_zoom_in = ttk.Button(
+            self,
+            text="+",
+            width=3,
+            command=lambda: self.canvas.zoom(1.25)
+        )
+        self.btn_zoom_out = ttk.Button(
+            self,
+            text="-",
+            width=3,
+            command=lambda: self.canvas.zoom(0.8)
+        )
+
+        self.btn_delete = ttk.Button(
+            self,
+            text="🗑",
+            width=3,
+            command=lambda: self.model.ed.remove_child(self.model.channel_group, self.pattern)
+        )
+        
+        self.lbl_colour.grid(column=0, row=0, **self.padding)
+        self.inp_name.grid(column=1, row=0, **self.padding)
+        self.btn_zoom_in.grid(column=2, row=0, **self.padding)
+        self.btn_zoom_out.grid(column=3, row=0, **self.padding)
+        self.btn_delete.grid(column=5, row=0, sticky="e", **self.padding)
+
     def update_ui(self):
         if self.pattern is None:
-            self.state(["disabled"])
+            self.set_all_states(["disabled"])
         else:
-            self.state(["!disabled"])
+            self.set_all_states(["!disabled"])
+            self.lbl_colour.config(background=self.pattern.get_property("colour"))
             self.var_name.set(self.pattern.get_property("name"))
+
+    def set_all_states(self, statespec: list[str]):
+        for component in (self.inp_name, self.btn_zoom_in, self.btn_zoom_out, self.btn_delete):
+            component.state(statespec)

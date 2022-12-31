@@ -89,7 +89,39 @@ class PatternList(Listener, ttk.Frame):
             # cursed hack around Python closures in lambda functions
             pattern_label.bind("<ButtonPress-1>", lambda e, p=pattern: self.model.event_bus.node_selected(p))
             pattern_label.bind("<ButtonPress-1>", lambda e, p=pattern_label: dnd.dnd_start(p, e), add=True)
+
+            btn_move_up = ttk.Button(
+                self.internal_frame,
+                text="▲",
+                width=2,
+                command=lambda i=index: self.move_pattern(i, -1)
+            )
+            btn_move_down = ttk.Button(
+                self.internal_frame,
+                text="▼",
+                width=2,
+                command=lambda i=index: self.move_pattern(i, 1)
+            )
+            btn_delete = ttk.Button(
+                self.internal_frame,
+                text="🗑",
+                width=2,
+                command=lambda i=index: self.model.ed.remove_child_at_index(self.model.pattern_group, i)
+            )
             
             pattern_label.grid(column=0, row=index, ipadx=5, ipady=5, padx=2, pady=2)
+            btn_move_up.grid(column=1, row=index, padx=2, pady=2)
+            btn_move_down.grid(column=2, row=index, padx=2, pady=2)
+            btn_delete.grid(column=3, row=index, padx=2, pady=2)
 
         self.canvas.configure(scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))
+
+    def move_pattern(self, old_index: int, delta: int):
+        new_index = old_index + delta
+        if new_index < 0 or new_index >= self.model.pattern_group.children_count():
+            return # without this check, everything breaks
+        pattern = self.model.pattern_group.get_child_at_index(old_index)
+        self.model.uman.start_group()
+        self.model.ed.remove_child(self.model.pattern_group, pattern)
+        self.model.ed.add_child_at_index(self.model.pattern_group, pattern, new_index)
+        self.model.uman.end_group()

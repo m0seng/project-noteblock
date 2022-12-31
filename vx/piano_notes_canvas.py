@@ -1,7 +1,7 @@
 import math
 import tkinter as tk
 
-class PianoNotes(tk.Canvas):
+class PianoNotesCanvas(tk.Canvas):
     def __init__(self, parent, *args, **kwargs):
         self.canvas_height: int = 300
         self.note_width: int = 20

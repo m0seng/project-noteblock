@@ -14,15 +14,6 @@ class PianoRollCanvas(Listener, tk.Canvas):
         self.model = model
         self.pattern: Pattern | None = None
 
-        super().__init__(
-            parent, *args,
-            height=self.canvas_height,
-            scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height),
-            highlightthickness=0,
-            bg=self.bg_colour,
-            **kwargs
-        )
-
         # drawing constants
         self.non_neg_pitch_count: int = 25
         self.negative_pitch_count: int = 2
@@ -37,6 +28,15 @@ class PianoRollCanvas(Listener, tk.Canvas):
         self.guideline_colour: str = "gray65"
         self.no_note_bar_colour: str = "gray65"
 
+        super().__init__(
+            parent, *args,
+            height=self.canvas_height,
+            scrollregion=(0, 0, self.target_canvas_length(), self.canvas_height),
+            highlightthickness=0,
+            bg=self.bg_colour,
+            **kwargs
+        )
+        
         self.model.event_bus.add_listener(self)
         self.bind("<ButtonPress-1>", self.set_note) # left click sets note
         self.bind("<ButtonPress-3>", self.delete_note) # right click deletes note
