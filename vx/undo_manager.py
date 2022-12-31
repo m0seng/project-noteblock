@@ -1,6 +1,10 @@
 from collections import deque
 from node_actions import Action
 
+# NOTE: group depth keeps track of how many layers deep we are supposed to be in groups
+# so that if you start_group twice you have to end_group twice to actually finish the group
+# this allows us to pretend to have groups within groups
+
 class UndoManager:
     def __init__(self, past_len: int = 10, future_len: int = 10):
         self.past: deque[Action | list[Action]] = deque(maxlen=past_len)
