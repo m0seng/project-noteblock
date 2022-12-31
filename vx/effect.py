@@ -7,5 +7,5 @@ class Effect(Node):
         super().__init__(*args, **kwargs)
 
     @abstractmethod
-    def tick(self, mono_tick: int, bar_number: int, pat_tick: int) -> list[Note]:
+    def tick(self, mono_tick: int, sequence_enabled: bool, bar_number: int, pat_tick: int) -> list[Note]:
         ...

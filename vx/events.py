@@ -24,7 +24,7 @@ class Listener(ABC):
         ...
 
     def bar_playing(self, bar: int):
-        ...
+        ... # TODO: actually use this
 
     def reset_ui(self):
         # Used when a project is loaded from file

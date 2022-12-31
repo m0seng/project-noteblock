@@ -14,7 +14,6 @@ class PianoNotesCanvas(tk.Canvas):
         self.note_height: float = self.canvas_height / self.pitch_count
 
         # colour constants
-        # TODO: derive these from global theme???
         self.bg_colour: str = "white"
         self.guidebar_colour: str = "black"
         self.no_note_bar_colour: str = "gray50"

@@ -2,6 +2,7 @@ from node import Node
 from note import Note
 from pattern import Pattern
 from pattern_group import PatternGroup
+from effect import Effect
 
 class Channel(Node):
     def __init__(self, *args, pattern_group: PatternGroup, sequence_length: int = 20, **kwargs):
@@ -37,7 +38,8 @@ class Channel(Node):
 
         # apply effects in sequence
         for effect in self.children_iterator():
-            notes = effect.tick(notes, mono_tick)
+            if isinstance(effect, Effect):
+                notes = effect.tick(mono_tick, sequence_enabled, bar_number, pat_tick)
 
         # apply volume and pan
         notes = [note.apply_volume_and_pan(

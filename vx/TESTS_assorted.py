@@ -4,7 +4,7 @@ class Something:
 class SomethingElse:
     ...
 
-def main():
+def old_main():
     some_list = [Something() for _ in range(5)]
     # print(some_list)
 
@@ -17,6 +17,14 @@ def main():
 
     for item in second_list:
         item.method()
+
+def main():
+    my_dict = {
+        Something: 1,
+        SomethingElse: 2
+    }
+
+    print(my_dict[SomethingElse])
 
 if __name__ == "__main__":
     main()
