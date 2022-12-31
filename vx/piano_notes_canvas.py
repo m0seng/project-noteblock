@@ -4,7 +4,7 @@ import tkinter as tk
 class PianoNotesCanvas(tk.Canvas):
     def __init__(self, parent, *args, **kwargs):
         self.canvas_height: int = 300
-        self.note_width: int = 20
+        self.note_width: int = 30
 
         # drawing constants
         self.non_neg_pitch_count: int = 25
