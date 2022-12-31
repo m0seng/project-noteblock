@@ -118,10 +118,4 @@ class PatternList(Listener, ttk.Frame):
 
     def move_pattern(self, old_index: int, delta: int):
         new_index = old_index + delta
-        if new_index < 0 or new_index >= self.model.pattern_group.children_count():
-            return # without this check, everything breaks
-        pattern = self.model.pattern_group.get_child_at_index(old_index)
-        self.model.uman.start_group()
-        self.model.ed.remove_child(self.model.pattern_group, pattern)
-        self.model.ed.add_child(self.model.pattern_group, pattern, new_index)
-        self.model.uman.end_group()
+        self.model.ed.move_child(self.model.pattern_group, old_index, new_index)
