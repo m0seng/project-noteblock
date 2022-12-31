@@ -2,13 +2,12 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from node import Node
-from events import EventBus, Listener
-from node_editor import NodeEditor
+from events import Listener
 from model import Model
 
 from channel import Channel
 
-class InstrumentEditor(Listener, ttk.Frame):
+class InstrumentSettings(Listener, ttk.Frame):
     instrument_names = [
         "harp",
         "basedrum",

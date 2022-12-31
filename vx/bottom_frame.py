@@ -3,7 +3,9 @@ import tkinter.ttk as ttk
 
 from model import Model
 
-from piano_roll import PianoRoll
+from old_piano_roll import PianoRoll
+
+# TODO: update this to use new piano roll lol
 
 class BottomFrame(ttk.Frame):
     def __init__(self, parent, *args, model: Model, **kwargs):

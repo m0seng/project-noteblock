@@ -14,7 +14,7 @@ from channel_header import ChannelHeader
 from channel_header_canvas import ChannelHeaderCanvas
 from placement_display import PlacementDisplay
 from sequencer import Sequencer
-from instrument_editor import InstrumentEditor
+from instrument_settings import InstrumentSettings
 
 def test_header():
     model = Model()
@@ -75,7 +75,7 @@ def test_instrument_editor():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(0, weight=1)
 
-    editor = InstrumentEditor(window, model=model, channel=channel)
+    editor = InstrumentSettings(window, model=model, channel=channel)
     editor.grid(column=0, row=0, padx=5, pady=5)
 
     undo_frame = ttk.Frame(window)
@@ -145,4 +145,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_sequencer()
+    test_instrument_editor()

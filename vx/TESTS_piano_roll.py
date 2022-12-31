@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from model import Model
-from piano_roll import PianoRoll
+from old_piano_roll import PianoRoll
 
 def main():
     model = Model()
