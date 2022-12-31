@@ -111,7 +111,7 @@ class Model:
         if pattern_id is None: return
         for channel in self.channel_group.children_iterator():
             old_placements = channel.get_property("placements")
-            new_placements = [id for id in old_placements if id != pattern_id]
+            new_placements = [id if id != pattern_id else -1 for id in old_placements]
             self.ed.set_property(channel, "placements", new_placements)
         self.ed.remove_child(self.pattern_group, pattern)
         self.uman.end_group()
