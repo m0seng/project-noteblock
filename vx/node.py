@@ -73,3 +73,7 @@ class Node:
         del self.children[id]
         del self.child_order[index]
         child.parent = None
+
+    def _move_child(self, old_index: int, new_index: int):
+        child_id = self.child_order.pop(old_index)
+        self.child_order.insert(new_index, child_id)

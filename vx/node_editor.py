@@ -1,6 +1,6 @@
 from node import Node
 from events import EventBus
-from node_actions import AddChildAction, RemoveChildAction, SetPropertyAction
+from node_actions import AddChildAction, RemoveChildAction, MoveChildAction, SetPropertyAction
 from undo_manager import UndoManager
 
 # This is where I stick methods to make editing nodes MUCH easier
@@ -107,3 +107,13 @@ class NodeEditor:
             child_id,
             child_index
         ))
+
+    def move_child(self, parent: Node, old_index: int, new_index: int):
+        children_count = parent.children_count
+        if 0 <= old_index < children_count and 0 <= new_index < children_count:
+            self.uman.perform(MoveChildAction(
+                self.event_bus,
+                parent,
+                old_index,
+                new_index
+            ))

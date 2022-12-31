@@ -49,11 +49,15 @@ class PlacementDisplay(Listener, tk.Canvas):
             self.draw_everything()
 
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.model.channel_group or parent is self.model.pattern_group:
+        if parent is self.model.channel_group:
             self.draw_everything()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.model.channel_group or parent is self.model.pattern_group:
+        if parent is self.model.channel_group:
+            self.draw_everything()
+
+    def node_child_moved(self, parent: Node, old_index: int, new_index: int):
+        if parent is self.model.channel_group:
             self.draw_everything()
 
     def bar_selected(self, bar: int):

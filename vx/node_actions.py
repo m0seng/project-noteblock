@@ -63,3 +63,18 @@ class RemoveChildAction(Action):
     def undo(self):
         self.parent._add_child(self.child, self.id, self.index)
         self.event_bus.node_child_added(self.parent, self.child, self.id, self.index)
+
+class MoveChildAction(Action):
+    def __init__(self, event_bus: EventBus, parent: Node, old_index: int, new_index: int):
+        self.event_bus = event_bus
+        self.parent = parent
+        self.old_index = old_index
+        self.new_index = new_index
+
+    def perform(self):
+        self.parent._move_child(self.old_index, self.new_index)
+        self.event_bus.node_child_moved(self.parent, self.old_index, self.new_index)
+    
+    def undo(self):
+        self.parent._move_child(self.new_index, self.old_index)
+        self.event_bus.node_child_moved(self.parent, self.new_index, self.old_index)

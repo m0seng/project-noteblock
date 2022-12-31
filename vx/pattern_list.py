@@ -123,5 +123,5 @@ class PatternList(Listener, ttk.Frame):
         pattern = self.model.pattern_group.get_child_at_index(old_index)
         self.model.uman.start_group()
         self.model.ed.remove_child(self.model.pattern_group, pattern)
-        self.model.ed.add_child_at_index(self.model.pattern_group, pattern, new_index)
+        self.model.ed.add_child(self.model.pattern_group, pattern, new_index)
         self.model.uman.end_group()

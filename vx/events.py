@@ -14,6 +14,9 @@ class Listener(ABC):
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         ...
 
+    def node_child_moved(self, parent: Node, old_index: int, new_index: int):
+        ...
+
     def node_selected(self, node: Node):
         ...
 
@@ -54,6 +57,10 @@ class EventBus:
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
         for listener in self.listeners:
             listener.node_child_removed(parent, child, id, index)
+
+    def node_child_moved(self, parent: Node, old_index: int, new_index: int):
+        for listener in self.listeners:
+            listener.node_child_moved(parent, old_index, new_index)
 
     def node_selected(self, node: Node):
         print(f"node {node} selected") # TODO: remove this
