@@ -36,6 +36,10 @@ class PatternList(Listener, ttk.Frame):
         if parent is self.model.pattern_group:
             self.update_ui()
 
+    def node_child_moved(self, parent: Node, old_index: int, new_index: int):
+        if parent is self.model.pattern_group:
+            self.update_ui()
+
     def reset_ui(self):
         self.update_ui()
 

@@ -109,7 +109,7 @@ class NodeEditor:
         ))
 
     def move_child(self, parent: Node, old_index: int, new_index: int):
-        children_count = parent.children_count
+        children_count = parent.children_count()
         if 0 <= old_index < children_count and 0 <= new_index < children_count:
             self.uman.perform(MoveChildAction(
                 self.event_bus,
