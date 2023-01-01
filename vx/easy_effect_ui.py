@@ -16,7 +16,6 @@ class EasyEffectUI(EffectUI):
     @abstractmethod    
     def init_ui(self):
         super().init_ui()
-
         self.next_grid_row: int = 1
         self.update_callbacks: list[Callable] = []
 
@@ -26,15 +25,18 @@ class EasyEffectUI(EffectUI):
         for callback in self.update_callbacks:
             callback()
 
-    def add_spinbox(self, key: str, low: float, high: float, step: float):
+    def add_spinbox(self, name: str, key: str, var, low: float, high: float, step: float):
         set_callback = lambda e=None: self.model.ed.set_property(self.effect, key, var.get())
         get_callback = lambda: var.set(self.effect.get_property(key))
-        var = tk.DoubleVar()
+        frame = ttk.Frame(self)
+        label = ttk.Label(frame, text=name)
         spinbox = ttk.Spinbox(
-            self, from_=low, to=high, increment=step, width=5,
+            frame, from_=low, to=high, increment=step, width=5,
             textvariable=var,
             command=set_callback)
         spinbox.bind("<Return>", set_callback)
-        spinbox.grid(column=0, row=self.next_grid_row)
+        label.grid(column=0, row=0)
+        spinbox.grid(column=1, row=0)
+        frame.grid(column=0, row=self.next_grid_row, sticky="w", padx=2, pady=2)
         self.next_grid_row += 1
         self.update_callbacks.append(get_callback)
