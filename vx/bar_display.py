@@ -95,22 +95,16 @@ class BarDisplay(Listener, tk.Canvas):
 
     def draw_loop_markers(self):
         self.delete("loop_marker")
-        self.create_line(
+        self.create_rectangle(
             self.model.song_config.get_property("loop_start") * self.bar_width,
-            0,
-            self.model.song_config.get_property("loop_start") * self.bar_width,
-            self.strip_height,
-            fill="purple",
-            tags="loop_marker"
-        )
-        self.create_line(
-            self.model.song_config.get_property("loop_end") * self.bar_width,
             0,
             self.model.song_config.get_property("loop_end") * self.bar_width,
             self.strip_height,
             fill="purple",
+            stipple="gray50",
             tags="loop_marker"
         )
+        self.tag_raise("start_marker", "loop_marker")
 
     def select_bar(self, event: tk.Event):
             bar = self.get_bar_at_coords(event.x)
