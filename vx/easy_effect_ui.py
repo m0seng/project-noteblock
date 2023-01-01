@@ -25,8 +25,10 @@ class EasyEffectUI(EffectUI):
         for callback in self.update_callbacks:
             callback()
 
-    def add_spinbox(self, name: str, key: str, var, low: float, high: float, step: float):
-        set_callback = lambda e=None: self.model.ed.set_property(self.effect, key, var.get())
+    def add_spinbox(self, name: str, key: str, low: float, high: float, step: float, int_only: bool = False):
+        var = (tk.IntVar() if int_only else tk.DoubleVar())
+        set_callback = lambda e=None: self.model.ed.set_property(
+            self.effect, key, self._clamp(var.get(), low, high))
         get_callback = lambda: var.set(self.effect.get_property(key))
         frame = ttk.Frame(self)
         label = ttk.Label(frame, text=name)
@@ -40,3 +42,6 @@ class EasyEffectUI(EffectUI):
         frame.grid(column=0, row=self.next_grid_row, sticky="w", padx=2, pady=2)
         self.next_grid_row += 1
         self.update_callbacks.append(get_callback)
+
+    def _clamp(self, value, low, high):
+        return min(max(value, low), high)

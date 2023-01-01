@@ -36,7 +36,7 @@ class EffectUI(Listener, ttk.Labelframe, ABC):
         
         self.btn_enabled = ttk.Button(
             self.header_frame,
-            text="|",
+            text="⚫",
             width=3,
             command=lambda: self.model.ed.toggle_bool(self.effect, "enabled")
         )
@@ -69,7 +69,7 @@ class EffectUI(Listener, ttk.Labelframe, ABC):
 
     @abstractmethod
     def update_ui(self):
-        self.btn_enabled.configure(text=("|" if self.effect.get_property("enabled") else "◯"))
+        self.btn_enabled.configure(text=("⚫" if self.effect.get_property("enabled") else "⚪"))
 
     def move_effect(self, delta: int):
         channel = self.effect.parent
