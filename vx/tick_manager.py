@@ -1,8 +1,9 @@
 from model import Model
 
 class TickManager:
-    def __init__(self, model: Model):
+    def __init__(self, model: Model, ignore_loop: bool = False):
         self.model = model
+        self.ignore_loop = ignore_loop
         self.mono_tick: int = 0
         self.sequence_enabled: bool = False
         self.bar_number: int = 0
@@ -33,6 +34,9 @@ class TickManager:
         if self.pat_tick >= self.model.song_config.get_property("pattern_length"):
             self.pat_tick = 0
             self.bar_number += 1
-            # TODO: insert loop logic here
+            if (self.bar_number == self.model.song_config.get_property("loop_end")
+                    and self.model.song_config.get_property("loop_enabled")
+                    and not self.ignore_loop):
+                self.bar_number = self.model.song_config.get_property("loop_start")
             if self.bar_number >= self.model.song_config.get_property("sequence_length"):
                 self.sequence_enabled = False

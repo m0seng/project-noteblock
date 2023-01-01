@@ -40,6 +40,11 @@ class EasyEffectUI(EffectUI):
         super().update_ui()
         for callback in self.update_callbacks:
             callback()
+
+    def add_label(self, text: str):
+        label = ttk.Label(self, text=text)
+        label.grid(column=0, row=self.next_grid_row, **self.grid_kwargs)
+        self.next_grid_row += 1
     
     def add_checkbox(self, name: str, key: str):
         var = tk.BooleanVar()
