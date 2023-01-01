@@ -4,6 +4,7 @@ import tkinter.ttk as ttk
 from model import Model
 
 from piano_roll import PianoRoll
+from effect_rack import EffectRack
 
 # TODO: update this to use new piano roll lol
 
@@ -22,8 +23,12 @@ class BottomFrame(ttk.Frame):
         )
 
         self.notebook = ttk.Notebook(self)
+
         self.piano_roll = PianoRoll(self.notebook, model=self.model)
         self.notebook.add(self.piano_roll, text="piano roll")
+
+        self.effect_rack = EffectRack(self.notebook, model=self.model)
+        self.notebook.add(self.effect_rack, text="effects")
 
         self.btn_hide.grid(column=0, row=0, sticky="n")
         self.notebook.grid(column=1, row=0, sticky="nsew")

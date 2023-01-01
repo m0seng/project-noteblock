@@ -7,6 +7,7 @@ from model import Model
 from channel import Channel
 from effect import Effect
 from effect_ui_factory import EffectUIFactory
+from instrument_settings import InstrumentSettings
 
 class EffectRack(Listener, ttk.Frame):
     def __init__(self, parent, model: Model, **kwargs):
@@ -14,7 +15,8 @@ class EffectRack(Listener, ttk.Frame):
         self.model = model
         self.channel: Channel | None = None
 
-        self.factory = EffectUIFactory(parent=self, model=self.model)
+        self.init_ui()
+        self.factory = EffectUIFactory(parent=self.internal_frame, model=self.model)
 
         self.model.event_bus.add_listener(self)
         self.update_ui()
@@ -44,12 +46,34 @@ class EffectRack(Listener, ttk.Frame):
         self.channel = None
         self.update_ui()
 
+    def init_ui(self):
+        self.columnconfigure(1, weight=1)
+        self.rowconfigure(0, weight=1)
+
+        self.canvas = tk.Canvas(self)
+        self.canvas.grid(column=1, row=0, sticky="nsew")
+
+        self.internal_frame = ttk.Frame(self.canvas)
+        self.canvas.create_window(0, 0, anchor="nw", window=self.internal_frame)
+
+        self.scrollbar = ttk.Scrollbar(self, orient=tk.HORIZONTAL)
+        self.canvas.configure(xscrollcommand=self.scrollbar.set)
+        self.scrollbar["command"] = self.canvas.xview
+        self.scrollbar.grid(column=1, row=1, sticky="ew")
+
     def update_ui(self):
-        for child in self.winfo_children():
+        for child in self.internal_frame.winfo_children():
             child.destroy()
 
         if self.channel is not None:
+            instrument_settings = InstrumentSettings(self, model=self.model, channel=self.channel)
+            instrument_settings.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
             for index, effect in enumerate(self.channel.children_iterator()):
                 if isinstance(effect, Effect):
                     effect_ui = self.factory.create_ui(effect)
                     effect_ui.grid(column=index, row=0, sticky="ns", padx=5, pady=5)
+
+        self.canvas.configure(
+            height=self.internal_frame.winfo_reqheight(),
+            scrollregion=(0, 0, self.internal_frame.winfo_reqwidth(), 0)
+        )

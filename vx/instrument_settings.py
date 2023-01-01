@@ -29,8 +29,8 @@ class InstrumentSettings(Listener, ttk.Frame):
 
     padding = {"padx": 5, "pady": 5}
 
-    def __init__(self, parent, *args, model: Model, channel: Channel, **kwargs):
-        super().__init__(parent, *args, **kwargs)
+    def __init__(self, parent, model: Model, channel: Channel, **kwargs):
+        super().__init__(parent, **kwargs)
         self.model = model
         self.channel = channel
 

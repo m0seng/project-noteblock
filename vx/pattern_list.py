@@ -74,10 +74,6 @@ class PatternList(Listener, ttk.Frame):
         for child in self.internal_frame.winfo_children():
             child.destroy()
 
-        # empty function that gets added to every pattern label
-        def dnd_end(target, event):
-            ...
-
         for index, pattern in enumerate(self.model.pattern_group.children_iterator()):
             pattern_name = pattern.get_property("name")
             pattern_colour = pattern.get_property("colour")
@@ -88,7 +84,7 @@ class PatternList(Listener, ttk.Frame):
                 background=pattern_colour,
             )
             pattern_label.pattern = pattern # cheeky monkey patch
-            pattern_label.dnd_end = dnd_end
+            pattern_label.dnd_end = lambda t, e: ... # empty function
 
             # cursed hack around Python closures in lambda functions
             pattern_label.bind("<ButtonPress-1>", lambda e, p=pattern: self.model.event_bus.node_selected(p))
