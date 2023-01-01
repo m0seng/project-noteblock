@@ -9,7 +9,7 @@ from sequencer import Sequencer
 from top_frame import TopFrame
 from bottom_frame import BottomFrame
 
-def test_sequencer():
+def main():
     model = Model()
 
     window = tk.Tk()
@@ -40,4 +40,4 @@ def test_sequencer():
     window.mainloop()
 
 if __name__ == "__main__":
-    test_sequencer()
+    main()
