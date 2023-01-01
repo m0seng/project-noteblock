@@ -8,10 +8,12 @@ from model import Model
 from channel import Channel
 
 from effect_dummy import EffectDummy
+from effect_delay import EffectDelay
 
 class EffectAddFrame(Listener, ttk.Frame):
     effects = {
         "dummy": EffectDummy,
+        "delay": EffectDelay,
     }
     effect_names = list(effects.keys())
 

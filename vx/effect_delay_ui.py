@@ -5,7 +5,7 @@ from effect_ui import EffectUI
 
 # TODO: make this!
 
-class EffectDummyUI(EffectUI):
+class EffectDelayUI(EffectUI):
     effect_name = "delay"
     ui_width = 200
 

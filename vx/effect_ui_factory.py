@@ -5,11 +5,13 @@ from effect import Effect
 from effect_ui import EffectUI
 
 from effect_dummy_ui import EffectDummyUI
+from effect_delay_ui import EffectDelayUI
 # TODO: import EffectUI subclasses here
 
 class EffectUIFactory:
     ui_classes: dict[str, Type[EffectUI]] = {
         "EffectDummy": EffectDummyUI,
+        "EffectDelay": EffectDelayUI
         # TODO: add entries for EffectUI subclasses here
     }
 
