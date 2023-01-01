@@ -47,10 +47,15 @@ class EffectDelayUI(EffectUI):
         self.inp_wet_pan.bind("<Return>",
             lambda e: self.model.ed.set_property(self.effect, "wet_pan", self.var_wet_pan.get()))
 
+        self.inp_delay_ticks.grid(column=0, row=1)
+        self.inp_dry_mix.grid(column=0, row=2)
+        self.inp_wet_mix.grid(column=0, row=3)
+        self.inp_wet_pan.grid(column=0, row=4)
+
     def update_ui(self):
         super().update_ui()
         # update UI components based on self.effect (which will not be None)
         self.var_delay_ticks.set(self.effect.get_property("delay_ticks"))
-        self.var_dry_mix.set(self.effect.get_property("var_dry_mix"))
-        self.var_wet_mix.set(self.effect.get_property("var_wet_mix"))
-        self.var_wet_pan.set(self.effect.get_property("var_wet_pan"))
+        self.var_dry_mix.set(self.effect.get_property("dry_mix"))
+        self.var_wet_mix.set(self.effect.get_property("wet_mix"))
+        self.var_wet_pan.set(self.effect.get_property("wet_pan"))
