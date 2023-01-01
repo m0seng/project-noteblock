@@ -9,7 +9,7 @@ from channel_header_canvas import ChannelHeaderCanvas
 from placement_display import PlacementDisplay
 from bar_display import BarDisplay
 
-class Sequencer(ttk.Frame):
+class Sequencer(Listener, ttk.Frame):
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)
@@ -21,12 +21,19 @@ class Sequencer(ttk.Frame):
         self.bar_display = BarDisplay(self, model=self.model)
 
         self.buttons_frame = ttk.Frame(self)
+        self.btn_loop = ttk.Button(
+            self.buttons_frame,
+            text="loop",
+            command=self.model.ed.toggle_bool(self.model.song_config, "loop_enabled")
+        )
+        self.btn_loop.state(["pressed" if self.model.song_config.get_property("loop_enabled") else "!pressed"])
+        self.btn_loop.grid(column=0, row=0)
         self.btn_add_channel = ttk.Button(
             self.buttons_frame,
             text="+ add channel",
             command=self.model.new_channel
         )
-        self.btn_add_channel.grid(column=0, row=0)
+        self.btn_add_channel.grid(column=0, row=1)
 
         def xview_both_canvases(*args):
             self.placement_display.xview(*args)
@@ -50,3 +57,13 @@ class Sequencer(ttk.Frame):
         self.buttons_frame.grid(column=1, row=0, sticky="ew")
         self.horizontal_scroll.grid(column=0, row=2, sticky="ew")
         self.vertical_scroll.grid(column=2, row=1, sticky="ns")
+
+        self.model.event_bus.add_listener(self)
+
+    def destroy(self):
+        self.model.event_bus.remove_listener(self)
+        super().destroy()
+
+    def node_property_set(self, node: Node, key, old_value, new_value):
+        if node is self.model.song_config and key == "loop_enabled":
+            self.btn_loop.state(["pressed" if self.model.song_config.get_property("loop_enabled") else "!pressed"])

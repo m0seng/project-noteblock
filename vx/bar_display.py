@@ -37,8 +37,11 @@ class BarDisplay(Listener, tk.Canvas):
         super().destroy(*args, **kwargs)
 
     def node_property_set(self, node: Node, key, old_value, new_value):
-        if node is self.model.song_config and key == "sequence_length":
-            self.draw_everything()
+        if node is self.model.song_config:
+            if key == "sequence_length":
+                self.draw_everything()
+            elif key == "loop_start" or key == "loop_end":
+                self.draw_loop_markers()
 
     def bar_selected(self, bar: int):
         self.selected_bar = bar
@@ -51,6 +54,7 @@ class BarDisplay(Listener, tk.Canvas):
         self.delete("all")
         self.draw_background()
         self.draw_start_marker()
+        self.draw_loop_markers()
 
     def draw_background(self):
         sequence_length = self.model.song_config.get_property("sequence_length")
@@ -87,6 +91,25 @@ class BarDisplay(Listener, tk.Canvas):
             self.strip_height - 5,
             fill=self.selected_bar_colour,
             tags="start_marker"
+        )
+
+    def draw_loop_markers(self):
+        self.delete("loop_marker")
+        self.create_line(
+            self.model.song_config.get_property("loop_start") * self.bar_width,
+            0,
+            self.model.song_config.get_property("loop_start") * self.bar_width,
+            self.strip_height,
+            fill="purple",
+            tags="loop_marker"
+        )
+        self.create_line(
+            self.model.song_config.get_property("loop_end") * self.bar_width,
+            0,
+            self.model.song_config.get_property("loop_end") * self.bar_width,
+            self.strip_height,
+            fill="purple",
+            tags="loop_marker"
         )
 
     def select_bar(self, event: tk.Event):
