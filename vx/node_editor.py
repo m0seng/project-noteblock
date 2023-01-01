@@ -6,7 +6,6 @@ from undo_manager import UndoManager
 # This is where I stick methods to make editing nodes MUCH easier
 # passing an undo manager for now but it might make its own
 # also partially facades undo manager, for example when making action groups
-# TODO: add moving children as a feature (kind of optional)
 
 class NodeEditor:
     def __init__(self, uman: UndoManager, event_bus: EventBus):

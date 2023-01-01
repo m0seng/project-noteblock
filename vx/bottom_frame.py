@@ -6,8 +6,6 @@ from model import Model
 from piano_roll import PianoRoll
 from effect_rack import EffectRack
 
-# TODO: update this to use new piano roll lol
-
 class BottomFrame(ttk.Frame):
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)

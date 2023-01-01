@@ -50,7 +50,7 @@ class Model:
         self.root._add_child(self.song_config, 0, 0)
         self.root._add_child(self.pattern_group, 1, 1)
         self.root._add_child(self.channel_group, 2, 2)
-        self.event_bus.reset_ui() # TODO: does this have to be somewhere else?
+        self.event_bus.reset_ui()
 
     def to_dict(self) -> dict:
         return self.root.to_dict()

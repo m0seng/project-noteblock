@@ -63,7 +63,6 @@ class EventBus:
             listener.node_child_moved(parent, old_index, new_index)
 
     def node_selected(self, node: Node):
-        print(f"node {node} selected") # TODO: remove this
         for listener in self.listeners:
             listener.node_selected(node)
 

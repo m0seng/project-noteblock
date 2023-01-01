@@ -22,7 +22,6 @@ class PianoRollCanvas(Listener, tk.Canvas):
         self.note_height: float = self.canvas_height / self.pitch_count
 
         # colour constants
-        # TODO: derive these from global theme???
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
