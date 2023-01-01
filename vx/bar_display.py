@@ -28,6 +28,8 @@ class BarDisplay(Listener, tk.Canvas):
             **kwargs
         )
         self.bind("<ButtonPress-1>", self.select_bar)
+        self.bind("<ButtonPress-3>", self.set_loop_start)
+        self.bind("<ButtonRelease-3>", self.set_loop_end)
 
         self.model.event_bus.add_listener(self)
         self.draw_everything()
@@ -107,8 +109,16 @@ class BarDisplay(Listener, tk.Canvas):
         self.tag_raise("start_marker", "loop_marker")
 
     def select_bar(self, event: tk.Event):
-            bar = self.get_bar_at_coords(event.x)
-            self.model.event_bus.bar_selected(bar)
+        bar = self.get_bar_at_coords(event.x)
+        self.model.event_bus.bar_selected(bar)
+
+    def set_loop_start(self, event: tk.Event):
+        bar = self.get_bar_at_coords(event.x)
+        self.model.ed.set_property(self.model.song_config, "loop_start", bar)
+
+    def set_loop_end(self, event: tk.Event):
+        bar = self.get_bar_at_coords(event.x)
+        self.model.ed.set_property(self.model.song_config, "loop_end", bar)
 
     def get_bar_at_coords(self, x: int) -> int:
         canvas_x = self.canvasx(x)

@@ -34,7 +34,7 @@ class TickManager:
         if self.pat_tick >= self.model.song_config.get_property("pattern_length"):
             self.pat_tick = 0
             self.bar_number += 1
-            if (self.bar_number == self.model.song_config.get_property("loop_end")
+            if ((self.bar_number == self.model.song_config.get_property("loop_end"))
                     and self.model.song_config.get_property("loop_enabled")
                     and not self.ignore_loop):
                 self.bar_number = self.model.song_config.get_property("loop_start")

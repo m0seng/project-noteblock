@@ -33,7 +33,7 @@ class Sequencer(Listener, ttk.Frame):
             text="+ add channel",
             command=self.model.new_channel
         )
-        self.btn_add_channel.grid(column=0, row=1)
+        self.btn_add_channel.grid(column=1, row=0)
 
         def xview_both_canvases(*args):
             self.placement_display.xview(*args)

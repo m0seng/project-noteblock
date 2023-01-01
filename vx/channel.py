@@ -23,12 +23,12 @@ class Channel(Node):
 
     def tick(self, mono_tick: int, sequence_enabled: bool, bar_number: int, pat_tick: int) -> list[Note]:
         if not sequence_enabled: # NO-PATTERN TICK!
-            note_numbers = []
+            note_numbers = [-2]
         else:
             # get note numbers from pattern
             pattern_id = self.get_property("placements")[bar_number]
             if pattern_id == -1: # no pattern
-                note_numbers = []
+                note_numbers = [-1]
             else:
                 pattern: Pattern = self.pattern_group.get_child_by_id(pattern_id)
                 note_numbers = pattern.get_notes(pat_tick)
