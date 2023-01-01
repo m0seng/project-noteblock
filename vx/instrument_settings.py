@@ -29,10 +29,10 @@ class InstrumentSettings(Listener, ttk.Frame):
 
     padding = {"padx": 5, "pady": 5}
 
-    def __init__(self, parent, model: Model, channel: Channel, **kwargs):
+    def __init__(self, parent, model: Model, **kwargs):
         super().__init__(parent, **kwargs)
         self.model = model
-        self.channel = channel
+        self.channel: Channel | None = None
 
         self.columnconfigure(0, weight=1)
 
@@ -47,6 +47,20 @@ class InstrumentSettings(Listener, ttk.Frame):
     def node_property_set(self, node: Node, key, old_value, new_value):
         if node is self.channel:
             self.update_ui()
+
+    def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
+        if child is self.channel:
+            self.channel = None
+            self.update_ui()
+
+    def node_selected(self, node: Node):
+        if isinstance(node, Channel):
+            self.channel = node
+            self.update_ui()
+
+    def reset_ui(self):
+        self.channel = None
+        self.update_ui()
 
     def init_ui(self):
         self.var_name = tk.StringVar(self)
@@ -124,11 +138,19 @@ class InstrumentSettings(Listener, ttk.Frame):
         self.lf_sustain.grid(column=0, row=2, sticky="ew", **self.padding)
 
     def update_ui(self):
-        self.var_name.set(self.channel.get_property("name"))
-        self.var_main_instrument.set(self.instrument_names[self.channel.get_property("main_instrument")])
-        self.var_sustain_enabled.set(self.channel.get_property("sustain_enabled"))
-        self.var_sustain_instrument.set(self.instrument_names[self.channel.get_property("sustain_instrument")])
-        self.var_sustain_mix.set(self.channel.get_property("sustain_mix"))
-        self.cmb_sustain_instrument.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
-        self.inp_sustain_mix.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
-        self.lbl_sustain_mix.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
+        if self.channel is None:
+            self.set_all_states(["disabled"])
+        else:
+            self.set_all_states(["!disabled"])
+            self.var_name.set(self.channel.get_property("name"))
+            self.var_main_instrument.set(self.instrument_names[self.channel.get_property("main_instrument")])
+            self.var_sustain_enabled.set(self.channel.get_property("sustain_enabled"))
+            self.var_sustain_instrument.set(self.instrument_names[self.channel.get_property("sustain_instrument")])
+            self.var_sustain_mix.set(self.channel.get_property("sustain_mix"))
+            for component in (self.cmb_sustain_instrument, self.inp_sustain_mix, self.lbl_sustain_mix):
+                component.state(["!disabled" if self.channel.get_property("sustain_enabled") else "disabled"])
+
+    def set_all_states(self, statespec: list[str]):
+        for component in (self.inp_name, self.cmb_main_instrument, self.chk_sustain_enabled,
+                self.cmb_sustain_instrument, self.lbl_sustain_mix, self.inp_sustain_mix):
+            component.state(statespec)

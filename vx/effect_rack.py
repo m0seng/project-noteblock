@@ -8,6 +8,7 @@ from channel import Channel
 from effect import Effect
 from effect_ui_factory import EffectUIFactory
 from instrument_settings import InstrumentSettings
+from effect_add_frame import EffectAddFrame
 
 class EffectRack(Listener, ttk.Frame):
     def __init__(self, parent, model: Model, **kwargs):
@@ -30,7 +31,10 @@ class EffectRack(Listener, ttk.Frame):
             self.update_ui()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.channel or child is self.channel:
+        if parent is self.channel:
+            self.update_ui()
+        elif child is self.channel:
+            self.channel = None
             self.update_ui()
 
     def node_child_moved(self, parent: Node, old_index: int, new_index: int):
@@ -50,6 +54,12 @@ class EffectRack(Listener, ttk.Frame):
         self.columnconfigure(1, weight=1)
         self.rowconfigure(0, weight=1)
 
+        self.instrument_settings = InstrumentSettings(self, model=self.model)
+        self.instrument_settings.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
+
+        self.effect_add_frame = EffectAddFrame(self, model=self.model)
+        self.effect_add_frame.grid(column=2, row=0, sticky="nsew", padx=5, pady=5)
+
         self.canvas = tk.Canvas(self)
         self.canvas.grid(column=1, row=0, sticky="nsew")
 
@@ -66,8 +76,6 @@ class EffectRack(Listener, ttk.Frame):
             child.destroy()
 
         if self.channel is not None:
-            instrument_settings = InstrumentSettings(self, model=self.model, channel=self.channel)
-            instrument_settings.grid(column=0, row=0, sticky="nsew", padx=5, pady=5)
             for index, effect in enumerate(self.channel.children_iterator()):
                 if isinstance(effect, Effect):
                     effect_ui = self.factory.create_ui(effect)

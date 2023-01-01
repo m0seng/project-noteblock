@@ -29,12 +29,12 @@ class EffectUI(Listener, ttk.Frame, ABC):
     def init_ui(self):
         pad_kwargs = {"padx": 2, "pady": 2}
         self.header_frame = ttk.Frame(self)
-
+        
         self.btn_enabled = ttk.Button(
             self.header_frame,
-            text="●",
+            text="|",
             width=3,
-            command=self.model.ed.toggle_bool(self.effect, "enabled")
+            command=lambda: self.model.ed.toggle_bool(self.effect, "enabled")
         )
         self.btn_move_left = ttk.Button(
             self.header_frame,
@@ -57,14 +57,14 @@ class EffectUI(Listener, ttk.Frame, ABC):
 
         self.header_frame.columnconfigure(1, weight=1) # expand space in the middle
         self.btn_enabled.grid(column=0, row=0, **pad_kwargs)
-        self.btn_move_left.grid(column=0, row=2, **pad_kwargs)
-        self.btn_move_right.grid(column=0, row=3, **pad_kwargs)
-        self.btn_delete.grid(column=0, row=4, **pad_kwargs)
+        self.btn_move_left.grid(column=2, row=0, **pad_kwargs)
+        self.btn_move_right.grid(column=3, row=0, **pad_kwargs)
+        self.btn_delete.grid(column=4, row=0, **pad_kwargs)
         self.header_frame.grid(column=0, row=0, sticky="ew")
 
     @abstractmethod
     def update_ui(self):
-        self.btn_enabled.configure(text = "●" if self.effect.get_property("enabled") else "○")
+        self.btn_enabled.configure(text=("|" if self.effect.get_property("enabled") else "◯"))
 
     def move_effect(self, delta: int):
         channel = self.effect.parent
