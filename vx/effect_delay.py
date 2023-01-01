@@ -29,9 +29,9 @@ class EffectDelay(Effect):
 
         # advance buffer index
         self.buffer_index += 1
-        if self.buffer_index > self.get_property("delay_ticks"): # loop back round
+        if self.buffer_index >= self.get_property("delay_ticks"): # loop back round
             self.buffer_index = 0
-        elif self.buffer_index > len(self.notes_buffer): # extend buffer
+        elif self.buffer_index >= len(self.notes_buffer): # extend buffer
             self.notes_buffer.append([])
 
         # output
