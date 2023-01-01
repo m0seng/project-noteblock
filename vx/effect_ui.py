@@ -7,9 +7,12 @@ from events import Listener
 from model import Model
 from effect import Effect
 
-class EffectUI(Listener, ttk.Frame, ABC):
+class EffectUI(Listener, ttk.Labelframe, ABC):
+    effect_name: str = "base effect ui"
+    ui_width: int = 200
+
     def __init__(self, parent, model: Model, effect: Effect, **kwargs):
-        super().__init__(parent, **kwargs)
+        super().__init__(parent, text=self.effect_name, **kwargs)
         self.model = model
         self.effect = effect
 
@@ -28,6 +31,7 @@ class EffectUI(Listener, ttk.Frame, ABC):
     @abstractmethod
     def init_ui(self):
         pad_kwargs = {"padx": 2, "pady": 2}
+        self.columnconfigure(0, minsize=self.ui_width)
         self.header_frame = ttk.Frame(self)
         
         self.btn_enabled = ttk.Button(
@@ -36,6 +40,7 @@ class EffectUI(Listener, ttk.Frame, ABC):
             width=3,
             command=lambda: self.model.ed.toggle_bool(self.effect, "enabled")
         )
+
         self.btn_move_left = ttk.Button(
             self.header_frame,
             text="◀",
@@ -55,7 +60,7 @@ class EffectUI(Listener, ttk.Frame, ABC):
             command=lambda: self.model.ed.remove_child(self.effect.parent, self.effect)
         )
 
-        self.header_frame.columnconfigure(1, weight=1) # expand space in the middle
+        self.header_frame.columnconfigure(1, weight=1)
         self.btn_enabled.grid(column=0, row=0, **pad_kwargs)
         self.btn_move_left.grid(column=2, row=0, **pad_kwargs)
         self.btn_move_right.grid(column=3, row=0, **pad_kwargs)

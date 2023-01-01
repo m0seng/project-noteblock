@@ -4,10 +4,12 @@ import tkinter.ttk as ttk
 from effect_ui import EffectUI
 
 class EffectDummyUI(EffectUI):
+    effect_name = "dummy effect"
+    ui_width = 200
+
     def init_ui(self):
         super().init_ui()
         # initialize UI components here - grid into column 0, row 1
-        self.columnconfigure(0, minsize=200)
         self.label = ttk.Label(self, text="dummy effect")
         self.label.grid(column=0, row=1, sticky="nsew", padx=5, pady=5)
 

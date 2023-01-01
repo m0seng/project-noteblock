@@ -66,6 +66,11 @@ class EffectRack(Listener, ttk.Frame):
         self.internal_frame = ttk.Frame(self.canvas)
         self.canvas.create_window(0, 0, anchor="nw", window=self.internal_frame)
 
+        self.internal_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=(0, 0, self.internal_frame.winfo_reqwidth(), 0))
+        )
+
         self.scrollbar = ttk.Scrollbar(self, orient=tk.HORIZONTAL)
         self.canvas.configure(xscrollcommand=self.scrollbar.set)
         self.scrollbar["command"] = self.canvas.xview
@@ -81,7 +86,6 @@ class EffectRack(Listener, ttk.Frame):
                     effect_ui = self.factory.create_ui(effect)
                     effect_ui.grid(column=index, row=0, sticky="ns", padx=5, pady=5)
 
-        self.canvas.configure(
-            height=self.internal_frame.winfo_reqheight(),
-            scrollregion=(0, 0, self.internal_frame.winfo_reqwidth(), 0)
-        )
+        # self.canvas.configure(
+        #     height=self.internal_frame.winfo_reqheight(),
+        # )
