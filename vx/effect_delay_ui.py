@@ -1,7 +1,7 @@
 from easy_effect_ui import EasyEffectUI
 
 class EffectDelayUI(EasyEffectUI):
-    effect_name: str = "delayffr"
+    effect_name: str = "delay"
     ui_width: int = 200
 
     def init_ui(self):
