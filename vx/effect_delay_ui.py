@@ -1,9 +1,8 @@
-import tkinter as tk
 from easy_effect_ui import EasyEffectUI
 
 class EffectDelayUI(EasyEffectUI):
     effect_name: str = "delay"
-    ui_width: int = 200
+    ui_width: int = 150
 
     def init_ui(self):
         super().init_ui()
