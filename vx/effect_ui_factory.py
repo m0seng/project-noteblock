@@ -3,10 +3,15 @@ from typing import Type
 from model import Model
 from effect import Effect
 from effect_ui import EffectUI
+
+from effect_dummy import EffectDummy, EffectDummyUI
+from effect_delay import EffectDelay, EffectDelayUI
 # TODO: import EffectUI subclasses here
 
 class EffectUIFactory:
     ui_classes: dict[Type[Effect], Type[EffectUI]] = {
+        EffectDummy: EffectDummyUI,
+        EffectDelay: EffectDelayUI,
         # TODO: add entries for EffectUI subclasses here
     }
 

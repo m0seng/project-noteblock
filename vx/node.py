@@ -6,7 +6,7 @@ class Node:
     
     Many features have been omitted as I do not need them.
     '''
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.parent: Node | None = None
         self.properties = {}
         self.children: dict[int, Node] = {}

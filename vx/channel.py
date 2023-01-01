@@ -39,7 +39,7 @@ class Channel(Node):
         # apply effects in sequence
         for effect in self.children_iterator():
             if isinstance(effect, Effect):
-                notes = effect.tick(mono_tick, sequence_enabled, bar_number, pat_tick)
+                notes = effect.tick(notes, mono_tick)
 
         # apply volume and pan
         notes = [note.apply_volume_and_pan(

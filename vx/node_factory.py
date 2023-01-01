@@ -7,6 +7,9 @@ from pattern import Pattern
 from pattern_group import PatternGroup
 from channel import Channel
 from channel_group import ChannelGroup
+
+from effect_dummy import EffectDummy
+from effect_delay import EffectDelay
 # TODO: import Node subclasses here
 
 class NodeFactory:
@@ -17,6 +20,8 @@ class NodeFactory:
         "PatternGroup": PatternGroup,
         "Channel": Channel,
         "ChannelGroup": ChannelGroup,
+        "EffectDummy": EffectDummy,
+        "EffectDelay": EffectDelay,
         # TODO: add entries for Node subclasses here
     }
 

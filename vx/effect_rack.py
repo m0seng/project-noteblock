@@ -28,7 +28,7 @@ class EffectRack(Listener, ttk.Frame):
             self.update_ui()
 
     def node_child_removed(self, parent: Node, child: Node, id: int, index: int):
-        if parent is self.channel:
+        if parent is self.channel or child is self.channel:
             self.update_ui()
 
     def node_child_moved(self, parent: Node, old_index: int, new_index: int):

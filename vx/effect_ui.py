@@ -27,8 +27,48 @@ class EffectUI(Listener, ttk.Frame, ABC):
 
     @abstractmethod
     def init_ui(self):
-        ... # TODO: write code for effect header here
+        pad_kwargs = {"padx": 2, "pady": 2}
+        self.header_frame = ttk.Frame(self)
+
+        self.btn_enabled = ttk.Button(
+            self.header_frame,
+            text="●",
+            width=3,
+            command=self.model.ed.toggle_bool(self.effect, "enabled")
+        )
+        self.btn_move_left = ttk.Button(
+            self.header_frame,
+            text="◀",
+            width=3,
+            command=lambda: self.move_effect(-1)
+        )
+        self.btn_move_right = ttk.Button(
+            self.header_frame,
+            text="▶",
+            width=3,
+            command=lambda: self.move_effect(1)
+        )
+        self.btn_delete = ttk.Button(
+            self.header_frame,
+            text="🗑",
+            width=3,
+            command=lambda: self.model.ed.remove_child(self.effect.parent, self.effect)
+        )
+
+        self.header_frame.columnconfigure(1, weight=1) # expand space in the middle
+        self.btn_enabled.grid(column=0, row=0, **pad_kwargs)
+        self.btn_move_left.grid(column=0, row=2, **pad_kwargs)
+        self.btn_move_right.grid(column=0, row=3, **pad_kwargs)
+        self.btn_delete.grid(column=0, row=4, **pad_kwargs)
+        self.header_frame.grid(column=0, row=0, sticky="ew")
 
     @abstractmethod
     def update_ui(self):
-        ...
+        self.btn_enabled.configure(text = "●" if self.effect.get_property("enabled") else "○")
+
+    def move_effect(self, delta: int):
+        channel = self.effect.parent
+        if channel is not None:
+            old_index = channel.get_index_of_child(self.effect)
+            new_index = old_index + delta
+            self.model.ed.move_child(channel, old_index, new_index)
