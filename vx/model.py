@@ -83,7 +83,7 @@ class Model:
             old_notes = pattern.get_property("notes")
             new_notes = [-1] * new_length
             ratio = new_length / old_length
-            for old_tick, note in reversed(enumerate(old_notes)):
+            for old_tick, note in reversed(list(enumerate(old_notes))):
                 if note != -1:
                     new_tick = int(old_tick * ratio)
                     new_notes[new_tick] = note

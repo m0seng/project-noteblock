@@ -47,6 +47,8 @@ class PlacementDisplay(Listener, tk.Canvas):
             self.draw_everything()
         elif isinstance(node, Channel) and key == "placements":
             self.draw_everything()
+        elif node is self.model.song_config and key == "sequence_length":
+            self.draw_everything()
 
     def node_child_added(self, parent: Node, child: Node, id: int, index: int):
         if parent is self.model.channel_group:

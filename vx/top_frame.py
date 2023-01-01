@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 from tkinter import filedialog as fd
 
 from model import Model
-
+from song_settings import SongSettings
 from playback import Playback
 
 class TopFrame(ttk.Frame):
@@ -50,6 +50,10 @@ class TopFrame(ttk.Frame):
                 filetypes=[("JSON project file", "*.json")]
             ))
         )
+        self.btn_settings = ttk.Button(
+            self, text="⚙", width=3,
+            command=lambda: SongSettings(self, model=self.model)
+        )
 
         self.btn_play.grid(column=0, row=0)
         self.btn_pause.grid(column=1, row=0)
@@ -59,3 +63,4 @@ class TopFrame(ttk.Frame):
         self.btn_new_song.grid(column=5, row=0)
         self.btn_load.grid(column=6, row=0)
         self.btn_save.grid(column=7, row=0)
+        self.btn_settings.grid(column=8, row=0)

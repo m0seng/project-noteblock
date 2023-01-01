@@ -30,14 +30,14 @@ class UndoManager:
         self.future.clear()
     
     def start_group(self):
-        self.current_group = []
         self.group_depth += 1
 
     def end_group(self):
         if self.group_depth > 0:
-            self.past.append(self.current_group)
-            self.current_group = []
             self.group_depth -= 1
+            if self.group_depth == 0:
+                self.past.append(self.current_group)
+                self.current_group = []
 
     def can_undo(self):
         return len(self.past) > 0
