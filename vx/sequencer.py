@@ -24,9 +24,9 @@ class Sequencer(Listener, ttk.Frame):
         self.btn_loop = ttk.Button(
             self.buttons_frame,
             text="loop",
-            command=self.model.ed.toggle_bool(self.model.song_config, "loop_enabled")
+            command=lambda: self.model.ed.toggle_bool(self.model.song_config, "loop_enabled")
         )
-        self.btn_loop.state(["pressed" if self.model.song_config.get_property("loop_enabled") else "!pressed"])
+        self.btn_loop.state(["pressed"] if self.model.song_config.get_property("loop_enabled") else ["!pressed"])
         self.btn_loop.grid(column=0, row=0)
         self.btn_add_channel = ttk.Button(
             self.buttons_frame,
@@ -66,4 +66,4 @@ class Sequencer(Listener, ttk.Frame):
 
     def node_property_set(self, node: Node, key, old_value, new_value):
         if node is self.model.song_config and key == "loop_enabled":
-            self.btn_loop.state(["pressed" if self.model.song_config.get_property("loop_enabled") else "!pressed"])
+            self.btn_loop.state(["pressed"] if new_value else ["!pressed"])
