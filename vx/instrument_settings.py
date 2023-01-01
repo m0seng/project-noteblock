@@ -125,7 +125,7 @@ class InstrumentSettings(Listener, ttk.Frame):
         )
         self.inp_sustain_mix.bind(
             "<Return>",
-            lambda e: self.model.ed.set_property(self.channel, "volume", self.var_sustain_mix.get())
+            lambda e: self.model.ed.set_property(self.channel, "sustain_mix", self.var_sustain_mix.get())
         )
 
         self.cmb_main_instrument.grid(column=0, row=0, sticky="w", **self.padding)
