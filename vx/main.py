@@ -8,7 +8,7 @@ from pattern_list import PatternList
 from sequencer import Sequencer
 from top_frame import TopFrame
 from bottom_frame import BottomFrame
-
+ 
 def main():
     model = Model()
 
