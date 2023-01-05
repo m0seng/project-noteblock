@@ -8,7 +8,7 @@ from audio_generator import AudioGenerator
 from audio_player import AudioPlayer
 
 class Playback(Listener):
-    def __init__(self, model: Model, window, block_size: int = 2205):
+    def __init__(self, model: Model, window, block_size: int = 2400):
         self.model = model
         self.model.event_bus.add_listener(self)
         self.start_bar: int = 0

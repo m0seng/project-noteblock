@@ -6,8 +6,8 @@ class AudioPlayer:
     def __init__(self, audio_queue: queue.Queue):
         self.audio_queue = audio_queue
         self.stream = sd.OutputStream(
-            samplerate=44100,
-            blocksize=2205,
+            samplerate=48000,
+            blocksize=2400,
             device="Speakers (Realtek High Definition Audio(SST)), Windows DirectSound", # TODO: change this lmao
             callback=self.sd_callback)
         self.stream.start()
