@@ -35,7 +35,7 @@ class TopFrame(ttk.Frame):
         self.btn_new_song = ttk.Button(
             self, text="☆", width=3,
             command=self.model.init_tree
-        ) # TODO: dialog to ask you to save first?
+        )
         self.btn_load = ttk.Button(
             self, text="📁", width=3,
             command=lambda: self.model.from_file(fd.askopenfilename(

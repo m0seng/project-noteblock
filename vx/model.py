@@ -76,7 +76,6 @@ class Model:
         return channel
 
     def change_pattern_length(self, new_length: int):
-        # TODO: note priority logic?
         self.uman.start_group()
         old_length: int = self.song_config.get_property("pattern_length")
         for pattern in self.pattern_group.children_iterator():

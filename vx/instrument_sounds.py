@@ -3,8 +3,6 @@ import numpy as np
 import samplerate
 import soundfile
 
-# TODO: FIX THE SAMPLE RATES OF MY SAMPLES >:(((
-
 instrument_paths = {
     0: "sounds/wav/harp.wav",
     1: "sounds/wav/basedrum.wav",

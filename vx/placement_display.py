@@ -64,7 +64,7 @@ class PlacementDisplay(Listener, tk.Canvas):
 
     def bar_selected(self, bar: int):
         self.selected_bar = bar
-        self.draw_everything() # TODO: probably don't have to redraw everything here
+        self.draw_everything()
 
     def reset_ui(self):
         self.draw_everything()

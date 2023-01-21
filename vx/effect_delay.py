@@ -1,8 +1,6 @@
 from note import Note
 from effect import Effect
 
-# TODO: make this!!!
-
 class EffectDelay(Effect):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -6,6 +6,7 @@ from node_actions import Action
 # this allows us to pretend to have groups within groups
 
 class UndoManager:
+    """Manages a timeline of actions that can be traversed."""
     def __init__(self, past_len: int = 10, future_len: int = 10):
         self.past: deque[Action | list[Action]] = deque(maxlen=past_len)
         self.future: deque[Action | list[Action]] = deque(maxlen=future_len)

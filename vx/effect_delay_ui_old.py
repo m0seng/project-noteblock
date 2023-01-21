@@ -3,8 +3,6 @@ import tkinter.ttk as ttk
 
 from effect_ui import EffectUI
 
-# TODO: make this!
-
 class EffectDelayUI(EffectUI):
     effect_name = "delay"
     ui_width = 200

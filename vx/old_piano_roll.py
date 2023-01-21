@@ -17,7 +17,6 @@ class PianoRoll(Listener, ttk.Frame):
         self.pattern: Pattern | None = None
 
         # make this wide
-        # TODO: this column will have to change when I add more stuff before it
         self.columnconfigure(0, weight=1)
 
         # drawing constants
@@ -30,7 +29,6 @@ class PianoRoll(Listener, ttk.Frame):
         self.note_height: float = self.canvas_height / self.pitch_count
 
         # colour constants
-        # TODO: derive these from global theme???
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"

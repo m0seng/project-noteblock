@@ -19,7 +19,7 @@ class Playback(Listener):
             callback=self.tick,
             tps=20,
             lookahead_ticks=3,
-            repeat_ms=25
+            repeat_ms=50
         )
         
         self.audio_generator = AudioGenerator(block_size=block_size)
