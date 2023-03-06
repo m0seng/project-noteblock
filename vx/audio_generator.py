@@ -8,9 +8,9 @@ from instrument_sounds import InstrumentSounds
 
 class AudioGenerator():
     """Turns lists of Notes into blocks of audio."""
-    def __init__(self, block_size: int):
+    def __init__(self, block_size: int, sounds: InstrumentSounds):
         self.block_size = block_size
-        self.sounds = InstrumentSounds(block_size)
+        self.sounds = sounds
         self.current_sounds: list[tuple[np.ndarray, int]] = []
 
     def tick(self, notes: list[Note]) -> np.ndarray:

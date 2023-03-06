@@ -4,11 +4,12 @@ from events import Listener
 from model import Model
 from tick_manager import TickManager
 from loop_hijacker import LoopHijacker
+from instrument_sounds import InstrumentSounds
 from audio_generator import AudioGenerator
 from audio_player import AudioPlayer
 
 class Playback(Listener):
-    def __init__(self, model: Model, window, block_size: int = 2400):
+    def __init__(self, model: Model, window, sounds: InstrumentSounds, block_size: int = 2400):
         self.model = model
         self.model.event_bus.add_listener(self)
         self.start_bar: int = 0
@@ -22,7 +23,7 @@ class Playback(Listener):
             repeat_ms=50
         )
         
-        self.audio_generator = AudioGenerator(block_size=block_size)
+        self.audio_generator = AudioGenerator(block_size=block_size, sounds=sounds)
         self.audio_queue = queue.Queue(maxsize=10) # a bit arbitrary
 
         self.audio_player = AudioPlayer(self.audio_queue)

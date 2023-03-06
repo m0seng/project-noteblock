@@ -8,7 +8,7 @@ class AudioPlayer:
         self.stream = sd.OutputStream(
             samplerate=48000,
             blocksize=2400,
-            device="Speakers (Realtek High Definition Audio(SST)), Windows DirectSound", # TODO: change this lmao
+            device="Speakers (2- Realtek High Definition Audio(SST)), Windows DirectSound", # TODO: change this lmao
             callback=self.sd_callback)
         self.stream.start()
 

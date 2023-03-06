@@ -2,7 +2,9 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 from model import Model
+from instrument_sounds import InstrumentSounds
 from playback import Playback
+from audio_exporter import AudioExporter
 
 from pattern_list import PatternList
 from sequencer import Sequencer
@@ -17,9 +19,12 @@ def main():
     window.columnconfigure(0, weight=1)
     window.rowconfigure(1, weight=1)
 
-    playback = Playback(model=model, window=window)
+    block_size = 2400
+    sounds = InstrumentSounds(block_size=block_size)
+    playback = Playback(model=model, window=window, sounds=sounds, block_size=block_size)
+    audio_exporter = AudioExporter(model=model, sounds=sounds, block_size=block_size)
 
-    top_frame = TopFrame(window, model=model, playback=playback)
+    top_frame = TopFrame(window, model=model, playback=playback, audio_exporter=audio_exporter)
 
     main_frame = ttk.Frame(window)
     main_frame.columnconfigure(1, weight=1)

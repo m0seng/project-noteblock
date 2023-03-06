@@ -5,12 +5,14 @@ from tkinter import filedialog as fd
 from model import Model
 from song_settings import SongSettings
 from playback import Playback
+from audio_exporter import AudioExporter
 
 class TopFrame(ttk.Frame):
-    def __init__(self, parent, *args, model: Model, playback: Playback, **kwargs):
+    def __init__(self, parent, *args, model: Model, playback: Playback, audio_exporter: AudioExporter, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model
         self.playback = playback
+        self.audio_exporter = audio_exporter
 
         self.btn_play = ttk.Button(
             self, text="⏵", width=3,
@@ -40,14 +42,24 @@ class TopFrame(ttk.Frame):
             self, text="📁", width=3,
             command=lambda: self.model.from_file(fd.askopenfilename(
                 defaultextension=".json",
-                filetypes=[("JSON project file", "*.json")]
+                filetypes=[("JSON project file", "*.json")],
+                title="Load song project file..."
             ))
         )
         self.btn_save = ttk.Button(
             self, text="💾", width=3,
             command=lambda: self.model.to_file(fd.asksaveasfilename(
                 defaultextension=".json",
-                filetypes=[("JSON project file", "*.json")]
+                filetypes=[("JSON project file", "*.json")],
+                title="Save song project file..."
+            ))
+        )
+        self.btn_export_wav = ttk.Button(
+            self, text="↑", width=3,
+            command=lambda: self.audio_exporter.export(fd.asksaveasfilename(
+                defaultextension=".wav",
+                filetypes=[("WAV audio file", "*.wav")],
+                title="Export song as WAV..."
             ))
         )
         self.btn_settings = ttk.Button(
@@ -63,4 +75,5 @@ class TopFrame(ttk.Frame):
         self.btn_new_song.grid(column=5, row=0)
         self.btn_load.grid(column=6, row=0)
         self.btn_save.grid(column=7, row=0)
-        self.btn_settings.grid(column=8, row=0)
+        self.btn_export_wav.grid(column=8, row=0)
+        self.btn_settings.grid(column=9, row=0)
