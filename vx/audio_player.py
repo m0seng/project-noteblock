@@ -5,10 +5,16 @@ import sounddevice as sd
 class AudioPlayer:
     def __init__(self, audio_queue: queue.Queue):
         self.audio_queue = audio_queue
+        self.stream = None
+        self.init_stream(device=sd.default.device[1])
+
+    def init_stream(self, device):
+        if isinstance(self.stream, sd.OutputStream):
+            self.stream.stop()
         self.stream = sd.OutputStream(
             samplerate=48000,
             blocksize=2400,
-            device="Speakers (2- Realtek High Definition Audio(SST)), Windows DirectSound", # TODO: change this lmao
+            device=device,
             callback=self.sd_callback)
         self.stream.start()
 
