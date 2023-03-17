@@ -15,14 +15,23 @@ class PlacementDisplay(Listener, tk.Canvas):
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
         self.selected_bar: int = 0
+        self.playing_bar: int = -1
 
+        # actual config
         self.pattern_width: float = 60
         self.pattern_height: float = 60
+
+        # internal variables that get recalculated
+        self.channel_count: int = 0
+        self.placement_count: int = 0
+        self.canvas_height: float = 0
+        self.canvas_width: float = 0
 
         self.bg_colour: str = "gray75"
         self.guidebar_colour: str = "gray70"
         self.guideline_colour: str = "gray65"
         self.selected_bar_colour: str = "red"
+        self.playing_bar_colour: str = "green"
 
         super().__init__(
             parent,
@@ -44,9 +53,9 @@ class PlacementDisplay(Listener, tk.Canvas):
 
     def node_property_set(self, node: Node, key, old_value, new_value):
         if isinstance(node, Pattern) and key == "colour":
-            self.draw_everything()
+            self.draw_placements()
         elif isinstance(node, Channel) and key == "placements":
-            self.draw_everything()
+            self.draw_placements()
         elif node is self.model.song_config and key == "sequence_length":
             self.draw_everything()
 
@@ -64,7 +73,11 @@ class PlacementDisplay(Listener, tk.Canvas):
 
     def bar_selected(self, bar: int):
         self.selected_bar = bar
-        self.draw_everything()
+        self.draw_selected_bar_line()
+
+    def bar_playing(self, bar: int):
+        self.playing_bar = bar
+        self.draw_playing_bar_line()
 
     def reset_ui(self):
         self.draw_everything()
@@ -98,59 +111,82 @@ class PlacementDisplay(Listener, tk.Canvas):
                 self.model.ed.set_property(channel, "placements", placements_copy)
 
     def draw_everything(self):
+        self.recalculate_dimensions()
         self.configure_canvas()
         self.draw_placements()
+        self.draw_selected_bar_line()
+        self.draw_playing_bar_line()
+
+    def recalculate_dimensions(self):
+        self.channel_count = self.model.channel_group.children_count()
+        self.placement_count = self.model.song_config.get_property("sequence_length")
+        self.canvas_height = self.channel_count * self.pattern_height
+        self.canvas_width = self.placement_count * self.pattern_width
 
     def configure_canvas(self):
         self.delete("all")
-
-        channel_count = self.model.channel_group.children_count()
-        placement_count = self.model.song_config.get_property("sequence_length")
-
-        canvas_height = channel_count * self.pattern_height
-        canvas_width = placement_count * self.pattern_width
-        self.configure(scrollregion=(0, 0, canvas_width, canvas_height))
+        self.configure(scrollregion=(0, 0, self.canvas_width, self.canvas_height))
 
         # guide bars
-        for channel_number in range(0, channel_count, 2):
+        for channel_number in range(0, self.channel_count, 2):
             self.draw_pattern(
                 channel=channel_number,
                 bar=0,
-                length=placement_count,
+                length=self.placement_count,
                 fill=self.guidebar_colour,
                 outline=""
             )
 
         # guide lines
-        for bar in range(placement_count):
+        for bar in range(self.placement_count):
             self.create_line(
                 bar * self.pattern_width,
                 0,
                 bar * self.pattern_width,
-                canvas_height,
+                self.canvas_height,
                 fill=self.guideline_colour,
                 width=0
             )
 
+    def draw_selected_bar_line(self):
         # selected bar line
-        if 0 <= self.selected_bar < placement_count:
+        self.delete("selected_bar_line")
+        if 0 <= self.selected_bar < self.placement_count:
             self.create_line(
                 self.selected_bar * self.pattern_width,
                 0,
                 self.selected_bar * self.pattern_width,
-                canvas_height,
+                self.canvas_height,
                 fill=self.selected_bar_colour,
-                width=0
+                width=0,
+                tags="selected_bar_line"
+            )
+
+    def draw_playing_bar_line(self):
+        # playing bar line
+        self.delete("playing_bar_line")
+        if 0 <= self.playing_bar < self.placement_count:
+            self.create_line(
+                self.playing_bar * self.pattern_width,
+                0,
+                self.playing_bar * self.pattern_width,
+                self.canvas_height,
+                fill=self.playing_bar_colour,
+                width=0,
+                tags="playing_bar_line"
             )
 
     def draw_placements(self):
+        self.delete("placements")
         for channel_number, channel in enumerate(self.model.channel_group.children_iterator()):
             for bar, pattern_id in enumerate(channel.get_property("placements")):
                 if pattern_id == -1: continue # no placement here
                 pattern = self.model.pattern_group.get_child_by_id(pattern_id)
                 if pattern is None: continue
                 pattern_colour = pattern.get_property("colour")
-                self.draw_pattern(channel=channel_number, bar=bar, length=1, fill=pattern_colour)
+                self.draw_pattern(channel=channel_number, bar=bar, length=1, fill=pattern_colour, tags="placements")
+        self.tag_raise("selected_bar_line")
+        self.tag_raise("playing_bar_line")
 
     def draw_pattern(self, channel: int, bar: int, length: int, **kwargs) -> int:
         """Draws a note on the canvas."""

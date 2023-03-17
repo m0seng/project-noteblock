@@ -23,6 +23,14 @@ class TickManager:
         self.bar_number = bar_number
         self.pat_tick = pat_tick
 
+    def enable_sequence(self):
+        self.sequence_enabled = True
+        self.model.event_bus.bar_playing(self.bar_number)
+
+    def disable_sequence(self):
+        self.sequence_enabled = False
+        self.model.event_bus.bar_playing(-1) # -1 means no bar is playing
+
     def _increment_tick(self):
         # increment tick
         self.mono_tick += 1
@@ -34,9 +42,15 @@ class TickManager:
         if self.pat_tick >= self.model.song_config.get_property("pattern_length"):
             self.pat_tick = 0
             self.bar_number += 1
+
+            # respect loop markers
             if ((self.bar_number == self.model.song_config.get_property("loop_end"))
                     and self.model.song_config.get_property("loop_enabled")
                     and not self.ignore_loop):
                 self.bar_number = self.model.song_config.get_property("loop_start")
+            
+            # stop playing through song if we reached the end
             if self.bar_number >= self.model.song_config.get_property("sequence_length"):
-                self.sequence_enabled = False
+                self.disable_sequence()
+            else:
+                self.model.event_bus.bar_playing(self.bar_number)

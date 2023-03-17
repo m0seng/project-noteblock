@@ -35,10 +35,10 @@ class Playback(Listener):
             self.tick_manager.set_tick(bar_number=bar, pat_tick=0)
 
     def play(self):
-        self.tick_manager.sequence_enabled = True
+        self.tick_manager.enable_sequence()
 
     def pause(self):
-        self.tick_manager.sequence_enabled = False
+        self.tick_manager.disable_sequence()
 
     def stop(self):
         self.pause()
