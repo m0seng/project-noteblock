@@ -89,7 +89,7 @@ class PatternSettings(Listener, ttk.Frame):
             self,
             text="🗑",
             width=3,
-            command=lambda: self.model.ed.remove_child(self.model.channel_group, self.pattern)
+            command=lambda: self.model.remove_pattern(self.pattern)
         )
         
         self.lbl_colour.grid(column=0, row=0, **self.padding)

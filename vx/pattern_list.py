@@ -106,7 +106,7 @@ class PatternList(Listener, ttk.Frame):
                 self.internal_frame,
                 text="🗑",
                 width=2,
-                command=lambda p=pattern: self.model.remove_pattern(pattern)
+                command=lambda p=pattern: self.model.remove_pattern(p)
             )
             
             pattern_label.grid(column=0, row=index, ipadx=5, ipady=5, padx=2, pady=2)
