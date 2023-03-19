@@ -10,6 +10,7 @@ from audio_exporter import AudioExporter
 class TopFrame(ttk.Frame):
     def __init__(self, parent, *args, model: Model, playback: Playback, audio_exporter: AudioExporter, **kwargs):
         super().__init__(parent, *args, **kwargs)
+        self.parent: tk.Tk = parent
         self.model = model
         self.playback = playback
         self.audio_exporter = audio_exporter
@@ -34,26 +35,44 @@ class TopFrame(ttk.Frame):
             self, text="↺", width=3,
             command=self.model.uman.redo
         )
+
+        def new_song_callback():
+            self.model.init_tree()
+            self.parent.title(f"project noteblock - new song")
+            
         self.btn_new_song = ttk.Button(
             self, text="☆", width=3,
-            command=self.model.init_tree
+            command=new_song_callback
         )
-        self.btn_load = ttk.Button(
-            self, text="📁", width=3,
-            command=lambda: self.model.from_file(fd.askopenfilename(
+
+        def load_callback():
+            filename = fd.askopenfilename(
                 defaultextension=".json",
                 filetypes=[("JSON project file", "*.json")],
                 title="Load song project file..."
-            ))
+            )
+            self.model.from_file(filename)
+            self.parent.title(f"project noteblock - {filename}")
+
+        self.btn_load = ttk.Button(
+            self, text="📁", width=3,
+            command=load_callback
         )
-        self.btn_save = ttk.Button(
-            self, text="💾", width=3,
-            command=lambda: self.model.to_file(fd.asksaveasfilename(
+
+        def save_callback():
+            filename = fd.asksaveasfilename(
                 defaultextension=".json",
                 filetypes=[("JSON project file", "*.json")],
                 title="Save song project file..."
-            ))
+            )
+            self.model.to_file(filename)
+            self.parent.title(f"project noteblock - {filename}")
+
+        self.btn_save = ttk.Button(
+            self, text="💾", width=3,
+            command=save_callback
         )
+
         self.btn_export_wav = ttk.Button(
             self, text="↑", width=3,
             command=lambda: self.audio_exporter.export(fd.asksaveasfilename(

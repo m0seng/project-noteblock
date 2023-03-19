@@ -15,7 +15,7 @@ def main():
     model = Model()
 
     window = tk.Tk()
-    window.title("project noteblock")
+    window.title("project noteblock - new song")
     window.columnconfigure(0, weight=1)
     window.rowconfigure(1, weight=1)
 
