@@ -55,7 +55,8 @@ class PatternList(Listener, ttk.Frame):
         # problem of having 1 pixel width/height at init
         self.internal_frame.bind(
             "<Configure>",
-            lambda e: self.canvas.configure(width=self.internal_frame.winfo_reqwidth())
+            lambda e: self.canvas.configure(width=self.internal_frame.winfo_reqwidth(),
+                                            scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))
         )
 
         self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL)
@@ -113,8 +114,6 @@ class PatternList(Listener, ttk.Frame):
             btn_move_up.grid(column=1, row=index, padx=2, pady=2)
             btn_move_down.grid(column=2, row=index, padx=2, pady=2)
             btn_delete.grid(column=3, row=index, padx=2, pady=2)
-
-        self.canvas.configure(scrollregion=(0, 0, 0, self.internal_frame.winfo_reqheight()))
 
     def move_pattern(self, old_index: int, delta: int):
         new_index = old_index + delta
