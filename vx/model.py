@@ -78,10 +78,10 @@ class Model:
     def change_pattern_length(self, new_length: int):
         self.uman.start_group()
         old_length: int = self.song_config.get_property("pattern_length")
+        ratio = new_length / old_length
         for pattern in self.pattern_group.children_iterator():
             old_notes = pattern.get_property("notes")
             new_notes = [-1] * new_length
-            ratio = new_length / old_length
             for old_tick, note in reversed(list(enumerate(old_notes))):
                 if note != -1:
                     new_tick = int(old_tick * ratio)
