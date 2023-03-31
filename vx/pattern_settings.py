@@ -10,6 +10,8 @@ from pattern import Pattern
 from piano_roll_canvas import PianoRollCanvas
 
 class PatternSettings(Listener, ttk.Frame):
+    """UI component - shows a pattern's settings above the piano roll."""
+
     padding = {"padx": 2, "pady": 2}
 
     def __init__(self, parent, *args, model: Model, canvas: PianoRollCanvas, **kwargs):

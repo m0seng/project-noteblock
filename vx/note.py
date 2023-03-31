@@ -2,6 +2,11 @@ from dataclasses import dataclass
 
 @dataclass(slots=True)
 class Note:
+    """
+    Represents one note played by a note block.
+    Generating and processing these is the basis of playback.
+    """
+
     instrument: int = 0
     pitch: int = 0
     volume: float = 1 # 0 to 1

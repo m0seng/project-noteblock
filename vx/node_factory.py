@@ -13,6 +13,11 @@ from effect_delay import EffectDelay
 # TODO: import Node subclasses here
 
 class NodeFactory:
+    """
+    Creates a song object from its class name and attributes.
+    Used to reproduce a song object from a dictionary.
+    """
+
     node_classes: dict[str, Type[Node]] = {
         "Node": Node,
         "SongConfig": SongConfig,

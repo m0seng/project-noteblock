@@ -8,6 +8,11 @@ from events import Listener
 from model import Model
 
 class PatternList(Listener, ttk.Frame):
+    """
+    UI component - shows a list of patterns that
+    can be created/reordered/deleted and dragged into the sequencer.
+    """
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model

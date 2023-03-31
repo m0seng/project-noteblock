@@ -1,11 +1,8 @@
 from copy import copy, deepcopy
 
 class Node:
-    '''
-    A simplified adaptation of the ValueTree concept from JUCE.
-    
-    Many features have been omitted as I do not need them.
-    '''
+    """Base class of all song objects."""
+
     def __init__(self, *args, **kwargs):
         self.parent: Node | None = None
         self.properties = {}
