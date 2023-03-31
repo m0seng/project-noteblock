@@ -22,11 +22,6 @@ class PatternSettings(Listener, ttk.Frame):
         self.model.event_bus.add_listener(self)
         self.update_ui()
 
-    def attach_pattern(self, pattern: Pattern | None):
-        # NOTE: this is made obsolete by the node_selected event
-        self.pattern = pattern
-        self.update_ui()
-
     def destroy(self, *args, **kwargs):
         self.model.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)

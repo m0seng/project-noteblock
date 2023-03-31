@@ -36,12 +36,6 @@ class Model:
         self.event_bus.reset_ui()
 
     def from_dict(self, source: dict):
-        # NOTE: if only it was this simple...
-        # self.root = self.factory.create_node(source)
-        # self.song_config = self.root.get_child_by_class(SongConfig)
-        # self.pattern_group = self.root.get_child_by_class(PatternGroup)
-        # self.channel_group = self.root.get_child_by_class(ChannelGroup)
-
         self.song_config = self.factory.create_node(source["children"]["0"])
         self.pattern_group = self.factory.create_node(source["children"]["1"])
         self.channel_group = self.factory.create_node(source["children"]["2"],

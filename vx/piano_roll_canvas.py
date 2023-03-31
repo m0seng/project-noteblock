@@ -42,11 +42,6 @@ class PianoRollCanvas(Listener, tk.Canvas):
         
         self.draw_everything()
 
-    def attach_pattern(self, pattern: Pattern | None):
-        # NOTE: this is made obsolete by the node_selected event
-        self.pattern = pattern
-        self.draw_everything()
-
     def destroy(self, *args, **kwargs):
         self.model.event_bus.remove_listener(self)
         super().destroy(*args, **kwargs)
