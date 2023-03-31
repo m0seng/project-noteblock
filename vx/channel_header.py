@@ -10,6 +10,8 @@ from model import Model
 from channel import Channel
 
 class ChannelHeader(Listener, ttk.Frame):
+    """UI component - gives access to channel settings next to the sequencer."""
+
     def __init__(self, parent, *args, model: Model, channel: Channel, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model

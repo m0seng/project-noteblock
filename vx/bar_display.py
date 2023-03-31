@@ -7,6 +7,8 @@ from node_editor import NodeEditor
 from model import Model
 
 class BarDisplay(Listener, tk.Canvas):
+    """UI component - displays bar numbers and playback start/loop points above the sequencer."""
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
         self.selected_bar: int = 0

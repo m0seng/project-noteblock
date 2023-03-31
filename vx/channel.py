@@ -5,6 +5,8 @@ from pattern_group import PatternGroup
 from effect import Effect
 
 class Channel(Node):
+    """Song object - analogous to a voice in a song."""
+
     def __init__(self, *args, pattern_group: PatternGroup, sequence_length: int = 20, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_property("name", "channel name")

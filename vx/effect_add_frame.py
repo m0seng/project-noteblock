@@ -11,6 +11,8 @@ from effect_dummy import EffectDummy
 from effect_delay import EffectDelay
 
 class EffectAddFrame(Listener, ttk.Frame):
+    """UI component - used to add effects to a channel's effect rack."""
+
     effects = {
         "dummy": EffectDummy,
         "delay": EffectDelay,

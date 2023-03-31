@@ -11,6 +11,8 @@ from instrument_settings import InstrumentSettings
 from effect_add_frame import EffectAddFrame
 
 class EffectRack(Listener, ttk.Frame):
+    """UI component - displays a channel's effects."""
+    
     def __init__(self, parent, model: Model, **kwargs):
         super().__init__(parent, **kwargs)
         self.model = model
@@ -85,7 +87,3 @@ class EffectRack(Listener, ttk.Frame):
                 if isinstance(effect, Effect):
                     effect_ui = self.factory.create_ui(effect)
                     effect_ui.grid(column=index, row=0, sticky="ns", padx=5, pady=5)
-
-        # self.canvas.configure(
-        #     height=self.internal_frame.winfo_reqheight(),
-        # )

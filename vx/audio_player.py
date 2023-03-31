@@ -3,6 +3,8 @@ import numpy as np
 import sounddevice as sd
 
 class AudioPlayer:
+    """Responsible for getting blocks of audio from a queue to a physical output device."""
+
     def __init__(self, audio_queue: queue.Queue):
         self.audio_queue = audio_queue
         self.stream = None

@@ -4,6 +4,8 @@ import tkinter.ttk as ttk
 from effect_ui import EffectUI
 
 class EffectDummyUI(EffectUI):
+    """UI component - UI for the dummy effect."""
+
     effect_name = "dummy effect"
     ui_width = 200
 

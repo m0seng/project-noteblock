@@ -1,6 +1,8 @@
 from easy_effect_ui import EasyEffectUI
 
 class EffectDelayUI(EasyEffectUI):
+    """UI component - controls for the delay effect."""
+
     effect_name: str = "delay"
     ui_width: int = 150
 

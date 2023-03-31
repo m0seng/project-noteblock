@@ -3,6 +3,8 @@ from note import Note
 from channel import Channel
 
 class ChannelGroup(Node):
+    """Song object - holds a song's channels, and deals with mute/solo functionality."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -8,6 +8,7 @@ from instrument_sounds import InstrumentSounds
 
 class AudioGenerator():
     """Turns lists of Notes into blocks of audio."""
+    
     def __init__(self, block_size: int, sounds: InstrumentSounds):
         self.block_size = block_size
         self.sounds = sounds

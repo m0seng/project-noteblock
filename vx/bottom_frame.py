@@ -7,6 +7,8 @@ from piano_roll import PianoRoll
 from effect_rack import EffectRack
 
 class BottomFrame(ttk.Frame):
+    """UI component - contains the piano roll and effect rack, with tabs to switch between them."""
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model

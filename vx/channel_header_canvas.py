@@ -8,6 +8,8 @@ from model import Model
 from channel_header import ChannelHeader
 
 class ChannelHeaderCanvas(Listener, tk.Canvas):
+    """UI component - provides a scrollable canvas for channel headers."""
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
         self.bg_colour: str = "gray75"

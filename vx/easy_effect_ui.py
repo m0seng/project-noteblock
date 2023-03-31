@@ -6,6 +6,8 @@ import tkinter.ttk as ttk
 from effect_ui import EffectUI
 
 class EasyEffectUI(EffectUI):
+    """UI component - provides methods to easily create simple effect UIs."""
+    
     effect_name: str = "easy effect ui"
     ui_width: int = 200
 

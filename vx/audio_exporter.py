@@ -7,6 +7,8 @@ from instrument_sounds import InstrumentSounds
 from audio_generator import AudioGenerator
 
 class AudioExporter:
+    """Turns a song into audio (without waiting for real-time) and writes it to a .wav file."""
+
     def __init__(self, model: Model, sounds: InstrumentSounds, block_size: int = 2400):
         self.model = model
         self.sounds = sounds

@@ -2,6 +2,8 @@ from note import Note
 from effect import Effect
 
 class EffectDelay(Effect):
+    """Song object - delays notes, creating an echo-like sound."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_property("delay_ticks", 4)
