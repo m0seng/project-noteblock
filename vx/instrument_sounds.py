@@ -24,6 +24,7 @@ instrument_paths = {
 
 class InstrumentSounds:
     '''Loads every instrument at every pitch into memory. Does not actually consume much memory.'''
+    
     def __init__(self, block_size: int):
         self.block_size = block_size
         self.pitch_ratios = tuple(2 * math.pow(2, -pitch/12) for pitch in range(25))

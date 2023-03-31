@@ -13,6 +13,11 @@ from channel import Channel
 from channel_group import ChannelGroup
 
 class Model:
+    """
+    A wrapper and coordinator for song object classes and other helper classes.
+    Also handles song init/load/save and song-wide edits.
+    """
+
     def __init__(self):
         self.init_components()
         self.init_tree()

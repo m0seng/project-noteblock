@@ -8,6 +8,8 @@ from model import Model
 from channel import Channel
 
 class InstrumentSettings(Listener, ttk.Frame):
+    """UI component - controls for a channel's main and sustain instruments."""
+
     instrument_names = [
         "harp",
         "basedrum",

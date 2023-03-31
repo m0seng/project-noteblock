@@ -3,6 +3,11 @@ from typing import Callable
 import tkinter as tk
 
 class LoopHijacker:
+    """
+    Turns inconsistent callback frequencies from the tkinter event loop
+    into consistent ones for playback.
+    """
+
     def __init__(
             self,
             root: tk.Tk,

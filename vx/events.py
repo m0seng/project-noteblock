@@ -2,6 +2,8 @@ from abc import ABC
 from node import Node
 
 class Listener(ABC):
+    """Base class for listening to events."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -32,6 +34,11 @@ class Listener(ABC):
         ...
 
 class EventBus:
+    """
+    Facilitates indirect communication between objects,
+    based only on what information they need from each other.
+    """
+    
     def __init__(self):
         self.listeners: list[Listener] = []
 

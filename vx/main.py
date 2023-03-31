@@ -12,6 +12,8 @@ from top_frame import TopFrame
 from bottom_frame import BottomFrame
  
 def main():
+    """Program flow starts here. Everything else is initialized from here."""
+
     model = Model()
 
     window = tk.Tk()

@@ -8,6 +8,8 @@ from model import Model
 from effect import Effect
 
 class EffectUI(Listener, ttk.Labelframe, ABC):
+    """UI component - base class of effect UIs, supplies effect on/off/reorder/delete controls."""
+
     effect_name: str = "base effect ui"
     ui_width: int = 200
 

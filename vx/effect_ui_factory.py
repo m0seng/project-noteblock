@@ -9,6 +9,8 @@ from effect_delay_ui import EffectDelayUI
 # TODO: import EffectUI subclasses here
 
 class EffectUIFactory:
+    """Takes Effects and creates their corresponding UI components."""
+
     ui_classes: dict[str, Type[EffectUI]] = {
         "EffectDummy": EffectDummyUI,
         "EffectDelay": EffectDelayUI

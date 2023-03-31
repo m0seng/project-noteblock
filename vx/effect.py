@@ -3,6 +3,8 @@ from node import Node
 from note import Note
 
 class Effect(Node):
+    """Song object - base class for all effects."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_property("enabled", True)

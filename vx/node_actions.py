@@ -3,6 +3,11 @@ from node import Node
 from events import EventBus
 
 class Action(ABC):
+    """
+    Encapsulates a change to a node as an object.
+    Subclasses that actually do things are found below.
+    """
+
     @abstractmethod
     def __init__(self):
         ...
