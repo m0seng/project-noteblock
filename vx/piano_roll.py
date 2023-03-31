@@ -7,6 +7,8 @@ from piano_notes_canvas import PianoNotesCanvas
 from pattern_settings import PatternSettings
 
 class PianoRoll(ttk.Frame):
+    """UI component - a scrollable, editable pattern display."""
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.model = model

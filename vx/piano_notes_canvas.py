@@ -2,6 +2,8 @@ import math
 import tkinter as tk
 
 class PianoNotesCanvas(tk.Canvas):
+    """UI component - displays a piano's keys next to the piano roll for reference."""
+
     def __init__(self, parent, *args, **kwargs):
         self.canvas_height: int = 300
         self.note_width: int = 30
