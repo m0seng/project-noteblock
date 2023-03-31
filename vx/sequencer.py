@@ -10,6 +10,8 @@ from placement_display import PlacementDisplay
 from bar_display import BarDisplay
 
 class Sequencer(Listener, ttk.Frame):
+    """UI component - facilitates song arrangement based on patterns and channels."""
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.columnconfigure(0, weight=1)

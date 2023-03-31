@@ -1,6 +1,8 @@
 from node import Node
 
 class SongConfig(Node):
+    """Song object - holds song-wide properties."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_property("name", "song name")

@@ -4,6 +4,8 @@ import tkinter.ttk as ttk
 from model import Model
 
 class SongSettings(tk.Toplevel):
+    """UI component - popup for editing song-wide properties."""
+
     def __init__(self, parent, model: Model, **kwargs):
         super().__init__(parent, **kwargs)
         self.model = model

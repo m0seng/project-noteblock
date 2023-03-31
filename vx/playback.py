@@ -9,6 +9,8 @@ from audio_generator import AudioGenerator
 from audio_player import AudioPlayer
 
 class Playback(Listener):
+    """Coordinates real-time playback of a song."""
+
     def __init__(self, model: Model, window, sounds: InstrumentSounds, block_size: int = 2400):
         self.model = model
         self.model.event_bus.add_listener(self)

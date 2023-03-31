@@ -12,6 +12,11 @@ from channel import Channel
 from channel_group import ChannelGroup
 
 class PlacementDisplay(Listener, tk.Canvas):
+    """
+    UI component - the main renderer of the sequencer.
+    Shows pattern placements on their respective channels.
+    """
+
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.model = model
         self.selected_bar: int = 0

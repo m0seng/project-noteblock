@@ -8,7 +8,7 @@ from model import Model
 from pattern import Pattern
 
 class PianoRollCanvas(Listener, tk.Canvas):
-    """UI component - the main part of the piano roll UI."""
+    """UI component - the main renderer of the piano roll."""
 
     def __init__(self, parent, *args, model: Model, **kwargs):
         self.canvas_height: int = 300

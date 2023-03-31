@@ -8,6 +8,10 @@ from playback import Playback
 from audio_exporter import AudioExporter
 
 class TopFrame(ttk.Frame):
+    """
+    UI component - holds the top bar of buttons.
+    Includes playback control, undo/redo and song init/load/save/export/settings."""
+
     def __init__(self, parent, *args, model: Model, playback: Playback, audio_exporter: AudioExporter, **kwargs):
         super().__init__(parent, *args, **kwargs)
         self.parent: tk.Tk = parent

@@ -1,6 +1,8 @@
 from model import Model
 
 class TickManager:
+    """An advanced counter for position in a song."""
+
     def __init__(self, model: Model, ignore_loop: bool = False):
         self.model = model
         self.ignore_loop = ignore_loop
