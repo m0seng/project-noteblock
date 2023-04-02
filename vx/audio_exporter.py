@@ -22,11 +22,11 @@ class AudioExporter:
         tick_manager.set_tick(0, 0)
 
         # workaround for clearing effects when exporting: just run the buffer a bit
-        tick_manager.enable_sequence()
+        tick_manager.disable_sequence()
         for _ in range(32): # arbitrary number, might need to increase this
             next_tick = tick_manager.next_tick()
             self.model.channel_group.tick(*next_tick)
-        tick_manager.disable_sequence()
+        tick_manager.enable_sequence()
 
         while tick_manager.sequence_enabled:
             next_tick = tick_manager.next_tick()
