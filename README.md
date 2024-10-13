@@ -2,6 +2,8 @@
 
 Music creation software with sounds from Minecraft.
 
+![screenshot](images/screenshot.png)
+
 Uses only Python, numpy, tkinter, and libraries for loading/playing sounds.
 
 Tested with Python 3.12. Run `pip install -r requirements.txt` to install the required libraries, then `python src/main.py` to run the program.
