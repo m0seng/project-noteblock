@@ -6,7 +6,8 @@ from undo_manager import UndoManager
 class NodeEditor:
     """
     Provides easier methods for editing a song object tree,
-    including special case handling and undo management."""
+    including special case handling and undo management.
+    """
 
     def __init__(self, uman: UndoManager, event_bus: EventBus):
         self.uman = uman
